@@ -1,0 +1,114 @@
+.footer {
+  background: linear-gradient(135deg, #0097a7, #6a1b9a); /* same as navbar */
+  color: #ffffff; /* white text */
+  padding: 30px 20px;
+  font-family: 'Montserrat', sans-serif;
+
+  .footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+
+    .footer-brand {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+
+      .brand {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 700;
+        font-size: 1.5rem;
+        color: #ffffff; /* white brand text */
+        text-decoration: none;
+
+        .logo {
+          height: 100px;
+          width: auto;
+          vertical-align: middle;
+          margin-right: 0;
+        }
+      }
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 20px;
+
+      .link-group {
+        h4 {
+          color: #ffffff;
+          margin-bottom: 8px;
+          font-weight: 600;
+          text-decoration: underline;
+          font-size: 1rem;
+        }
+
+        ul {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+
+          li {
+            margin-bottom: 6px;
+
+            a {
+              color: #ffffff;
+              text-decoration: none;
+              transition: color 0.3s;
+
+              &:hover {
+                color: #00bcd4; /* cyan hover */
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .footer-bottom {
+      text-align: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      padding-top: 10px;
+      font-size: 0.85rem;
+      color: #e0e0e0;
+    }
+  }
+
+  /* Footer buttons if any */
+  button {
+    margin-left: 10px;
+    padding: 8px 18px;
+    font-weight: 600;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.95rem;
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  button:hover {
+    background: linear-gradient(135deg, #00bcd4, #8e24aa);
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    border-color: #ffffff;
+  }
+
+  @media (max-width: 768px) {
+    .footer-links {
+      flex-direction: column;
+      align-items: center;
+
+      .link-group {
+        text-align: center;
+      }
+    }
+  }
+}

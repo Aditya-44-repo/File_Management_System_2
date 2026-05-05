@@ -1,0 +1,109 @@
+<div class="admin-users-page">
+  <mat-card class="page-card">
+    <div class="page-header">
+      <div>
+        <p class="eyebrow">Admin Actions</p>
+        <h2>User Management</h2>
+        <p>Only admins with the allowed scopes can use these actions.</p>
+      </div>
+      <div class="badges">
+        <span class="scope-badge" *ngFor="let note of permissionNotes">{{ note }}</span>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Search users</mat-label>
+        <input matInput [(ngModel)]="query" (keyup.enter)="search()" placeholder="email or username" />
+      </mat-form-field>
+      <button mat-raised-button color="primary" (click)="search()">Search</button>
+    </div>
+
+    <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+
+    <div class="table-wrapper" *ngIf="dataSource.data.length > 0; else emptyState">
+      <table mat-table [dataSource]="dataSource" class="users-table">
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef>ID</th>
+          <td mat-cell *matCellDef="let row">{{ row.id }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="username">
+          <th mat-header-cell *matHeaderCellDef>Username</th>
+          <td mat-cell *matCellDef="let row">{{ row.username }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef>Email</th>
+          <td mat-cell *matCellDef="let row">{{ row.email }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="role">
+          <th mat-header-cell *matHeaderCellDef>Role</th>
+          <td mat-cell *matCellDef="let row">
+            <span class="role-pill" [class.super-admin]="row.role === 'SUPER_ADMIN'">{{ row.role }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="enabled">
+          <th mat-header-cell *matHeaderCellDef>Enabled</th>
+          <td mat-cell *matCellDef="let row">{{ row.enabled ? 'Yes' : 'No' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="failedLoginAttempts">
+          <th mat-header-cell *matHeaderCellDef>Failed logins</th>
+          <td mat-cell *matCellDef="let row">{{ row.failedLoginAttempts }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="fileCount">
+          <th mat-header-cell *matHeaderCellDef>File count</th>
+          <td mat-cell *matCellDef="let row">
+            <ng-container *ngIf="canViewFileCounts(); else noFileCountAccess">
+              <span *ngIf="row.loadingCount">Loading...</span>
+              <span *ngIf="!row.loadingCount">{{ row.fileCount ?? 0 }}</span>
+            </ng-container>
+            <ng-template #noFileCountAccess>
+              <span class="protected-label">Hidden</span>
+            </ng-template>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let row" class="actions-cell">
+            <ng-container *ngIf="canActOnRow(row); else protectedActions">
+              <button mat-stroked-button color="primary" (click)="toggleEnabled(row)">
+                {{ row.enabled ? 'Block' : 'Unblock' }}
+              </button>
+              <button *ngIf="canDeleteAllFiles()" mat-stroked-button color="warn" (click)="deleteAllFiles(row)">
+                Delete all files
+              </button>
+            </ng-container>
+            <ng-template #protectedActions>
+              <span class="protected-label">Protected</span>
+            </ng-template>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+
+    <ng-template #emptyState>
+      <div class="empty-state">
+        <p>No users found.</p>
+      </div>
+    </ng-template>
+
+    <mat-paginator
+      [length]="total"
+      [pageIndex]="pageIndex"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="[5, 10, 25, 50]"
+      (page)="pageChange($event)">
+    </mat-paginator>
+  </mat-card>
+</div>
+
+

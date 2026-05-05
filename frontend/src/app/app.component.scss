@@ -1,0 +1,55 @@
+/* -------------------- Global Layout -------------------- */
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: 'Roboto', 'Arial', sans-serif;
+  background-color: #ffffff;
+  color: #121212;
+}
+
+body {
+  margin: 0;
+  scroll-behavior: smooth;
+  background-color: #ffffff;
+  color: #121212;
+}
+
+/* Router outlet full height and padding */
+router-outlet {
+  flex: 1;
+  display: block;
+  padding: 24px;
+  background-color: #ffffff;
+}
+
+/* Material card default styling */
+mat-card {
+  padding: 24px;
+  border-radius: 14px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  color: #121212;
+}
+
+/* Buttons default hover effect */
+button {
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Links */
+a {
+  color: #0097a7;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: #00bcd4;
+}

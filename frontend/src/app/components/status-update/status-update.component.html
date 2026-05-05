@@ -1,0 +1,37 @@
+<div class="status-shell" [class.dialog-mode]="isDialog" [class.inline-mode]="!isDialog">
+  <div class="status-head" *ngIf="isDialog">
+    <div>
+      <h3 class="title">Update Status</h3>
+      <p class="subtitle">Move this file through the processing lifecycle.</p>
+    </div>
+    <span class="current-chip" *ngIf="currentStatus">Current: {{ currentStatus }}</span>
+  </div>
+
+  <div class="status-head compact" *ngIf="!isDialog">
+    <span class="current-chip" *ngIf="currentStatus">Current: {{ currentStatus }}</span>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="status-form">
+    <mat-form-field appearance="outline" class="field status-field">
+      <mat-label>New Status</mat-label>
+      <mat-select formControlName="status" required>
+        <mat-option value="PENDING">Pending</mat-option>
+        <mat-option value="PROCESSING">Processing</mat-option>
+        <mat-option value="SUCCESS">Success</mat-option>
+        <mat-option value="FAILED">Failed</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="field comment-field">
+      <mat-label>Comment (optional)</mat-label>
+      <textarea matInput rows="3" formControlName="comment" placeholder="Add context for audit trail..."></textarea>
+    </mat-form-field>
+
+    <div class="actions">
+      <button mat-stroked-button type="button" *ngIf="isDialog" (click)="cancel()" [disabled]="submitting">Cancel</button>
+      <button mat-raised-button type="submit" class="btn-update" [disabled]="form.invalid || submitting">
+        {{ submitting ? 'Updating...' : 'Update Status' }}
+      </button>
+    </div>
+  </form>
+</div>

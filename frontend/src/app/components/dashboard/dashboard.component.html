@@ -1,0 +1,224 @@
+<div class="dashboard-container">
+  <section class="hero">
+    <div class="hero-copy">
+      <span class="eyebrow">Welcome to TradeNest</span>
+      <h1>TradeNest</h1>
+      <p class="tagline">
+        Your modern file load control center for trade operations. Manage uploads, monitor processing,
+        and resolve exceptions from one secure workspace.
+      </p>
+
+      <div class="hero-actions">
+        <a href="" (click)="navigateTo('/upload', $event)" class="btn-primary hero-btn">Start Upload</a>
+        <a href="" (click)="navigateTo('/files', $event)" class="btn-secondary hero-btn">View File Loads</a>
+      </div>
+
+      <div class="hero-highlights">
+        <div class="highlight-item">
+          <span class="mini-badge">SEC</span>
+          <span>Secure handoff</span>
+        </div>
+        <div class="highlight-item">
+          <span class="mini-badge">BAT</span>
+          <span>Batch-ready tracking</span>
+        </div>
+        <div class="highlight-item">
+          <span class="mini-badge">OPS</span>
+          <span>Operational visibility</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-panel">
+      <div class="panel-card spotlight-card">
+        <div class="card-header">
+          <span>Today at a glance</span>
+          <span class="header-badge live-pulse">LIVE</span>
+        </div>
+
+        <p class="live-note" *ngIf="loadingOverview">Fetching live metrics...</p>
+        <p class="live-note error-note" *ngIf="overviewError">{{ overviewError }}</p>
+
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <strong>{{ formatCount(overview?.totalUploads) }}</strong>
+            <span>Total uploads</span>
+            <em class="metric-trend neutral">Live global count</em>
+          </div>
+          <div class="metric-card">
+            <strong>{{ formatCount(overview?.inProcessing) }}</strong>
+            <span>In processing</span>
+            <em class="metric-trend neutral">Active pipeline right now</em>
+          </div>
+          <div class="metric-card">
+            <strong>{{ formatRate(overview?.successRate) }}</strong>
+            <span>Success rate</span>
+            <em class="metric-trend up">Based on all uploads</em>
+          </div>
+          <div class="metric-card">
+            <strong>{{ formatCount(overview?.exceptionsToday) }}</strong>
+            <span>Exceptions today</span>
+            <em class="metric-trend down">Failed uploads since midnight</em>
+          </div>
+        </div>
+
+        <div class="status-stack">
+          <div class="status-row pending-row">
+            <span>Pending validations ({{ formatCount(overview?.pendingCount) }})</span>
+            <span class="status-pill pending">PENDING</span>
+          </div>
+          <div class="status-row processing-row">
+            <span>Batch execution window ({{ formatCount(overview?.processingCount) }})</span>
+            <span class="status-pill processing">PROCESSING</span>
+          </div>
+          <div class="status-row success-row">
+            <span>Completed reconciliations ({{ formatCount(overview?.successCount) }})</span>
+            <span class="status-pill success">SUCCESS</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-card timeline-card">
+        <div class="card-header">
+          <span>Processing flow</span>
+          <span class="header-badge subtle">FLOW</span>
+        </div>
+
+        <div class="timeline-list">
+          <div class="timeline-item">
+            <span class="timeline-dot"></span>
+            <div>
+              <h4>Upload received</h4>
+              <p>Files are validated for type, size, and naming conventions.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-dot"></span>
+            <div>
+              <h4>Batch processing</h4>
+              <p>Status moves from pending to processing while records are ingested.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-dot"></span>
+            <div>
+              <h4>Exception review</h4>
+              <p>Errors and record counts stay visible for fast operational follow-up.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features section-block">
+    <div class="section-heading">
+      <span>Capabilities</span>
+      <h2>Everything your operations team needs</h2>
+      <p>Purpose-built actions and visibility for enterprise file load workflows.</p>
+    </div>
+
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="icon-shell"><span>UP</span></div>
+        <h3>Fast file onboarding</h3>
+        <p>Upload new trade files quickly with clear validation feedback and progress tracking.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon-shell"><span>SR</span></div>
+        <h3>Smart search & filters</h3>
+        <p>Find file loads by filename, type, date range, and lifecycle status in seconds.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon-shell"><span>ST</span></div>
+        <h3>Status orchestration</h3>
+        <p>Track pending, processing, success, and failed states from a single view.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon-shell"><span>EX</span></div>
+        <h3>Operational exception handling</h3>
+        <p>Inspect errors, record counts, and details before reruns or downstream action.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="how-it-works section-block">
+    <div class="section-heading">
+      <span>Workflow</span>
+      <h2>How the file load journey works</h2>
+      <p>Aligned to the backend batch lifecycle so the UI is ready for live processing updates.</p>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step-card">
+        <span class="step-number">01</span>
+        <h4>Upload</h4>
+        <p>Select one or more trade files and submit them to the processing pipeline.</p>
+      </div>
+      <div class="step-card">
+        <span class="step-number">02</span>
+        <h4>Monitor</h4>
+        <p>Watch status updates move through pending, processing, success, or failed states.</p>
+      </div>
+      <div class="step-card">
+        <span class="step-number">03</span>
+        <h4>Review & act</h4>
+        <p>Open file details, inspect results, and handle exceptions quickly.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="benefits section-block">
+    <div class="section-heading">
+      <span>Why TradeNest</span>
+      <h2>Consistent control with the same trusted theme</h2>
+      <p>A cleaner experience for users without changing the overall product identity.</p>
+    </div>
+
+    <div class="benefit-grid">
+      <div class="benefit-card">
+        <h4>Reliable</h4>
+        <p>Clear statuses and lifecycle visibility reduce guesswork during daily operations.</p>
+      </div>
+      <div class="benefit-card">
+        <h4>Secure</h4>
+        <p>Role-based access and authenticated endpoints fit enterprise deployment needs.</p>
+      </div>
+      <div class="benefit-card">
+        <h4>Efficient</h4>
+        <p>Quick actions keep upload, search, and exception handling within reach.</p>
+      </div>
+      <div class="benefit-card">
+        <h4>Scalable</h4>
+        <p>Designed to align with future Spring Batch processing and backend API integration.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="quick-actions section-block">
+    <div class="section-heading">
+      <span>Actions</span>
+      <h2>Ready to get started?</h2>
+      <p>Pick a module to begin. You'll be prompted to sign in to securely access your files.
+      </p>
+    </div>
+
+    <div class="action-grid">
+      <div class="action-card accent-card">
+        <h4>Upload New File</h4>
+        <p>Send a new trade file into the pipeline.</p>
+        <a href="" (click)="navigateTo('/upload', $event)" class="action-link">Upload</a>
+      </div>
+      <div class="action-card">
+        <h4>View File Loads</h4>
+        <p>Open the table view with filters, actions, and statuses.</p>
+        <a href="" (click)="navigateTo('/files', $event)" class="action-link">Open list</a>
+      </div>
+      <div class="action-card">
+        <h4>Search & Filter</h4>
+        <p>Use the file list filters to find results by name, status, date, or type.</p>
+        <a href="" (click)="navigateTo('/files', $event)" class="action-link">Search files</a>
+      </div>
+    </div>
+  </section>
+</div>

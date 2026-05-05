@@ -1,0 +1,301 @@
+/* ==================== LOGIN CARD STYLING ==================== */
+
+.auth-card {
+  max-width: 420px;
+  margin: 80px auto 60px auto;
+  padding: 0;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  font-family: 'Roboto', sans-serif;
+  overflow: hidden;
+}
+
+.form-container {
+  padding: 40px 32px;
+}
+
+/* ==================== TITLE ==================== */
+
+.auth-card h2 {
+  margin: 0 0 32px 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: #0097a7;
+  text-align: center;
+}
+
+/* ==================== FORM FIELDS ==================== */
+
+mat-form-field.full {
+  width: 100%;
+  margin-bottom: 16px;
+  display: block;
+}
+
+::ng-deep .mat-mdc-text-field-wrapper {
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+::ng-deep .mat-mdc-form-field-label {
+  color: #757575;
+}
+
+::ng-deep input {
+  color: #121212;
+  font-size: 14px;
+}
+
+::ng-deep .mdc-text-field--outlined .mdc-notched-outline__leading,
+::ng-deep .mdc-text-field--outlined .mdc-notched-outline__notch,
+::ng-deep .mdc-text-field--outlined .mdc-notched-outline__trailing {
+  border-color: #d0d0d0;
+}
+
+::ng-deep .mdc-text-field--outlined:hover .mdc-notched-outline__leading,
+::ng-deep .mdc-text-field--outlined:hover .mdc-notched-outline__notch,
+::ng-deep .mdc-text-field--outlined:hover .mdc-notched-outline__trailing {
+  border-color: #0097a7;
+}
+
+/* ==================== FORGOT PASSWORD LINK ==================== */
+
+.forgot-password-link {
+  text-align: right;
+  margin: -8px 0 16px 0;
+
+  a {
+    color: #46459e;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    transition: color 0.2s;
+
+    &:hover {
+      color: #00bcd4;
+      text-decoration: underline;
+    }
+  }
+}
+
+/* ==================== PRIMARY SIGN IN BUTTON ==================== */
+
+.sign-in-btn {
+  width: 100%;
+  height: 48px;
+  margin-top: 8px;
+  margin-bottom: 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  background: linear-gradient(135deg, #0097a7 0%, #6a1b9a 100%) !important;
+  color: white !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 12px rgba(0, 151, 167, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:not(:disabled):hover {
+    background: linear-gradient(135deg, #00bcd4 0%, #8e24aa 100%) !important;
+    box-shadow: 0 6px 20px rgba(0, 151, 167, 0.4);
+    transform: translateY(-2px);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+/* ==================== DIVIDER ==================== */
+
+.divider {
+  display: flex;
+  align-items: center;
+  margin: 24px 0;
+  color: #999;
+  font-size: 13px;
+  font-weight: 500;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #ddd;
+  }
+
+  span {
+    padding: 0 12px;
+    color: #aaa;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
+
+/* ==================== GOOGLE OAUTH BUTTON ==================== */
+
+.google-btn {
+  width: 100%;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 0 20px;
+  margin: 0;
+  border: 1.5px solid #dadce0;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #3c4043;
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+  &:hover:not(:disabled) {
+    border-color: #c6c6c6;
+    background: #f8f9fa;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  &:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 4px rgba(66, 133, 244, 0.1), 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+}
+
+.google-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.google-text {
+  font-size: 15px;
+  font-weight: 600;
+  color: #3c4043;
+  flex: 1;
+}
+
+/* ==================== REGISTER LINK ==================== */
+
+.register-link {
+  margin-top: 24px;
+  margin-bottom: 0;
+  padding: 0;
+  text-align: center;
+  font-size: 13px;
+  color: #666;
+  font-weight: 400;
+
+  a {
+    color: #0097a7;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s;
+
+    &:hover {
+      color: #00bcd4;
+      text-decoration: underline;
+    }
+  }
+}
+
+/* ==================== RESPONSIVE DESIGN ==================== */
+
+@media (max-width: 480px) {
+  .auth-card {
+    max-width: 100%;
+    margin: 80px 16px 40px 16px;
+    border-radius: 12px;
+  }
+
+  .form-container {
+    padding: 32px 20px;
+  }
+
+  .auth-card h2 {
+    font-size: 24px;
+    margin-bottom: 24px;
+  }
+
+  .sign-in-btn {
+    height: 44px;
+    font-size: 14px;
+  }
+
+  .google-btn {
+    height: 44px;
+    font-size: 14px;
+    gap: 10px;
+  }
+
+  .google-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .divider {
+    margin: 20px 0;
+    font-size: 12px;
+
+    span {
+      padding: 0 10px;
+    }
+  }
+
+  .register-link {
+    margin-top: 20px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 360px) {
+  .form-container {
+    padding: 24px 16px;
+  }
+
+  .auth-card h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  mat-form-field.full {
+    margin-bottom: 12px;
+  }
+
+  .sign-in-btn {
+    margin-bottom: 18px;
+  }
+
+  .divider {
+    margin: 16px 0;
+  }
+
+  .google-btn {
+    height: 40px;
+    font-size: 13px;
+  }
+}

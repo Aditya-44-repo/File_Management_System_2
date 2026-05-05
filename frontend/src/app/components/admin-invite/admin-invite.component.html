@@ -1,0 +1,49 @@
+<div class="admin-invite-page">
+  <mat-card class="panel">
+    <h2>Admin Access</h2>
+
+    <ng-container *ngIf="isSuperAdmin; else invitedAdminView">
+      <p>Create an admin invite, assign scope, and send the acceptance link by email.</p>
+
+      <form [formGroup]="inviteForm" (ngSubmit)="createInvite()" class="invite-form">
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" type="email" />
+        </mat-form-field>
+
+        <div class="permissions-group" formGroupName="permissions">
+          <label class="section-title">Admin permissions</label>
+          <div class="permission-item" *ngFor="let option of permissionOptions">
+            <mat-checkbox [formControlName]="option.key">{{ option.label }}</mat-checkbox>
+          </div>
+        </div>
+
+        <button mat-raised-button color="primary" type="submit" [disabled]="loading">
+          {{ loading ? 'Sending...' : 'Send Invite' }}
+        </button>
+      </form>
+
+      <div class="result" *ngIf="inviteResult">
+        <p><strong>Invite sent to:</strong> {{ inviteResult.email }}</p>
+        <p><strong>Invite link:</strong> {{ inviteResult.inviteLink }}</p>
+        <p><strong>Generated password:</strong> {{ inviteResult.generatedPassword }}</p>
+      </div>
+    </ng-container>
+
+    <ng-template #invitedAdminView>
+      <p>Open this page from the email invite link to accept access.</p>
+      <div class="invite-status" *ngIf="acceptToken">
+        <p>Token status: {{ inviteTokenStatus }}</p>
+        <button mat-raised-button color="primary" (click)="acceptInvite()" [disabled]="loading || inviteTokenStatus !== 'valid'">
+          {{ loading ? 'Accepting...' : 'Accept Invite' }}
+        </button>
+      </div>
+      <p *ngIf="!acceptToken">Invite token missing from URL.</p>
+    </ng-template>
+
+    <div class="alerts" *ngIf="message">{{ message }}</div>
+    <div class="errors" *ngIf="error">{{ error }}</div>
+  </mat-card>
+</div>
+
+

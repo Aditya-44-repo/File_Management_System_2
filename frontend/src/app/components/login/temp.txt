@@ -1,0 +1,55 @@
+import { Component } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { PasswordResetService } from '../../services/password-reset.service';
+
+@Component({
+  selector: 'app-forgot-password',
+  templateUrl: './forgot-password.component.html',
+  styleUrls: ['./forgot-password.component.scss']
+})
+export class ForgotPasswordComponent {
+  loading = false;
+  emailSent = false;
+  sentEmail = '';
+
+  form = this.fb.group({
+    email: ['', [Validators.required, Validators.email]]
+  });
+
+  constructor(
+    private fb: FormBuilder,
+    private passwordResetService: PasswordResetService,
+    private router: Router,
+    private snack: MatSnackBar
+  ) {}
+
+  submit() {
+    if (this.form.invalid) return;
+
+    this.loading = true;
+    const email = this.form.get('email')?.value;
+
+    this.passwordResetService.requestPasswordReset(email).subscribe({
+      next: (response) => {
+        this.loading = false;
+        this.emailSent = true;
+        this.sentEmail = email;
+        this.snack.open('Password reset link sent to your email', 'OK', { duration: 3000 });
+      },
+      error: (err) => {
+        this.loading = false;
+        this.snack.open(err?.error?.message ?? 'Failed to send reset link', 'Dismiss', { duration: 3500 });
+      }
+    });
+  }
+
+  backToLogin() {
+    this.router.navigate(['/login']);
+  }
+
+  resendEmail() {
+    this.submit();
+  }
+}

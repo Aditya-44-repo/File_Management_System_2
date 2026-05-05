@@ -1,0 +1,89 @@
+spring:
+  config:
+    import: optional:file:.env[.properties]
+  application:
+    name: TradeNest
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/file_load_mgmt?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}
+    username: ${DB_USERNAME:}
+    password: ${DB_PASSWORD:}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+  batch:
+    jdbc:
+      initialize-schema: always
+    job:
+      enabled: false
+#  security:
+#    oauth2:
+#      client:
+#        registration:
+#          google:
+#            client-id: ${GOOGLE_CLIENT_ID:}
+#            client-secret: ${GOOGLE_CLIENT_SECRET:}
+#            client-authentication-method: client_secret_basic
+#            authorization-grant-type: authorization_code
+#            scope: profile,email
+#            redirect-uri: ${GOOGLE_REDIRECT_URI:https://localhost:8080/login/oauth2/code/google}
+#        provider:
+#          google:
+#            authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
+#            token-uri: https://www.googleapis.com/oauth2/v4/token
+#            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+#            user-name-attribute: email
+#            jwk-set-uri: https://www.googleapis.com/oauth2/v3/certs
+  mail:
+    host: ${MAIL_SMTP_HOST:smtp.gmail.com}
+    port: ${MAIL_SMTP_PORT:587}
+    username: ${MAIL_SMTP_USERNAME:}
+    password: ${MAIL_SMTP_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: ${MAIL_SMTP_AUTH:true}
+          starttls:
+            enable: ${MAIL_SMTP_STARTTLS_ENABLE:true}
+          ssl:
+            enable: ${MAIL_SMTP_SSL_ENABLE:false}
+    from: ${MAIL_FROM:}
+server:
+  port: ${SERVER_PORT:8080}
+  http:
+    port: ${SERVER_HTTP_PORT:8082}
+  ssl:
+    enabled: ${SERVER_SSL_ENABLED:true}
+    key-store: ${SERVER_SSL_KEY_STORE:classpath:keystore-local.pfx}
+    key-store-password: ${SERVER_SSL_KEY_STORE_PASSWORD:changeit123}
+    key-store-type: ${SERVER_SSL_KEY_STORE_TYPE:PKCS12}
+
+app:
+  frontend-base-url: ${FRONTEND_BASE_URL:https://localhost:4200}
+  super-admin:
+    email: ${SUPER_ADMIN_EMAIL:superadmin@gmail.com}
+    username: ${SUPER_ADMIN_USERNAME:superadmin}
+    password: ${SUPER_ADMIN_PASSWORD:super@123}
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+jwt:
+  secret: ${JWT_SECRET:}
+  expiration: ${JWT_EXPIRATION:86400000}
+
+# Note: Both HTTPS (8080) and HTTP (8082) are enabled for local backend access.
+# Make sure to register both redirect URIs in Google Console for OAuth:
+#   https://localhost:8080/login/oauth2/code/google
+#   http://localhost:8082/login/oauth2/code/google

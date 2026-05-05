@@ -1,0 +1,52 @@
+.admin-invite-page {
+  display: flex;
+  justify-content: center;
+  padding: 24px;
+}
+
+.panel {
+  width: min(900px, 100%);
+  padding: 24px;
+}
+
+.invite-form {
+  display: grid;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.permissions-group {
+  display: grid;
+  gap: 8px;
+  padding: 12px 0;
+}
+
+.section-title {
+  font-weight: 600;
+}
+
+.permission-item {
+  margin-left: 4px;
+}
+
+.result,
+.alerts,
+.errors,
+.invite-status {
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.result {
+  background: #eef7ff;
+}
+
+.alerts {
+  background: #edf9ee;
+}
+
+.errors {
+  background: #fdecec;
+}
+

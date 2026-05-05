@@ -1,0 +1,33 @@
+# Dependencies
+.angular/
+node_modules/
+dist/
+frontend/.angular/
+frontend/node_modules/
+frontend/dist/
+backend/**/target/
+backend/api/uploads/
+
+# Angular build artifacts & caches
+.angular/cache/
+
+.cache/
+coverage/
+
+# OS/IDE cruft
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Local environment secrets (ONLY exclude local variants, not the template)
+.env.local
+.env.development
+.env.production
+backend/api/.env.local
+backend/api/.env.development
+backend/api/.env.production
+
+# Allow .env template to be committed (contains only xxxxxx placeholders)
+# Users can copy it and create .env.local for their local credentials
+backend/api/.env

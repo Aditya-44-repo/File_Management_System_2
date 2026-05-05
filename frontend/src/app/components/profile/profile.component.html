@@ -1,0 +1,102 @@
+<div class="profile-container">
+  <div class="profile-header" *ngIf="currentUser && !isEditing">
+    <img [src]="profileImage" alt="Profile" class="profile-image" (error)="handleProfileImageError()">
+    <div class="user-info">
+      <h1>{{ currentUser.name || currentUser.username || 'User' }}</h1>
+      <p>{{ currentUser.email }}</p>
+      <span class="role-pill" *ngIf="currentUser.role" [class.super-admin]="(currentUser.role || '').toUpperCase() === 'SUPER_ADMIN'">
+        {{ getRoleLabel(currentUser.role) }}
+      </span>
+      <button mat-raised-button color="primary" (click)="enableEdit()" class="edit-btn">
+        <mat-icon>edit</mat-icon> Edit Profile
+      </button>
+    </div>
+  </div>
+
+  <!-- Edit Mode -->
+  <div class="profile-edit" *ngIf="isEditing">
+    <h2>Edit Profile</h2>
+    <div class="edit-form">
+      <div class="profile-image-upload" (click)="fileInput.click()">
+        <div class="image-wrapper">
+          <img [src]="profileImage" alt="Profile" class="profile-image-preview" (error)="handleProfileImageError()">
+
+          <!-- Overlay -->
+          <div class="overlay">
+            <mat-icon>camera_alt</mat-icon>
+            <span>Change</span>
+          </div>
+        </div>
+
+        <input
+                type="file"
+                accept="image/*"
+                (change)="onFileSelected($event)"
+                #fileInput
+                hidden
+        >
+      </div>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Name</mat-label>
+        <input matInput [(ngModel)]="newName" placeholder="Enter your name">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width" disabled>
+        <mat-label>Email</mat-label>
+        <input matInput [value]="currentUser?.email" disabled>
+      </mat-form-field>
+
+      <div class="button-group">
+        <button mat-raised-button color="primary" (click)="saveProfile()">
+          <mat-icon>save</mat-icon> Save Changes
+        </button>
+        <button mat-stroked-button (click)="cancelEdit()">
+          <mat-icon>close</mat-icon> Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Statistics Section -->
+  <div class="statistics-section">
+    <h2>Your File Statistics</h2>
+    <div class="stats-grid">
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <div class="stat-value">{{ totalFiles }}</div>
+          <div class="stat-label">Total Files</div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <div class="stat-value pending">{{ pendingFiles }}</div>
+          <div class="stat-label">Pending</div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <div class="stat-value success">{{ successFiles }}</div>
+          <div class="stat-label">Successful</div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <div class="stat-value failed">{{ failedFiles }}</div>
+          <div class="stat-label">Failed</div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card full-width">
+        <mat-card-content>
+          <div class="stat-label">Success Rate</div>
+          <mat-progress-bar mode="determinate" [value]="successRate" class="progress-bar"></mat-progress-bar>
+          <div class="stat-percentage">{{ successRate }}%</div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

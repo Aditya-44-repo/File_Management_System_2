@@ -1,0 +1,62 @@
+/* ---------- PROFILE DROPDOWN ---------- */
+
+.profile-dropdown-panel {
+  width: 272px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* Menu content */
+.profile-dropdown-panel .mat-mdc-menu-content {
+  padding: 0 !important;
+}
+
+/* Profile card */
+.profile-dropdown-panel .profile-menu-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #fff;
+}
+
+/* Avatar */
+.profile-dropdown-panel .profile-avatar-menu {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+}
+
+/* Text */
+.profile-dropdown-panel .username {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.profile-dropdown-panel .email {
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+/* Menu items */
+.profile-dropdown-panel .mat-mdc-menu-item {
+  height: 42px;
+  padding: 0 14px;
+  font-size: 14px;
+}
+
+.profile-dropdown-panel .mat-mdc-menu-item mat-icon {
+  margin-right: 10px;
+  font-size: 20px;
+}
+
+/* Responsive */
+@media (max-width: 360px) {
+  .profile-dropdown-panel {
+    width: 252px;
+  }
+}

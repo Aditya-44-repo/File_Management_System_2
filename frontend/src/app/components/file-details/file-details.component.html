@@ -1,0 +1,159 @@
+<div class="details-page">
+
+  <!-- Loading -->
+  <mat-progress-bar *ngIf="loading" mode="indeterminate" class="top-loader"></mat-progress-bar>
+
+  <ng-container *ngIf="file && !loading">
+
+    <!-- ── Page Header ── -->
+    <div class="page-header">
+      <div class="header-left">
+        <button mat-icon-button class="back-btn" routerLink="/files" matTooltip="Back to file list">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <div>
+          <span class="page-eyebrow">File Details</span>
+          <h1 class="file-title">{{ fileName }}</h1>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button mat-stroked-button class="hdr-btn download" (click)="download()" matTooltip="Download file">
+          <mat-icon>download</mat-icon> Download
+        </button>
+        <button mat-stroked-button class="hdr-btn status" (click)="openStatusDialog()" matTooltip="Update status">
+          <mat-icon>edit_note</mat-icon> Update Status
+        </button>
+        <button mat-stroked-button class="hdr-btn danger" (click)="delete()" matTooltip="Delete file">
+          <mat-icon>delete_outline</mat-icon> Delete
+        </button>
+      </div>
+    </div>
+
+    <!-- ── Two-column layout ── -->
+    <div class="detail-grid">
+
+      <!-- LEFT: meta + tags/desc -->
+      <div class="left-col">
+
+        <!-- Status banner -->
+        <div class="status-banner">
+          <span class="status-badge" [ngClass]="statusClass(file.status)">{{ file.status }}</span>
+          <span class="status-hint">Current processing state</span>
+        </div>
+
+        <!-- Info cards -->
+        <div class="info-grid">
+          <div class="info-card">
+            <span class="info-label">File ID</span>
+            <span class="info-value">{{ file.id }}</span>
+          </div>
+          <div class="info-card">
+            <span class="info-label">Filename</span>
+            <span class="info-value">{{ fileName }}</span>
+          </div>
+          <div class="info-card">
+            <span class="info-label">File Size</span>
+            <span class="info-value">{{ formatSize(file.size) }}</span>
+          </div>
+          <div class="info-card">
+            <span class="info-label">File Type</span>
+            <span class="info-value">{{ fileType }}</span>
+          </div>
+          <div class="info-card">
+            <span class="info-label">Uploaded By</span>
+            <span class="info-value">{{ file.uploadedBy || 'System' }}</span>
+          </div>
+          <div class="info-card">
+            <span class="info-label">Upload Date</span>
+            <span class="info-value">{{ uploadDate | date:'dd MMM yyyy, HH:mm' }}</span>
+          </div>
+          <div class="info-card">
+            <span class="info-label">Record Count</span>
+            <span class="info-value">{{ file.recordCount | number }}</span>
+          </div>
+          <div class="info-card" *ngIf="file.version">
+            <span class="info-label">Version</span>
+            <span class="info-value">v{{ file.version }}</span>
+          </div>
+          <div class="info-card wide" *ngIf="file.checksum">
+            <span class="info-label">Checksum</span>
+            <span class="info-value mono">{{ file.checksum }}</span>
+          </div>
+          <div class="info-card wide" *ngIf="file.errors">
+            <span class="info-label">Errors</span>
+            <span class="info-value error-text">{{ file.errors }}</span>
+          </div>
+        </div>
+
+        <!-- Tags display -->
+        <div class="tags-row" *ngIf="file.tags && file.tags.length">
+          <span class="info-label">Tags</span>
+          <div class="tag-chips">
+            <span class="tag-chip" *ngFor="let tag of file.tags">{{ tag }}</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT: editable metadata -->
+      <div class="right-col">
+        <div class="edit-card">
+          <div class="edit-card-header">
+            <mat-icon class="edit-icon">edit</mat-icon>
+            <span>Edit Metadata</span>
+          </div>
+
+          <form [formGroup]="form" class="edit-form">
+            <mat-form-field appearance="outline" class="full-field">
+              <mat-label>Description</mat-label>
+              <textarea matInput rows="4" formControlName="description" placeholder="Add a description…"></textarea>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-field">
+              <mat-label>Tags</mat-label>
+              <input matInput formControlName="tags" placeholder="e.g. trade, equity, q1" />
+              <mat-hint>Comma-separated</mat-hint>
+            </mat-form-field>
+
+            <div class="edit-actions">
+              <button mat-stroked-button type="button" *ngIf="!isMetadataEditing" (click)="startMetadataEdit()">
+                <mat-icon>edit</mat-icon>
+                Edit
+              </button>
+
+              <button mat-button type="button" class="btn-cancel" *ngIf="isMetadataEditing" (click)="cancelMetadataEdit()" [disabled]="saving">
+                Cancel
+              </button>
+
+              <button mat-raised-button type="button" class="btn-save" *ngIf="isMetadataEditing" (click)="save()" [disabled]="saving">
+                <mat-icon>save</mat-icon>
+                {{ saving ? 'Saving…' : 'Save Changes' }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="status-wide">
+      <div class="status-card">
+        <div class="edit-card-header">
+          <mat-icon class="edit-icon">swap_horiz</mat-icon>
+          <span>Update Status</span>
+        </div>
+        <app-status-update [fileId]="file.id" [currentStatus]="file.status" (updated)="load()"></app-status-update>
+      </div>
+    </div>
+
+  </ng-container>
+
+  <!-- Empty / error state -->
+  <div *ngIf="!loading && !file" class="empty-state">
+    <div class="empty-icon">📄</div>
+    <h3>File not found</h3>
+    <p>The file may have been deleted or the ID is invalid.</p>
+    <button mat-raised-button routerLink="/files" color="primary">Back to Files</button>
+  </div>
+
+</div>
+

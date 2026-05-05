@@ -1,0 +1,11 @@
+{
+  "name": "file-management-backend",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "backend": "mvn -f pom.xml -pl api -am -DskipTests install && mvn -f api/pom.xml spring-boot:run",
+    "start": "npm run backend"
+  }
+}
+
+

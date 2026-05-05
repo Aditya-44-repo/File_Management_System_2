@@ -1,0 +1,244 @@
+/* Ensure hamburger icon is always visible and clickable on mobile */
+@media (max-width: 768px) {
+  .desktop-nav {
+    display: none !important;
+  }
+  .hamburger {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    margin-right: 8px;
+    z-index: 1100;
+    background: none;
+    border: none;
+    box-shadow: none;
+  }
+  .navbar {
+    padding: 8px 8px;
+    min-height: 56px;
+  }
+  .logo {
+    height: 28px !important;
+    margin-right: 6px !important;
+  }
+  .profile-avatar {
+    width: 32px !important;
+    height: 32px !important;
+  }
+  .mobile-dropdown-menu {
+    min-width: 180px !important;
+    max-width: 90vw !important;
+  }
+}
+@media (max-width: 768px) {
+  .desktop-nav {
+    display: none !important;
+  }
+  .hamburger {
+    display: inline-flex !important;
+    margin-right: 8px;
+  }
+  .navbar {
+    padding: 8px 8px;
+  }
+  .logo {
+    height: 28px !important;
+    margin-right: 6px !important;
+  }
+  .profile-avatar {
+    width: 32px !important;
+    height: 32px !important;
+  }
+  .mobile-sidenav {
+    width: 90vw !important;
+    max-width: 340px;
+    min-width: 160px;
+    padding-top: 56px;
+  }
+  mat-nav-list a, mat-nav-list button {
+    font-size: 1.15rem;
+    padding: 16px 8px;
+  }
+}
+
+/* Remove global resets from component styles to avoid layout side effects */
+/* html, body { ... } moved out intentionally */
+
+/* -------------------- Navbar -------------------- */
+.navbar {
+  position: fixed;        /* sticks to the viewport */
+  top: 0;
+  left: 0;
+  right: 0;               /* or width: 100%; */
+  z-index: 1000;          /* stays above content */
+
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #0097a7, #6a1b9a);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+  /* border-radius: 0 0 12px 12px;  if you want rounded bottom edges */
+}
+
+/* Optional: prevent content from hiding under fixed navbar.
+   Adjust this to match your navbar height (here ~52px). */
+.main-content {
+  padding-top: 60px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  color: #ffffff;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: 1px;
+}
+
+.logo {
+  height: 32px;
+  width: auto;
+  display: block;
+  margin-right: 10px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+/* Apply custom styling only to toolbar text buttons, not icon/menu buttons */
+.navbar button[mat-button] {
+  margin-left: 10px;
+  padding: 8px 18px;
+  font-weight: 600;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.95rem;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.navbar button[mat-button]:hover {
+  background: linear-gradient(135deg, #00bcd4, #8e24aa);
+  color: #ffffff;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  border-color: #ffffff;
+}
+
+.profile-menu-btn {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  margin-left: 12px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  box-shadow: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+/* Subtle animated ring */
+.profile-menu-btn::after {
+  content: '';
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.65);
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  pointer-events: none;
+}
+
+.profile-menu-btn:hover::after,
+.profile-menu-btn:focus-visible::after {
+  opacity: 1;
+  transform: scale(1.06);
+}
+
+.profile-menu-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border: 0;
+  box-shadow: none;
+}
+
+.profile-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  box-sizing: border-box;
+  object-fit: cover;
+  object-position: center;
+  border: 2px solid #ffffff;
+  display: block;
+}
+
+.profile-dropdown {
+  .profile-header-menu {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 4px 4px 0 0;
+    min-width: 240px;
+    box-sizing: border-box;
+  }
+
+  .profile-avatar-menu {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid white;
+    flex: 0 0 auto;
+  }
+
+  .user-info-menu {
+    flex: 1;
+    min-width: 0;
+
+    .username {
+      margin: 0;
+      font-weight: 600;
+      font-size: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .email {
+      margin: 4px 0 0 0;
+      font-size: 12px;
+      opacity: 0.9;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  /* Keep menu items compact and aligned */
+  button[mat-menu-item] {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+  }
+
+  button[mat-menu-item] mat-icon {
+    margin-right: 10px;
+  }
+}
+
+.hamburger {
+  display: none;
+}

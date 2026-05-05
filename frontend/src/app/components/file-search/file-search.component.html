@@ -1,0 +1,64 @@
+<div class="search-bar-wrap">
+
+  <!-- Always-visible compact quick-search row -->
+  <form [formGroup]="form" (ngSubmit)="submit()" class="search-bar">
+
+    <mat-form-field appearance="outline" class="f-id">
+      <mat-label>File ID</mat-label>
+      <input matInput formControlName="fileId" placeholder="e.g. 1001" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="f-search">
+      <mat-label>Filename</mat-label>
+      <input matInput formControlName="filename" placeholder="trade-load.csv" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="f-status">
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="status">
+        <mat-option value="">Any</mat-option>
+        <mat-option value="PENDING">Pending</mat-option>
+        <mat-option value="PROCESSING">Processing</mat-option>
+        <mat-option value="SUCCESS">Success</mat-option>
+        <mat-option value="FAILED">Failed</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="f-date">
+      <mat-label>Start Date</mat-label>
+      <input matInput [matDatepicker]="df" formControlName="startDate" [max]="today">
+      <mat-datepicker-toggle matSuffix [for]="df"></mat-datepicker-toggle>
+      <mat-datepicker #df></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="f-date">
+      <mat-label>End Date</mat-label>
+      <input matInput [matDatepicker]="dt" formControlName="endDate" [max]="today">
+      <mat-datepicker-toggle matSuffix [for]="dt"></mat-datepicker-toggle>
+      <mat-datepicker #dt></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="f-record">
+      <mat-label>Min Records</mat-label>
+      <input matInput type="number" formControlName="recordCountMin" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="f-record">
+      <mat-label>Max Records</mat-label>
+      <input matInput type="number" formControlName="recordCountMax" />
+    </mat-form-field>
+
+    <button
+      mat-raised-button
+      type="submit"
+      class="btn-filter"
+      [class.btn-filter--active]="isFilterActive"
+      [attr.aria-pressed]="isFilterActive"
+    >
+      Filter
+    </button>
+    <button mat-stroked-button type="button" class="btn-reset" (click)="reset()">Reset</button>
+
+  </form>
+
+</div>

@@ -1,0 +1,33 @@
+{
+  "scripts": {
+    "frontend": "ng serve --ssl true --host localhost --port 4200 --no-open",
+    "start": "ng serve --ssl true --host localhost --port 4200 --no-open",
+    "start:open": "ng serve --ssl true --host localhost --port 4200 --open",
+    "start:http": "ng serve --host localhost --port 4200 --no-open",
+    "frontend:http": "ng serve --host localhost --port 4200 --no-open",
+    "start:https:trusted": "ng serve --ssl true --ssl-cert certs/localhost.pem --ssl-key certs/localhost-key.pem --host localhost --port 4200 --no-open",
+    "build": "ng build",
+    "prod": "ng serve --configuration production"
+  },
+  "dependencies": {
+    "@angular/animations": "^17.3.12",
+    "@angular/cdk": "^17.3.10",
+    "@angular/common": "^17.3.12",
+    "@angular/compiler": "^17.3.12",
+    "@angular/core": "^17.3.12",
+    "@angular/forms": "^17.3.12",
+    "@angular/material": "^17.3.10",
+    "@angular/platform-browser": "^17.3.12",
+    "@angular/platform-browser-dynamic": "^17.3.12",
+    "@angular/router": "^17.3.12",
+    "rxjs": "^7.8.2",
+    "tslib": "^2.8.1",
+    "zone.js": "0.14.10"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^17.3.17",
+    "@angular/cli": "^17.3.17",
+    "@angular/compiler-cli": "^17.3.12",
+    "typescript": "^5.4.5"
+  }
+}

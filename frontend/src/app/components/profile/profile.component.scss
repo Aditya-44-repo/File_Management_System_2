@@ -1,0 +1,275 @@
+/* ===== Container ===== */
+.profile-container {
+  max-width: 1200px; /* increased for proper full width */
+  margin: 50px auto;
+  padding: 24px;
+}
+
+/* ===== Header ===== */
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+
+  padding: 28px;
+  border-radius: 18px;
+
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  box-shadow: 0 15px 40px rgba(102, 126, 234, 0.25);
+
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.profile-header::after {
+  content: '';
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at top left, rgba(255,255,255,0.2), transparent);
+  top: -50%;
+  left: -50%;
+  pointer-events: none;
+}
+
+.profile-header .profile-image,
+.profile-header .user-info {
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== Profile Image ===== */
+.profile-image {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  object-fit: cover;
+
+  border: 4px solid rgba(255,255,255,0.9);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+}
+
+/* ===== User Info ===== */
+.user-info h1 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.user-info p {
+  margin: 6px 0 16px;
+  opacity: 0.85;
+  font-size: 14px;
+}
+
+.role-pill {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  margin-bottom: 14px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.role-pill.super-admin {
+  background: rgba(255, 255, 255, 0.24);
+  border-color: rgba(255, 255, 255, 0.42);
+}
+
+/* ===== Edit Button ===== */
+.edit-btn {
+  background: white !important;
+  color: #667eea !important;
+  font-weight: 600 !important;
+  border-radius: 10px !important;
+  transition: all 0.2s ease;
+}
+
+.edit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.2);
+}
+
+/* ===== Edit Section ===== */
+.profile-edit {
+  background: #ffffff;
+  padding: 28px;
+  border-radius: 18px;
+  margin-top: 24px;
+
+  box-shadow: 0 12px 35px rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(15, 23, 42, 0.05);
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  align-items: center;
+}
+
+/* ===== Image Upload ===== */
+.profile-image-upload {
+  cursor: pointer;
+}
+
+.image-wrapper {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  transition: transform 0.2s ease;
+}
+
+.image-wrapper:hover {
+  transform: scale(1.03);
+}
+
+.profile-image-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ===== Overlay ===== */
+.overlay {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 45%;
+
+  background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+  color: white;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  opacity: 0;
+  transition: 0.25s ease;
+}
+
+.image-wrapper:hover .overlay {
+  opacity: 1;
+}
+
+/* ===== Inputs ===== */
+.full-width {
+  width: 100%;
+  max-width: 420px;
+}
+
+/* ===== Buttons ===== */
+.button-group {
+  display: flex;
+  gap: 12px;
+}
+
+/* ===== Stats Section ===== */
+.statistics-section {
+  margin-top: 36px;
+}
+
+/* ===== Grid Layout ===== */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr)); /* 🔥 IMPORTANT */
+  gap: 22px;
+  width: 100%;
+}
+
+/* ===== Stat Card ===== */
+.stat-card {
+  width: 100%;
+  padding: 22px 24px;
+  border-radius: 16px;
+
+  background: #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.05);
+
+  box-shadow: 0 8px 25px rgba(15, 23, 42, 0.06);
+
+  transition: all 0.25s ease;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 35px rgba(15, 23, 42, 0.12);
+}
+
+/* ===== FULL WIDTH SUCCESS RATE CARD ===== */
+.stat-card.full-width {
+  grid-column: 1 / -1;
+
+  width: 100%;
+  max-width: 100%;
+
+  display: block; /* 🔥 override mat-card flex */
+
+  padding: 28px 32px;
+
+//   background: linear-gradient(135deg, #ecfeff, #f0f9ff);
+  border: 1px solid rgba(14, 165, 233, 0.2);
+
+  box-shadow: 0 10px 30px rgba(14, 165, 233, 0.12);
+}
+
+/* ===== Stat Values ===== */
+.stat-value {
+  font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.stat-value.success { color: #22c55e; }
+.stat-value.failed { color: #ef4444; }
+.stat-value.pending { color: #f59e0b; }
+.stat-value.total { color: #667eea; }
+
+/* ===== Labels ===== */
+.stat-label {
+  font-size: 13px;
+  color: #64748b;
+  letter-spacing: 0.03em;
+}
+
+/* ===== Success Rate UI ===== */
+.progress-bar {
+  width: 100%;
+  margin: 10px 0;
+}
+
+.stat-percentage {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0ea5e9;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 900px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
