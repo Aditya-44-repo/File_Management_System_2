@@ -172,7 +172,7 @@ public class AuthController {
 
     // ---------------- PROFILE UPLOAD ----------------
     @PostMapping("/upload-profile")
-    @PreAuthorize("hasAnyRole('USER','ADMIN','SUPER_ADMIN')")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<java.util.Map<String, String>> uploadProfile(
             @RequestParam("file") MultipartFile file,
             @RequestParam("userId") Long userId,
@@ -203,7 +203,8 @@ public class AuthController {
 
     // ---------------- PROFILE GET ----------------
     @GetMapping("/profile")
-    @PreAuthorize("hasAnyRole('USER','ADMIN','SUPER_ADMIN')")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @Operation(summary = "Get current user profile")
     public ResponseEntity<AuthResponseDTO> getProfile(Authentication authentication) {
         String email = authentication.getName();
         UserAccount user = userRepository.findByEmail(email)

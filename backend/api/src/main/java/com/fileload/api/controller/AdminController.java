@@ -39,7 +39,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/api/admin")
-@PreAuthorize("hasAnyRole('ADMIN','SUPER_ADMIN')")
+@PreAuthorize("hasRole('ADMIN')")
 @Tag(name = "Admin")
 public class AdminController {
 
@@ -68,7 +68,7 @@ public class AdminController {
     }
 
     @PatchMapping("/users/{userId}/role")
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Change user role")
     public ResponseEntity<AdminUserSummaryDTO> updateUserRole(
             @PathVariable Long userId,
@@ -88,14 +88,14 @@ public class AdminController {
     }
 
     @PostMapping("/users/{userId}/reset-failed-attempts")
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Reset user failed login attempts")
     public ResponseEntity<AdminUserSummaryDTO> resetFailedAttempts(@PathVariable Long userId) {
         return ResponseEntity.ok(adminService.resetFailedLoginAttempts(userId));
     }
 
     @PostMapping("/users/{userId}/force-logout")
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Force logout user by revoking active JWTs")
     public ResponseEntity<AdminUserSummaryDTO> forceLogout(@PathVariable Long userId) {
         return ResponseEntity.ok(adminService.forceLogout(userId));
@@ -119,7 +119,7 @@ public class AdminController {
     }
 
     @PutMapping("/files/{id}/status")
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Approve or reject upload by status update")
     public ResponseEntity<FileLoadResponseDTO> updateFileStatus(
             @PathVariable Long id,
@@ -131,7 +131,7 @@ public class AdminController {
     }
 
     @PostMapping("/files/{id}/reprocess")
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Reprocess failed upload")
     public ResponseEntity<FileLoadResponseDTO> reprocessFailed(@PathVariable Long id) {
         FileLoadResponseDTO response = fileLoadService.retryFileLoad(id);
@@ -140,7 +140,7 @@ public class AdminController {
     }
 
     @DeleteMapping("/files/{id}")
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Delete any file")
     public ResponseEntity<AdminSimpleResultDTO> deleteFile(@PathVariable Long id) {
         fileLoadService.deleteFileLoad(id);
@@ -149,7 +149,7 @@ public class AdminController {
     }
 
     @PostMapping("/security/blocked-ips")
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Block suspicious IP")
     public ResponseEntity<AdminSimpleResultDTO> blockIp(@Valid @RequestBody BlockedIpRequestDTO request) {
         securityControlService.blockIp(request.ipAddress());
@@ -158,7 +158,7 @@ public class AdminController {
     }
 
     @DeleteMapping("/security/blocked-ips")
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Unblock IP")
     public ResponseEntity<AdminSimpleResultDTO> unblockIp(@Valid @RequestBody BlockedIpRequestDTO request) {
         securityControlService.unblockIp(request.ipAddress());
@@ -167,14 +167,14 @@ public class AdminController {
     }
 
     @GetMapping("/security/blocked-ips")
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "List blocked IPs")
     public ResponseEntity<Set<String>> getBlockedIps() {
         return ResponseEntity.ok(securityControlService.getBlockedIps());
     }
 
     @PutMapping("/feature-flags/{flagKey}")
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Set feature flag state")
     public ResponseEntity<AdminSimpleResultDTO> setFeatureFlag(
             @PathVariable String flagKey,
@@ -186,7 +186,7 @@ public class AdminController {
     }
 
     @GetMapping("/feature-flags")
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "List feature flags")
     public ResponseEntity<Map<String, Boolean>> getFeatureFlags() {
         return ResponseEntity.ok(securityControlService.getFeatureFlags());
@@ -200,7 +200,7 @@ public class AdminController {
     }
 
     @GetMapping("/audit-events")
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "View admin action logs")
     public ResponseEntity<Page<AdminAuditEventDTO>> getAuditEvents(
             @RequestParam(defaultValue = "0") int page,
@@ -210,7 +210,7 @@ public class AdminController {
     }
 
     @GetMapping("/audit-events/export")
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Export admin action logs as CSV")
     public ResponseEntity<byte[]> exportAuditEvents() {
         String csv = adminService.exportAuditEventsAsCsv();
@@ -220,7 +220,4 @@ public class AdminController {
         return new ResponseEntity<>(csv.getBytes(java.nio.charset.StandardCharsets.UTF_8), headers, HttpStatus.OK);
     }
 }
-
-
-
 

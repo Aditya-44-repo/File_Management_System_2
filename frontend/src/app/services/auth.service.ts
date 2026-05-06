@@ -86,7 +86,7 @@ export class AuthService {
       return false;
     }
 
-    if ((current.role || '').toUpperCase() === 'SUPER_ADMIN') {
+    if ((current.role || '').toUpperCase() === 'ADMIN') {
       return true;
     }
 
@@ -126,22 +126,6 @@ export class AuthService {
     );
   }
 
-  inviteAdmin(payload: { email: string; permissions: string[] }) {
-    return this.http.post<{ email: string; generatedPassword: string; token: string; expiresAt: string; inviteLink: string }>(
-      `${environment.apiBaseUrl}/super-admin/admin-invites`,
-      payload
-    );
-  }
-
-  validateAdminInvite(token: string) {
-    return this.http.get<{ valid: boolean }>(
-      `${environment.apiBaseUrl}/super-admin/admin-invites/${encodeURIComponent(token)}/validate`
-    );
-  }
-
-  acceptAdminInvite(token: string) {
-    return this.http.post(`${environment.apiBaseUrl}/super-admin/admin-invites/accept`, { token });
-  }
 
   /**
    * Returns the correct profile image URL for a user, with cache-busting.
@@ -205,10 +189,6 @@ export class AuthService {
 
   private getAvatarLabel(user: User | null): string {
     const role = (user?.role || '').toUpperCase();
-    if (role === 'SUPER_ADMIN') {
-      return 'SA';
-    }
-
     if (role === 'ADMIN') {
       return 'AD';
     }
@@ -225,10 +205,6 @@ export class AuthService {
   }
 
   private getAvatarPalette(role: string): { start: string; end: string; text: string } {
-    if (role === 'SUPER_ADMIN') {
-      return { start: '#5b21b6', end: '#8b5cf6', text: '#ffffff' };
-    }
-
     if (role === 'ADMIN') {
       return { start: '#0f766e', end: '#14b8a6', text: '#ffffff' };
     }
@@ -237,9 +213,6 @@ export class AuthService {
   }
 
   private getAvatarDescription(role: string): string {
-    if (role === 'SUPER_ADMIN') {
-      return 'Super Admin';
-    }
 
     if (role === 'ADMIN') {
       return 'Admin';

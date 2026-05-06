@@ -126,9 +126,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     }
 
     private String blockedMessage(UserAccount user) {
-        return user.getDisabledByRole() == UserRole.SUPER_ADMIN
-                ? "You are blocked by superadmin"
-                : "You are blocked by admin";
+        return "You are blocked by admin";
     }
 }
-

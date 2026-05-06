@@ -62,8 +62,6 @@ public class SecurityConfig {
                 // OAuth2 login needs session for authorization request state.
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/super-admin/admin-invites/accept").permitAll()
-                        .requestMatchers("/api/super-admin/admin-invites/*/validate").permitAll()
                         .requestMatchers(
                                 "/api/auth/**",
                                 "/api/oauth/**",

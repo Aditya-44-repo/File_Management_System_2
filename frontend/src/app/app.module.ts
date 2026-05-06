@@ -24,7 +24,6 @@ import { FooterComponent } from './components/footer/footer.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ProfileDialogComponent } from './components/profile-dialog/profile-dialog.component';
 import { OauthCallbackComponent } from './components/oauth-callback/oauth-callback.component';
-import { AdminInviteComponent } from './components/admin-invite/admin-invite.component';
 import { AdminUsersComponent } from './components/admin-users/admin-users.component';
 
 // Angular Material modules
@@ -74,7 +73,6 @@ import { AuthInterceptor } from './services/auth.interceptor';
     ProfileComponent,
     ProfileDialogComponent,
     OauthCallbackComponent,
-    AdminInviteComponent,
     AdminUsersComponent
   ],
   imports: [

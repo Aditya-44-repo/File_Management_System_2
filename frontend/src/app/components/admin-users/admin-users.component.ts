@@ -61,26 +61,19 @@ export class AdminUsersComponent implements OnInit {
   }
 
   canAccessAdminUsers(): boolean {
-    return this.auth.hasAnyAdminPermission('USER_ACCESS_CONTROL', 'USER_RECORDS_OVERVIEW', 'USER_FILES_DELETE_ALL')
-      || (this.auth.getCurrentUser()?.role || '').toUpperCase() === 'SUPER_ADMIN';
+    return this.auth.hasAnyAdminPermission('USER_ACCESS_CONTROL', 'USER_RECORDS_OVERVIEW', 'USER_FILES_DELETE_ALL');
   }
 
   canViewFileCounts(): boolean {
-    return (this.auth.getCurrentUser()?.role || '').toUpperCase() === 'SUPER_ADMIN'
-      || this.auth.hasAnyAdminPermission('USER_RECORDS_OVERVIEW');
+    return this.auth.hasAnyAdminPermission('USER_RECORDS_OVERVIEW');
   }
 
   canDeleteAllFiles(): boolean {
-    return (this.auth.getCurrentUser()?.role || '').toUpperCase() === 'SUPER_ADMIN'
-      || this.auth.hasAnyAdminPermission('USER_FILES_DELETE_ALL');
-  }
-
-  isSuperAdminViewer(): boolean {
-    return (this.auth.getCurrentUser()?.role || '').toUpperCase() === 'SUPER_ADMIN';
+    return this.auth.hasAnyAdminPermission('USER_FILES_DELETE_ALL');
   }
 
   canActOnRow(row: AdminUserRow): boolean {
-    return this.isSuperAdminViewer() || (row.role || '').toUpperCase() !== 'SUPER_ADMIN';
+    return true;
   }
 
   search(): void {
@@ -101,7 +94,6 @@ export class AdminUsersComponent implements OnInit {
       .subscribe({
         next: async (res) => {
           const rows = (res.content || [])
-            .filter((u) => (u.role || '').toUpperCase() !== 'SUPER_ADMIN')
             .map((u) => ({ ...u, fileCount: undefined, loadingCount: false }));
           this.dataSource.data = rows;
           this.total = Number(res.totalElements || 0);
@@ -137,12 +129,7 @@ export class AdminUsersComponent implements OnInit {
   }
 
   toggleEnabled(row: AdminUserRow): void {
-    if (!this.canActOnRow(row)) {
-      this.snack.open('Only SUPER_ADMIN can manage this account', 'Dismiss', { duration: 3000 });
-      return;
-    }
-
-    if (!this.auth.hasAnyAdminPermission('USER_ACCESS_CONTROL') && (this.auth.getCurrentUser()?.role || '').toUpperCase() !== 'SUPER_ADMIN') {
+    if (!this.auth.hasAnyAdminPermission('USER_ACCESS_CONTROL')) {
       this.snack.open('You do not have permission to block or unblock users', 'Dismiss', { duration: 3000 });
       return;
     }
@@ -165,10 +152,6 @@ export class AdminUsersComponent implements OnInit {
   }
 
   deleteAllFiles(row: AdminUserRow): void {
-    if (!this.canActOnRow(row)) {
-      this.snack.open('Only SUPER_ADMIN can delete files for this account', 'Dismiss', { duration: 3000 });
-      return;
-    }
 
     if (!this.canDeleteAllFiles()) {
       this.snack.open('You do not have permission to delete all files for a user', 'Dismiss', { duration: 3000 });

@@ -4,7 +4,7 @@
     <div class="user-info">
       <h1>{{ currentUser.name || currentUser.username || 'User' }}</h1>
       <p>{{ currentUser.email }}</p>
-      <span class="role-pill" *ngIf="currentUser.role" [class.super-admin]="(currentUser.role || '').toUpperCase() === 'SUPER_ADMIN'">
+      <span class="role-pill" *ngIf="currentUser.role">
         {{ getRoleLabel(currentUser.role) }}
       </span>
       <button mat-raised-button color="primary" (click)="enableEdit()" class="edit-btn">

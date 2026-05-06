@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.security.core.Authentication;
@@ -51,7 +52,7 @@ public class FileLoadController {
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @PreAuthorize("hasAnyRole('USER','ADMIN','SUPER_ADMIN')")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @Operation(summary = "Create new file load")
     public ResponseEntity<FileLoadResponseDTO> createFileLoad(@RequestParam("file") MultipartFile file,
                                                               @RequestParam(required = false) String description,
@@ -70,14 +71,14 @@ public class FileLoadController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('USER','ADMIN','SUPER_ADMIN')")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @Operation(summary = "Get file load by id")
     public ResponseEntity<FileLoadResponseDTO> getFileLoad(@PathVariable Long id) {
         return ResponseEntity.ok(fileLoadService.getFileLoadById(id));
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN','SUPER_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Search file loads")
     public ResponseEntity<Page<FileLoadResponseDTO>> searchFileLoads(
             @RequestParam(required = false) Long fileId,
@@ -97,7 +98,7 @@ public class FileLoadController {
     }
 
     @GetMapping("/my")
-    @PreAuthorize("hasAnyRole('USER','ADMIN','SUPER_ADMIN')")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @Operation(summary = "Search current user's file loads")
     public ResponseEntity<Page<FileLoadResponseDTO>> searchMyFileLoads(
             @RequestParam(required = false) Long fileId,
@@ -117,7 +118,7 @@ public class FileLoadController {
     }
 
     @GetMapping("/overview")
-    @PreAuthorize("hasAnyRole('ADMIN','SUPER_ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @Operation(summary = "Get live dashboard overview metrics")
     public ResponseEntity<DashboardOverviewDTO> getDashboardOverview() {
         return ResponseEntity.ok(fileLoadService.getDashboardOverview());
@@ -177,7 +178,7 @@ public class FileLoadController {
     }
 
     @PutMapping("/{id}/status")
-    @PreAuthorize("hasAnyRole('ADMIN','SUPER_ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @Operation(summary = "Update file status")
     public ResponseEntity<FileLoadResponseDTO> updateStatus(@PathVariable Long id,
                                                             @Valid @RequestBody UpdateStatusRequestDTO request) {
@@ -187,7 +188,7 @@ public class FileLoadController {
         return ResponseEntity.ok(fileLoadService.updateFileLoadStatus(id, request.status(), request.comment()));
     }
     @PatchMapping("/{id}")
-    @PreAuthorize("hasAnyRole('USER','ADMIN','SUPER_ADMIN')")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @Operation(summary = "Update file metadata")
     public ResponseEntity<FileLoadResponseDTO> updateMetadata(@PathVariable Long id,
                                                               @RequestBody UpdateMetadataRequestDTO request) {
@@ -195,7 +196,7 @@ public class FileLoadController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('USER','ADMIN','SUPER_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Delete file load")
     public ResponseEntity<Void> deleteFileLoad(@PathVariable Long id) {
         fileLoadService.deleteFileLoad(id);
@@ -211,7 +212,7 @@ public class FileLoadController {
 //    }
 
     @GetMapping("/{id}/download")
-    @PreAuthorize("hasAnyRole('USER','ADMIN','SUPER_ADMIN')")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @Operation(summary = "Download original file")
     public ResponseEntity<byte[]> download(@PathVariable Long id) {
         FileLoadResponseDTO dto = fileLoadService.getFileLoadById(id);

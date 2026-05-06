@@ -4,7 +4,6 @@ import com.fileload.dao.repository.UserAccountRepository;
 import com.fileload.model.entity.AdminPermission;
 import com.fileload.model.entity.UserAccount;
 import com.fileload.model.entity.UserRole;
-import com.fileload.service.impl.SuperAdminServiceImpl;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -29,14 +28,6 @@ public class AdminAuthorizationService {
         if (user == null) {
             return false;
         }
-        if (user.getRole() == UserRole.SUPER_ADMIN) {
-            return true;
-        }
-        if (user.getRole() != UserRole.ADMIN) {
-            return false;
-        }
-
-        return SuperAdminServiceImpl.parsePermissions(user.getAdminPermissions()).contains(permission);
+        return user.getRole() == UserRole.ADMIN;
     }
 }
-

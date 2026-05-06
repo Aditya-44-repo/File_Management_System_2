@@ -10,11 +10,10 @@ import { FileUploadComponent } from './components/file-upload/file-upload.compon
 import { FileDetailsComponent } from './components/file-details/file-details.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { OauthCallbackComponent } from './components/oauth-callback/oauth-callback.component';
-import { AdminInviteComponent } from './components/admin-invite/admin-invite.component';
 import { AdminUsersComponent } from './components/admin-users/admin-users.component';
 import { AuthGuard } from './guards/auth.guard';
 import { AdminScopeGuard } from './guards/admin-scope.guard';
-import { SuperAdminGuard } from './guards/super-admin.guard';
+import { AdminGuard } from './guards/admin.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -27,8 +26,6 @@ const routes: Routes = [
 
   { path: 'dashboard', component: DashboardComponent },
   { path: 'admin/users', component: AdminUsersComponent, canActivate: [AdminScopeGuard] },
-  { path: 'super-admin/admin-invites', component: AdminInviteComponent, canActivate: [SuperAdminGuard] },
-  { path: 'admin-invite', component: AdminInviteComponent },
 
   { path: 'files', component: FileListComponent, canActivate: [AuthGuard] },
   { path: 'files/:id', component: FileDetailsComponent, canActivate: [AuthGuard] },

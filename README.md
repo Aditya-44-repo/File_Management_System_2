@@ -27,3 +27,6 @@ mvn spring-boot:run
 cd C:\fileManagement\frontend  
 npm start
 ```
+
+ API Docs  `http://localhost:8080/swagger-ui.html`   
+ Health Check  `http://localhost:8080/actuator/health`   

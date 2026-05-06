@@ -10,7 +10,6 @@ import com.fileload.model.entity.AdminAuditEvent;
 import com.fileload.model.entity.FileStatus;
 import com.fileload.model.entity.UserAccount;
 import com.fileload.model.entity.UserRole;
-import com.fileload.model.entity.UserRole;
 import com.fileload.service.AdminService;
 import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
@@ -58,16 +57,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     @Transactional
     public AdminUserSummaryDTO updateUserRole(Long userId, UserRole role) {
-        UserAccount actor = resolveActorUser();
-        if (role == UserRole.SUPER_ADMIN && (actor == null || actor.getRole() != UserRole.SUPER_ADMIN)) {
-            throw new org.springframework.security.access.AccessDeniedException("Only SUPER_ADMIN can assign SUPER_ADMIN role");
-        }
-
         UserAccount user = getUserOrThrow(userId);
-        if (user.getRole() == UserRole.SUPER_ADMIN && (actor == null || actor.getRole() != UserRole.SUPER_ADMIN)) {
-            throw new org.springframework.security.access.AccessDeniedException("SUPER_ADMIN account can only be managed by SUPER_ADMIN");
-        }
-
         user.setRole(role);
         UserAccount saved = userAccountRepository.save(user);
         audit("USER_ROLE_UPDATED", "USER", userId.toString(), "role=" + role.name());
@@ -79,9 +69,6 @@ public class AdminServiceImpl implements AdminService {
     public AdminUserSummaryDTO updateUserEnabled(Long userId, boolean enabled) {
         UserAccount actor = resolveActorUser();
         UserAccount user = getUserOrThrow(userId);
-        if (user.getRole() == UserRole.SUPER_ADMIN && (actor == null || actor.getRole() != UserRole.SUPER_ADMIN)) {
-            throw new org.springframework.security.access.AccessDeniedException("SUPER_ADMIN can only be managed by SUPER_ADMIN");
-        }
         user.setEnabled(enabled);
         user.setDisabledByRole(enabled ? null : resolveBlockingRole(actor));
         user.setTokenVersion(user.getTokenVersion() + 1);
@@ -94,11 +81,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     @Transactional
     public AdminUserSummaryDTO resetFailedLoginAttempts(Long userId) {
-        UserAccount actor = resolveActorUser();
         UserAccount user = getUserOrThrow(userId);
-        if (user.getRole() == UserRole.SUPER_ADMIN && (actor == null || actor.getRole() != UserRole.SUPER_ADMIN)) {
-            throw new org.springframework.security.access.AccessDeniedException("SUPER_ADMIN account can only be managed by SUPER_ADMIN");
-        }
         user.setFailedLoginAttempts(0);
         user.setAccountLockedUntil(null);
         UserAccount saved = userAccountRepository.save(user);
@@ -109,11 +92,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     @Transactional
     public AdminUserSummaryDTO forceLogout(Long userId) {
-        UserAccount actor = resolveActorUser();
         UserAccount user = getUserOrThrow(userId);
-        if (user.getRole() == UserRole.SUPER_ADMIN && (actor == null || actor.getRole() != UserRole.SUPER_ADMIN)) {
-            throw new org.springframework.security.access.AccessDeniedException("SUPER_ADMIN account can only be managed by SUPER_ADMIN");
-        }
         user.setTokenVersion(user.getTokenVersion() + 1);
         UserAccount saved = userAccountRepository.save(user);
         audit("USER_FORCE_LOGOUT", "USER", userId.toString(), "tokenVersion=" + saved.getTokenVersion());
@@ -234,11 +213,6 @@ public class AdminServiceImpl implements AdminService {
         if (actor == null) {
             return UserRole.ADMIN;
         }
-        if (actor.getRole() == UserRole.SUPER_ADMIN) {
-            return UserRole.SUPER_ADMIN;
-        }
         return UserRole.ADMIN;
     }
 }
-
-

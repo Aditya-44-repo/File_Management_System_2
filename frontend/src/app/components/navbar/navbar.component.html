@@ -19,7 +19,6 @@
       <button mat-button routerLink="/files">Files</button>
       <button mat-button routerLink="/upload">Upload</button>
       <button mat-button *ngIf="canManageUsers" routerLink="/admin/users">User Admin</button>
-      <button mat-button *ngIf="isSuperAdmin" routerLink="/super-admin/admin-invites">Invite Admin</button>
     </ng-container>
   </div>
   <!-- On mobile, optionally show avatar only -->
@@ -41,7 +40,6 @@
     <button mat-menu-item routerLink="/files">Files</button>
     <button mat-menu-item routerLink="/upload">Upload</button>
     <button mat-menu-item *ngIf="canManageUsers" routerLink="/admin/users">User Admin</button>
-    <button mat-menu-item *ngIf="isSuperAdmin" routerLink="/super-admin/admin-invites">Invite Admin</button>
     <button mat-menu-item (click)="openProfileDialog()">
       <img [src]="profileImage" alt="Profile" class="profile-avatar" style="margin-right:8px;" (error)="handleProfileImageError()"> Profile
     </button>

@@ -2,7 +2,6 @@ package com.fileload.api.security;
 
 import com.fileload.dao.repository.UserAccountRepository;
 import com.fileload.model.entity.UserAccount;
-import com.fileload.model.entity.UserRole;
 import java.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,9 +46,6 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     private String blockedMessage(UserAccount account) {
-        return account.getDisabledByRole() == UserRole.SUPER_ADMIN
-                ? "You are blocked by superadmin"
-                : "You are blocked by admin";
+        return "You are blocked by admin";
     }
 }
-

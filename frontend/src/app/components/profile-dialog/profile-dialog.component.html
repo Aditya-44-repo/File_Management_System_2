@@ -5,7 +5,7 @@
         <img [src]="profileImage" class="avatar" alt="Profile" (error)="handleProfileImageError()">
         <h3>{{ currentUser?.name || currentUser?.username || 'User' }}</h3>
         <p>{{ currentUser?.email }}</p>
-        <span class="role-pill" *ngIf="currentUser?.role" [class.super-admin]="(currentUser?.role || '').toUpperCase() === 'SUPER_ADMIN'">
+        <span class="role-pill" *ngIf="currentUser?.role">
             {{ getRoleLabel(currentUser?.role) }}
         </span>
     </div>

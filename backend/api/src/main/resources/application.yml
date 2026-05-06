@@ -68,10 +68,10 @@ server:
 
 app:
   frontend-base-url: ${FRONTEND_BASE_URL:https://localhost:4200}
-  super-admin:
-    email: ${SUPER_ADMIN_EMAIL:superadmin@gmail.com}
-    username: ${SUPER_ADMIN_USERNAME:superadmin}
-    password: ${SUPER_ADMIN_PASSWORD:super@123}
+  admin:
+    email: ${ADMIN_EMAIL:admin@filemanagement.local}
+    username: ${ADMIN_USERNAME:admin}
+    password: ${ADMIN_PASSWORD:}
 
 springdoc:
   api-docs:

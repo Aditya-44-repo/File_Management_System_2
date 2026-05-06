@@ -14,33 +14,32 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SuperAdminBootstrap implements ApplicationRunner {
+public class AdminBootstrap implements ApplicationRunner {
 
-    private static final Logger logger = LoggerFactory.getLogger(SuperAdminBootstrap.class);
+    private static final Logger logger = LoggerFactory.getLogger(AdminBootstrap.class);
     private static final SecureRandom RANDOM = new SecureRandom();
 
     private final UserAccountRepository userAccountRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public SuperAdminBootstrap(UserAccountRepository userAccountRepository, PasswordEncoder passwordEncoder) {
+    public AdminBootstrap(UserAccountRepository userAccountRepository, PasswordEncoder passwordEncoder) {
         this.userAccountRepository = userAccountRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
-    @Value("${app.super-admin.email:superadmin@filemanagement.local}")
+    @Value("${app.admin.email:admin@filemanagement.local}")
     private String email;
 
-    @Value("${app.super-admin.username:superadmin}")
+    @Value("${app.admin.username:admin}")
     private String username;
 
-    @Value("${app.super-admin.password:}")
+    @Value("${app.admin.password:}")
     private String password;
-
 
     @Override
     public void run(ApplicationArguments args) {
         String normalizedEmail = email == null ? "" : email.trim().toLowerCase();
-        String normalizedUsername = username == null || username.isBlank() ? "superadmin" : username.trim();
+        String normalizedUsername = username == null || username.isBlank() ? "admin" : username.trim();
         UserAccount existing = userAccountRepository.findByEmail(normalizedEmail)
                 .or(() -> userAccountRepository.findByUsername(normalizedUsername))
                 .orElse(null);
@@ -49,28 +48,28 @@ public class SuperAdminBootstrap implements ApplicationRunner {
         if (existing != null) {
             existing.setEmail(normalizedEmail);
             existing.setUsername(normalizedUsername);
-            existing.setRole(UserRole.SUPER_ADMIN);
+            existing.setRole(UserRole.ADMIN);
             existing.setEnabled(true);
             existing.setAdminPermissions("USER_ACCESS_CONTROL,USER_RECORDS_OVERVIEW,USER_FILES_DELETE_ALL");
             if (!configuredPassword.isBlank()) {
                 existing.setPassword(passwordEncoder.encode(configuredPassword));
             }
             userAccountRepository.save(existing);
-            logger.info("Super admin credentials synced in DB for: {}", normalizedEmail);
+            logger.info("Admin credentials synced in DB for: {}", normalizedEmail);
             return;
         }
 
         String rawPassword = configuredPassword.isBlank() ? generatePassword() : configuredPassword;
-        UserAccount superAdmin = new UserAccount();
-        superAdmin.setUsername(resolveAvailableUsername(normalizedUsername, normalizedEmail));
-        superAdmin.setEmail(normalizedEmail);
-        superAdmin.setPassword(passwordEncoder.encode(rawPassword));
-        superAdmin.setRole(UserRole.SUPER_ADMIN);
-        superAdmin.setEnabled(true);
-        superAdmin.setAdminPermissions("USER_ACCESS_CONTROL,USER_RECORDS_OVERVIEW,USER_FILES_DELETE_ALL");
-        userAccountRepository.save(superAdmin);
+        UserAccount adminUser = new UserAccount();
+        adminUser.setUsername(resolveAvailableUsername(normalizedUsername, normalizedEmail));
+        adminUser.setEmail(normalizedEmail);
+        adminUser.setPassword(passwordEncoder.encode(rawPassword));
+        adminUser.setRole(UserRole.ADMIN);
+        adminUser.setEnabled(true);
+        adminUser.setAdminPermissions("USER_ACCESS_CONTROL,USER_RECORDS_OVERVIEW,USER_FILES_DELETE_ALL");
+        userAccountRepository.save(adminUser);
 
-        logger.warn("Bootstrapped SUPER_ADMIN account => email: {}, password: {}", normalizedEmail, rawPassword);
+        logger.warn("Bootstrapped ADMIN account => email: {}, password: {}", normalizedEmail, rawPassword);
     }
 
     private String resolveAvailableUsername(String preferredUsername, String normalizedEmail) {
@@ -80,7 +79,7 @@ public class SuperAdminBootstrap implements ApplicationRunner {
 
         String emailPrefix = normalizedEmail.contains("@")
                 ? normalizedEmail.substring(0, normalizedEmail.indexOf('@'))
-                : "superadmin";
+                : "admin";
 
         if (!userAccountRepository.existsByUsername(emailPrefix)) {
             return emailPrefix;
@@ -102,6 +101,4 @@ public class SuperAdminBootstrap implements ApplicationRunner {
         return Base64.getUrlEncoder().withoutPadding().encodeToString(buffer);
     }
 }
-
-
 

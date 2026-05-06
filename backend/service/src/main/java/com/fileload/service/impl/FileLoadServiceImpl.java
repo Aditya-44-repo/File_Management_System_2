@@ -225,9 +225,6 @@ public class FileLoadServiceImpl implements FileLoadService {
         if (!canCurrentUserAccess(entity)) {
             throw new AccessDeniedException("You do not have permission to delete this file.");
         }
-        if (isOwnedBySuperAdmin(entity) && !isCurrentUserSuperAdmin()) {
-            throw new AccessDeniedException("Files owned by SUPER_ADMIN can only be deleted by SUPER_ADMIN.");
-        }
         if (entity.getStoragePath() != null) {
             try {
                 Files.deleteIfExists(Path.of(entity.getStoragePath()));
@@ -266,9 +263,6 @@ public class FileLoadServiceImpl implements FileLoadService {
     @Override
     @Transactional
     public long deleteAllFilesByUserId(Long userId) {
-        if (isTargetUserSuperAdmin(userId) && !isCurrentUserSuperAdmin()) {
-            throw new AccessDeniedException("Files owned by SUPER_ADMIN can only be deleted by SUPER_ADMIN.");
-        }
         List<FileLoad> files = fileLoadRepository.findByUploadedById(userId);
         for (FileLoad file : files) {
             if (file.getStoragePath() == null || file.getStoragePath().isBlank()) {
@@ -409,30 +403,10 @@ public class FileLoadServiceImpl implements FileLoadService {
         if (currentUser == null) {
             return false;
         }
-        if (currentUser.getRole() == UserRole.ADMIN || currentUser.getRole() == UserRole.SUPER_ADMIN) {
+        if (currentUser.getRole() == UserRole.ADMIN) {
             return true;
         }
         return currentUserIdEquals(fileLoad.getUploadedById(), currentUser.getId());
-    }
-
-    private boolean isCurrentUserSuperAdmin() {
-        UserAccount currentUser = resolveCurrentUser();
-        return currentUser != null && currentUser.getRole() == UserRole.SUPER_ADMIN;
-    }
-
-    private boolean isOwnedBySuperAdmin(FileLoad fileLoad) {
-        if (fileLoad.getUploadedById() == null) {
-            return false;
-        }
-        return userAccountRepository.findById(fileLoad.getUploadedById())
-                .map(user -> user.getRole() == UserRole.SUPER_ADMIN)
-                .orElse(false);
-    }
-
-    private boolean isTargetUserSuperAdmin(Long userId) {
-        return userAccountRepository.findById(userId)
-                .map(user -> user.getRole() == UserRole.SUPER_ADMIN)
-                .orElse(false);
     }
 }
 

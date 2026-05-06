@@ -41,7 +41,7 @@
         <ng-container matColumnDef="role">
           <th mat-header-cell *matHeaderCellDef>Role</th>
           <td mat-cell *matCellDef="let row">
-            <span class="role-pill" [class.super-admin]="row.role === 'SUPER_ADMIN'">{{ row.role }}</span>
+            <span class="role-pill">{{ row.role }}</span>
           </td>
         </ng-container>
 
