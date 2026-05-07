@@ -4,7 +4,6 @@ import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
-import jakarta.servlet.http.HttpServletResponse;
 import com.fileload.api.security.JwtUtil;
 import com.fileload.dao.repository.UserAccountRepository;
 import com.fileload.model.dto.*;
@@ -162,12 +161,6 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ResetPasswordResponseDTO(false, e.getMessage()));
         }
-    }
-
-    // ---------------- GOOGLE LOGIN ----------------
-    @GetMapping("/oauth2/google")
-    public void googleOauthLogin(HttpServletResponse response) throws IOException {
-        response.sendRedirect("/oauth2/authorization/google");
     }
 
     // ---------------- PROFILE UPLOAD ----------------

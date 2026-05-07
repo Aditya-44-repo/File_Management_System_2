@@ -2,7 +2,6 @@ package com.fileload.api.config;
 
 import com.fileload.api.security.IpBlockFilter;
 import com.fileload.api.security.JwtAuthenticationFilter;
-import com.fileload.api.security.OAuth2SuccessHandler;
 import com.fileload.api.security.RestAccessDeniedHandler;
 import com.fileload.api.security.RestAuthenticationEntryPoint;
 import org.springframework.context.annotation.Bean;
@@ -35,20 +34,17 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final IpBlockFilter ipBlockFilter;
-    private final OAuth2SuccessHandler oAuth2SuccessHandler;
     private final UserDetailsService userDetailsService;
     private final RestAuthenticationEntryPoint authenticationEntryPoint;
     private final RestAccessDeniedHandler accessDeniedHandler;
 
     public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter,
                           IpBlockFilter ipBlockFilter,
-                          OAuth2SuccessHandler oAuth2SuccessHandler,
                           UserDetailsService userDetailsService,
                           RestAuthenticationEntryPoint authenticationEntryPoint,
                           RestAccessDeniedHandler accessDeniedHandler) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.ipBlockFilter = ipBlockFilter;
-        this.oAuth2SuccessHandler = oAuth2SuccessHandler;
         this.userDetailsService = userDetailsService;
         this.authenticationEntryPoint = authenticationEntryPoint;
         this.accessDeniedHandler = accessDeniedHandler;
@@ -59,14 +55,10 @@ public class SecurityConfig {
         http
                 .cors(this::configureCors)
                 .csrf(csrf -> csrf.disable())
-                // OAuth2 login needs session for authorization request state.
-                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/api/auth/**",
-                                "/api/oauth/**",
-                                "/oauth2/**",
-                                "/login/oauth2/**",
                                 "/uploads/**",
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
@@ -80,9 +72,6 @@ public class SecurityConfig {
                         .accessDeniedHandler(accessDeniedHandler)
                 )
                 .authenticationProvider(authenticationProvider())
-//                .oauth2Login(oauth2 -> oauth2
-//                        .successHandler(oAuth2SuccessHandler)
-//                )
                 .addFilterBefore(ipBlockFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

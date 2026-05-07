@@ -24,24 +24,7 @@ spring:
       initialize-schema: always
     job:
       enabled: false
-#  security:
-#    oauth2:
-#      client:
-#        registration:
-#          google:
-#            client-id: ${GOOGLE_CLIENT_ID:}
-#            client-secret: ${GOOGLE_CLIENT_SECRET:}
-#            client-authentication-method: client_secret_basic
-#            authorization-grant-type: authorization_code
-#            scope: profile,email
-#            redirect-uri: ${GOOGLE_REDIRECT_URI:https://localhost:8080/login/oauth2/code/google}
-#        provider:
-#          google:
-#            authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
-#            token-uri: https://www.googleapis.com/oauth2/v4/token
-#            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
-#            user-name-attribute: email
-#            jwk-set-uri: https://www.googleapis.com/oauth2/v3/certs
+
   mail:
     host: ${MAIL_SMTP_HOST:smtp.gmail.com}
     port: ${MAIL_SMTP_PORT:587}
