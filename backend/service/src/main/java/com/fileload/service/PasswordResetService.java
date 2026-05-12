@@ -33,7 +33,7 @@ public class PasswordResetService {
 
     public PasswordResetService(PasswordResetTokenRepository passwordResetTokenRepository,
                                 UserAccountRepository userAccountRepository,
-                                JavaMailSender javaMailSender,
+                                 JavaMailSender javaMailSender,
                                 PasswordEncoder passwordEncoder,
                                 @Value("${app.frontend-base-url:https://localhost:4200}") String frontendBaseUrl,
                                 @Value("${mail.from:noreply@filemanagement.com}") String mailFrom) {
