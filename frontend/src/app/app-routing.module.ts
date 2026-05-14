@@ -11,12 +11,14 @@ import { FileDetailsComponent } from './components/file-details/file-details.com
 import { ProfileComponent } from './components/profile/profile.component';
 import { OauthCallbackComponent } from './components/oauth-callback/oauth-callback.component';
 import { AdminUsersComponent } from './components/admin-users/admin-users.component';
+import { HomeComponent } from './components/home/home.component';
 import { AuthGuard } from './guards/auth.guard';
 import { AdminScopeGuard } from './guards/admin-scope.guard';
 import { AdminGuard } from './guards/admin.guard';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  { path: '', component: HomeComponent },
+  { path: 'home', component: HomeComponent },
 
   { path: 'login', component: LoginComponent },
   { path: 'oauth/callback', component: OauthCallbackComponent },
@@ -32,7 +34,7 @@ const routes: Routes = [
   { path: 'upload', component: FileUploadComponent, canActivate: [AuthGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
 
-  { path: '**', redirectTo: 'profile' }
+  { path: '**', redirectTo: 'home' }
 ];
 
 @NgModule({
