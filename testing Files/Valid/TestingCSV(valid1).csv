@@ -1,0 +1,21 @@
+ProductId,Name,Category,Quantity,Price
+P1,Samsung Galaxy,Mobile,10,199939
+P2,Samsung Galaxy Note 8,Mobile,8,648382
+P3,MacBook Pro,Laptop,5,842942
+P4,MacBook Pro Air,Laptop,4,647491
+P5,Sony Bravia,TV,25,984923
+P6,LG Ultra HD,TV,20,283942
+P7,iPhone 13,Mobile,12,783029
+P8,iPhone 14 Pro,Mobile,7,236748
+P9,Dell XPS 13,Laptop,6,985732
+P10,HP Pavilion,Laptop,9,675792
+P11,Sony OLED A80J,TV,10,453892
+P12,Samsung QLED Q60A,TV,15,393711
+P13,OnePlus 11,Mobile,14,385383
+P14,Asus ROG Strix,Laptop,3,159999
+P15,Google Pixel 8,Mobile,9,72999
+P16,Acer Predator Helios ,Laptop,4,179999
+P17,"Xiaomi Smart TV 5A	",TV,25,28990
+P18,Dell Inspiron 15,Laptop,4,438740
+P19,OnePlus 12,Mobile,3,6487938
+P20,Vivo X100 Pro,Mobile,2,738872
