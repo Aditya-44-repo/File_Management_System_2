@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class RecordCountUtil {
 
     private static final List<String> EXPECTED_HEADER = List.of(
-            "tradeId", "clientId", "stockSymbol", "quantity", "price", "tradeType"
+            "ProductId", "Name", "Category", "Quantity", "Price"
     );
 
     public ProcessingResult analyzeFile(Path filePath) throws IOException {
@@ -51,7 +51,7 @@ public class RecordCountUtil {
 
         List<String> header = splitCsvCells(rows.get(0));
         if (!header.equals(EXPECTED_HEADER)) {
-            errors.add("Invalid header. Expected: tradeId,clientId,stockSymbol,quantity,price,tradeType");
+            errors.add("Invalid header. Expected: ProductId,Name,Category,Quantity,Price");
             return ProcessingResult.failed(0, errors);
         }
 
@@ -65,40 +65,41 @@ public class RecordCountUtil {
             List<String> cells = splitCsvCells(row);
             int lineNo = i + 1;
 
-            if (cells.size() != 6) {
-                errors.add("Invalid column count at line " + lineNo + ": expected 6, found " + cells.size());
+            if (cells.size() != 5) {
+                errors.add("Invalid column count at line " + lineNo + ": expected 5, found " + cells.size());
                 continue;
             }
 
-            String tradeId = cells.get(0).trim();
-            String clientId = cells.get(1).trim();
-            String stockSymbol = cells.get(2).trim();
+            String productId = cells.get(0).trim();
+            String name = cells.get(1).trim();
+            String categoryText = cells.get(2).trim();
             String quantityText = cells.get(3).trim();
             String priceText = cells.get(4).trim();
-            String tradeTypeText = cells.get(5).trim();
 
-            if (tradeId.isEmpty()) {
-                errors.add("Empty tradeId at line " + lineNo);
+            if (productId.isEmpty()) {
+                errors.add("Empty ProductId at line " + lineNo);
                 continue;
             }
-            if (clientId.isEmpty()) {
-                errors.add("Empty clientId at line " + lineNo);
+            if (name.isEmpty()) {
+                errors.add("Empty Name at line " + lineNo);
                 continue;
             }
-            if (stockSymbol.isEmpty()) {
-                errors.add("Empty stockSymbol at line " + lineNo);
+            if (categoryText.isEmpty()) {
+                errors.add("Empty Category at line " + lineNo);
                 continue;
             }
             if (quantityText.isEmpty()) {
-                errors.add("Empty quantity at line " + lineNo);
+                errors.add("Empty Quantity at line " + lineNo);
                 continue;
             }
             if (priceText.isEmpty()) {
-                errors.add("Empty price at line " + lineNo);
+                errors.add("Empty Price at line " + lineNo);
                 continue;
             }
-            if (tradeTypeText.isEmpty()) {
-                errors.add("Empty tradeType at line " + lineNo);
+
+            String category = categoryText.toUpperCase();
+            if (!"MOBILE".equals(category) && !"LAPTOP".equals(category) && !"TV".equals(category)) {
+                errors.add("Invalid Category at line " + lineNo + ": must be Mobile, Laptop, or TV");
                 continue;
             }
 
@@ -106,11 +107,11 @@ public class RecordCountUtil {
             try {
                 quantity = Integer.parseInt(quantityText);
             } catch (NumberFormatException ex) {
-                errors.add("Invalid quantity at line " + lineNo);
+                errors.add("Invalid Quantity at line " + lineNo);
                 continue;
             }
             if (quantity <= 0) {
-                errors.add("Invalid quantity at line " + lineNo + ": must be greater than 0");
+                errors.add("Invalid Quantity at line " + lineNo + ": must be greater than 0");
                 continue;
             }
 
@@ -118,17 +119,11 @@ public class RecordCountUtil {
             try {
                 price = Double.parseDouble(priceText);
             } catch (NumberFormatException ex) {
-                errors.add("Invalid price at line " + lineNo);
+                errors.add("Invalid Price at line " + lineNo);
                 continue;
             }
             if (price <= 0) {
-                errors.add("Invalid price at line " + lineNo + ": must be greater than 0");
-                continue;
-            }
-
-            String tradeType = tradeTypeText.toUpperCase();
-            if (!"BUY".equals(tradeType) && !"SELL".equals(tradeType)) {
-                errors.add("Invalid tradeType at line " + lineNo + ": must be BUY or SELL");
+                errors.add("Invalid Price at line " + lineNo + ": must be greater than 0");
                 continue;
             }
 

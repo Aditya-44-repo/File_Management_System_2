@@ -17,12 +17,12 @@ class RecordCountUtilTest {
     Path tempDir;
 
     @Test
-    void shouldCountTradeCsvRecordsWithoutErrors() throws Exception {
+    void shouldCountProductCsvRecordsWithoutErrors() throws Exception {
         Path file = tempDir.resolve("valid.csv");
         Files.writeString(file,
-                "tradeId,clientId,stockSymbol,quantity,price,tradeType\n"
-                        + "T1,C1,AAPL,10,189.50,BUY\n"
-                        + "T2,C2,MSFT,5,320.25,sell\n");
+                "ProductId,Name,Category,Quantity,Price\n"
+                        + "P1,Samsung Galaxy,Mobile,10,19999\n"
+                        + "P2,MacBook Pro,laptop,5,209999\n");
 
         RecordCountUtil.ProcessingResult result = recordCountUtil.analyzeFile(file);
 
@@ -34,8 +34,8 @@ class RecordCountUtilTest {
     void shouldFailWhenHeaderDoesNotMatch() throws Exception {
         Path file = tempDir.resolve("invalid-columns.csv");
         Files.writeString(file,
-                "id,name,qty,price,type,client\n"
-                        + "T1,C1,AAPL,10,189.50,BUY\n");
+                "id,name,qty,price,category\n"
+                        + "P1,Samsung Galaxy,Mobile,10,19999\n");
 
         RecordCountUtil.ProcessingResult result = recordCountUtil.analyzeFile(file);
 
@@ -48,26 +48,25 @@ class RecordCountUtilTest {
     void shouldFailWhenQuantityInvalid() throws Exception {
         Path file = tempDir.resolve("invalid-quantity.csv");
         Files.writeString(file,
-                "tradeId,clientId,stockSymbol,quantity,price,tradeType\n"
-                        + "T1,C1,AAPL,-1,189.50,BUY\n");
+                "ProductId,Name,Category,Quantity,Price\n"
+                        + "P1,Samsung Galaxy,Mobile,-1,19999\n");
 
         RecordCountUtil.ProcessingResult result = recordCountUtil.analyzeFile(file);
 
         assertTrue(result.hasErrors());
-        assertTrue(result.errorMessage().contains("Invalid quantity at line 2"));
+        assertTrue(result.errorMessage().contains("Invalid Quantity at line 2"));
     }
 
     @Test
-    void shouldFailWhenTradeTypeInvalid() throws Exception {
-        Path file = tempDir.resolve("invalid-tradetype.csv");
+    void shouldFailWhenCategoryInvalid() throws Exception {
+        Path file = tempDir.resolve("invalid-category.csv");
         Files.writeString(file,
-                "tradeId,clientId,stockSymbol,quantity,price,tradeType\n"
-                        + "T1,C1,AAPL,1,189.50,HOLD\n");
+                "ProductId,Name,Category,Quantity,Price\n"
+                        + "P1,Samsung Galaxy,Camera,1,19999\n");
 
         RecordCountUtil.ProcessingResult result = recordCountUtil.analyzeFile(file);
 
         assertTrue(result.hasErrors());
-        assertTrue(result.errorMessage().contains("Invalid tradeType at line 2"));
+        assertTrue(result.errorMessage().contains("Invalid Category at line 2"));
     }
 }
-
