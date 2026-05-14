@@ -1,0 +1,512 @@
+$primary-color: #6367FF;
+$gradient-start: #8494FF;
+$gradient-mid: #6367FF;
+$gradient-end: #C9BEFF;
+$text-light: #f5f5f5;
+$text-dark: #333;
+$border-radius: 16px;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.home-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+// Header
+.header {
+  background-color: $primary-color;
+  padding: 16px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+}
+
+.header-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.btn {
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 10px 20px;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.btn-login {
+  background-color: transparent;
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.btn-signup {
+  background-color: white;
+  color: $primary-color;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+  }
+}
+
+.btn-primary {
+  background-color: white;
+  color: $primary-color;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+  }
+}
+
+.btn-secondary {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2px solid transparent;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+}
+
+// Main Content
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+// Welcome Section
+.welcome-section {
+  background: linear-gradient(135deg, #ffc0e6 0%, #ffb0d9 100%);
+  padding: 48px 24px;
+}
+
+.welcome-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.welcome-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.welcome-title {
+  font-size: 48px;
+  font-weight: 700;
+  color: $text-dark;
+  margin-bottom: 16px;
+}
+
+.welcome-description {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+.welcome-actions {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+
+  .btn {
+    padding: 12px 28px;
+    font-size: 16px;
+  }
+}
+
+.welcome-features {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.feature-tag {
+  background-color: rgba($primary-color, 0.2);
+  color: $primary-color;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.feature-label {
+  color: #555;
+  font-size: 14px;
+}
+
+.welcome-overview {
+  background: linear-gradient(135deg, rgba($primary-color, 0.3) 0%, rgba($primary-color, 0.1) 100%);
+  padding: 32px;
+  border-radius: $border-radius;
+}
+
+.overview-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: $text-dark;
+  margin-bottom: 8px;
+}
+
+.overview-subtitle {
+  font-size: 14px;
+  color: #999;
+  margin-bottom: 24px;
+}
+
+.overview-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.overview-card {
+  background-color: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+  h4 {
+    font-size: 16px;
+    color: $text-dark;
+    margin-bottom: 8px;
+  }
+
+  p {
+    font-size: 14px;
+    color: #666;
+  }
+
+  .drag-text {
+    font-size: 12px;
+    color: #999;
+    font-style: italic;
+  }
+}
+
+// Features Section
+.features-section {
+  padding: 56px 24px;
+  background-color: #fce4ec;
+}
+
+.features-header {
+  max-width: 1200px;
+  margin: 0 auto 40px;
+  text-align: center;
+}
+
+.features-label {
+  display: inline-block;
+  background-color: rgba($primary-color, 0.15);
+  color: $primary-color;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.features-title {
+  font-size: 36px;
+  font-weight: 700;
+  color: $text-dark;
+  margin-bottom: 12px;
+}
+
+.features-description {
+  font-size: 16px;
+  color: #666;
+}
+
+.features-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+}
+
+.feature-card {
+  background: linear-gradient(135deg, $gradient-start 0%, $gradient-mid 50%, $gradient-end 100%);
+  padding: 32px 24px;
+  border-radius: $border-radius;
+  color: white;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba($primary-color, 0.3);
+  }
+
+  .feature-icon {
+    font-size: 40px;
+    margin-bottom: 16px;
+  }
+
+  h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  p {
+    font-size: 14px;
+    line-height: 1.6;
+    opacity: 0.95;
+  }
+}
+
+// CTA Section
+.cta-section {
+  padding: 48px 24px;
+  background-color: #ffb0d9;
+}
+
+.cta-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.cta-title {
+  font-size: 36px;
+  font-weight: 700;
+  color: $text-dark;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.cta-description {
+  font-size: 16px;
+  color: #666;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.cta-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.cta-card {
+  background: linear-gradient(135deg, $gradient-start 0%, $gradient-mid 50%, $gradient-end 100%);
+  padding: 28px 24px;
+  border-radius: $border-radius;
+  color: white;
+  text-align: center;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateY(-8px);
+  }
+
+  h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  p {
+    font-size: 14px;
+    margin-bottom: 20px;
+    opacity: 0.9;
+    line-height: 1.5;
+  }
+}
+
+.cta-btn {
+  background-color: white;
+  color: $primary-color;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+    transform: scale(1.02);
+  }
+}
+
+// Footer
+.footer {
+  background-color: $primary-color;
+  color: white;
+  padding: 40px 24px 20px;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto 32px;
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  gap: 40px;
+}
+
+.footer-logo {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.footer-sections {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+}
+
+.footer-column {
+  h4 {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+
+  ul {
+    list-style: none;
+
+    li {
+      margin-bottom: 12px;
+
+      a {
+        color: rgba(white, 0.8);
+        text-decoration: none;
+        font-size: 14px;
+        transition: color 0.3s ease;
+
+        &:hover {
+          color: white;
+        }
+      }
+    }
+  }
+}
+
+.footer-bottom {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-top: 24px;
+  border-top: 1px solid rgba(white, 0.1);
+  text-align: center;
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .welcome-content {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .welcome-title {
+    font-size: 36px;
+  }
+
+  .features-title {
+    font-size: 28px;
+  }
+
+  .cta-title {
+    font-size: 28px;
+  }
+
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .footer-sections {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    font-size: 13px;
+  }
+
+  .welcome-section {
+    padding: 32px 16px;
+  }
+
+  .features-section {
+    padding: 40px 16px;
+  }
+
+  .cta-section {
+    padding: 32px 16px;
+  }
+
+  .header-content {
+    padding: 0 16px;
+  }
+
+  .btn {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .welcome-features {
+    gap: 12px;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cta-buttons {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-sections {
+    grid-template-columns: 1fr;
+  }
+
+  .welcome-title {
+    font-size: 28px;
+  }
+
+  .features-title,
+  .cta-title {
+    font-size: 22px;
+  }
+}
