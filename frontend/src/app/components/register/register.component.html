@@ -1,35 +1,45 @@
-<mat-card class="auth-card">
+<div class="login-page">
+  <mat-card class="auth-card">
     <div class="form-container">
-        <h2>Create Account</h2>
-        <form [formGroup]="form" (ngSubmit)="submit()">
-            <mat-form-field appearance="outline" class="full">
-                <mat-label>Full Name</mat-label>
-                <input matInput formControlName="name" />
-                <mat-error *ngIf="form.controls.name.invalid">Name is required</mat-error>
-            </mat-form-field>
+      <div class="brand">
+        <img class="brand-logo" src="assets/docit-logo.png" alt="DocIT logo" />
+      </div>
 
-            <mat-form-field appearance="outline" class="full">
-                <mat-label>Email Address</mat-label>
-                <input matInput type="email" formControlName="email" />
-                <mat-error *ngIf="form.controls.email.hasError('required')">Email is required</mat-error>
-                <mat-error *ngIf="form.controls.email.hasError('email') || form.controls.email.hasError('pattern')">
-                    Enter a valid email
-                </mat-error>
-            </mat-form-field>
+      <h2>Create account</h2>
+      <p class="subtitle">Sign up to get started</p>
 
-            <mat-form-field appearance="outline" class="full">
-                <mat-label>Password</mat-label>
-                <input matInput type="password" formControlName="password" />
-                <mat-hint>At least 6 characters</mat-hint>
-                <mat-error *ngIf="form.controls.password.hasError('minlength')">Password must be at least 6 characters</mat-error>
-                <mat-error *ngIf="form.controls.password.hasError('required')">Password is required</mat-error>
-            </mat-form-field>
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <label class="input-label">Full Name</label>
+        <mat-form-field appearance="outline" class="full">
+          <mat-icon matPrefix>person</mat-icon>
+          <input matInput formControlName="name" placeholder="Enter your full name" />
+          <mat-error *ngIf="form.controls.name.invalid">Name is required</mat-error>
+        </mat-form-field>
 
-            <button mat-raised-button color="primary" type="submit" class="register-btn" [disabled]="loading || form.invalid">
-                {{ loading ? 'Creating Account…' : 'Sign Up' }}
-            </button>
-        </form>
+        <label class="input-label">Email Address</label>
+        <mat-form-field appearance="outline" class="full">
+          <mat-icon matPrefix>mail</mat-icon>
+          <input matInput type="email" formControlName="email" placeholder="Enter your email" />
+          <mat-error *ngIf="form.controls.email.hasError('required')">Email is required</mat-error>
+          <mat-error *ngIf="form.controls.email.hasError('email') || form.controls.email.hasError('pattern')">
+            Enter a valid email
+          </mat-error>
+        </mat-form-field>
 
-        <p class="login-link">Already have an account? <a routerLink="/login">Sign in</a></p>
+        <label class="input-label">Password</label>
+        <mat-form-field appearance="outline" class="full">
+          <mat-icon matPrefix>lock</mat-icon>
+          <input matInput type="password" formControlName="password" placeholder="Create a password" />
+          <mat-error *ngIf="form.controls.password.hasError('minlength')">Password must be at least 6 characters</mat-error>
+          <mat-error *ngIf="form.controls.password.hasError('required')">Password is required</mat-error>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" type="submit" class="register-btn" [disabled]="loading || form.invalid">
+          {{ loading ? 'Creating Account…' : 'Sign Up' }}
+        </button>
+      </form>
+
+      <p class="login-link">Already have an account? <a routerLink="/login">Sign in</a></p>
     </div>
-</mat-card>
+  </mat-card>
+</div>
