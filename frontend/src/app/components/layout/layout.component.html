@@ -1,0 +1,78 @@
+<div class="layout-wrapper">
+  <!-- HEADER (Fixed, stays in place) -->
+  <header class="layout-header">
+    <app-navbar></app-navbar>
+  </header>
+
+  <!-- Hamburger Toggle Button (only when logged in) -->
+  <button
+    class="hamburger-toggle"
+    *ngIf="isLoggedIn"
+    [class.open]="sidebarOpen"
+    (click)="toggleSidebar()"
+    title="Toggle Sidebar"
+    aria-label="Toggle Menu"
+  >
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+  </button>
+
+  <!-- Overlay (click to close sidebar) -->
+  <div
+    class="sidebar-overlay"
+    *ngIf="sidebarOpen && isLoggedIn"
+    (click)="closeSidebar()"
+    [class.visible]="sidebarOpen"
+  ></div>
+
+  <!-- MAIN CONTAINER (shifts when sidebar opens) -->
+  <div class="layout-container" [class.sidebar-open]="sidebarOpen">
+    <!-- SIDEBAR (only when logged in) -->
+    <aside class="sidebar" *ngIf="isLoggedIn" [class.open]="sidebarOpen">
+      <!-- Sidebar Header -->
+      <div class="sidebar-header">
+        <h3 class="sidebar-title">Menu</h3>
+        <button class="sidebar-close" (click)="closeSidebar()" aria-label="Close Menu">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <!-- Sidebar Content -->
+      <nav class="sidebar-nav">
+        <ul class="menu-list">
+          <li *ngFor="let item of menuItems" *ngIf="isMenuItemVisible(item)">
+            <a
+              class="menu-item"
+              [class.active]="isActive(item.route)"
+              (click)="navigateTo(item.route)"
+            >
+              <mat-icon class="menu-icon">{{ item.icon }}</mat-icon>
+              <span class="menu-label">{{ item.label }}</span>
+              <span class="menu-badge" *ngIf="isActive(item.route)"></span>
+            </a>
+          </li>
+        </ul>
+
+        <!-- Logout Button -->
+        <div class="sidebar-footer">
+          <button class="logout-btn" (click)="logout()">
+            <mat-icon class="menu-icon">logout</mat-icon>
+            <span class="menu-label">Logout</span>
+          </button>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- MAIN CONTENT AREA (shifts right when sidebar opens) -->
+    <main class="main-content">
+      <!-- Content goes here via router-outlet -->
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+
+  <!-- FOOTER (Fixed, stays in place) -->
+  <footer class="layout-footer">
+    <app-footer></app-footer>
+  </footer>
+</div>

@@ -66,8 +66,8 @@ export class ProfileDialogComponent implements OnInit {
   // 2. Clear the session/tokens via your service
   this.auth.logout();
 
-  // 3. Force redirect to the login page
-  this.router.navigate(['/login']);
+  // 3. Force redirect to the home page
+  this.router.navigate(['/home']);
 }
 
 }

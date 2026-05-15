@@ -1,48 +1,28 @@
 <mat-toolbar color="primary" class="navbar">
   <!-- Hamburger icon for mobile -->
-  <button mat-icon-button class="hamburger" [matMenuTriggerFor]="mobileMenu">
+  <button mat-icon-button class="hamburger" [matMenuTriggerFor]="mobileMenu" *ngIf="!isLoggedIn">
     <mat-icon>menu</mat-icon>
   </button>
   <!-- Logo -->
-  <a routerLink="/dashboard" class="brand" aria-label="DocIT Home">
+  <a routerLink="/home" class="brand" aria-label="DocIT Home">
     <span class="brand-text">DocIT</span>
   </a>
   <span class="spacer"></span>
   <!-- Desktop nav buttons (hidden on mobile) -->
-  <div class="desktop-nav">
-    <button mat-button routerLink="/dashboard">Dashboard</button>
-    <ng-container *ngIf="!isLoggedIn">
-      <button mat-button routerLink="/login">Login</button>
-      <button mat-button routerLink="/register">Register</button>
-    </ng-container>
-    <ng-container *ngIf="isLoggedIn">
-      <button mat-button routerLink="/files">Files</button>
-      <button mat-button routerLink="/upload">Upload</button>
-      <button mat-button *ngIf="canManageUsers" routerLink="/admin/users">User Admin</button>
-    </ng-container>
+  <div class="desktop-nav" *ngIf="!isLoggedIn">
+    <button mat-button routerLink="/login">Login</button>
+    <button mat-button routerLink="/register">Register</button>
   </div>
-  <!-- On mobile, optionally show avatar only -->
+  <!-- Profile button on right (shown when logged in) -->
   <ng-container *ngIf="isLoggedIn">
-    <button mat-icon-button class="profile-menu-btn mobile-avatar" (click)="openProfileDialog()">
+    <button mat-icon-button class="profile-menu-btn" (click)="openProfileDialog()">
       <img [src]="profileImage" alt="Profile" class="profile-avatar" (error)="handleProfileImageError()">
     </button>
   </ng-container>
 </mat-toolbar>
 
-<!-- Mobile dropdown menu -->
+<!-- Mobile dropdown menu (only when not logged in) -->
 <mat-menu #mobileMenu="matMenu" class="mobile-dropdown-menu">
-  <button mat-menu-item routerLink="/dashboard">Dashboard</button>
-  <ng-container *ngIf="!isLoggedIn">
-    <button mat-menu-item routerLink="/login">Login</button>
-    <button mat-menu-item routerLink="/register">Register</button>
-  </ng-container>
-  <ng-container *ngIf="isLoggedIn">
-    <button mat-menu-item routerLink="/files">Files</button>
-    <button mat-menu-item routerLink="/upload">Upload</button>
-    <button mat-menu-item *ngIf="canManageUsers" routerLink="/admin/users">User Admin</button>
-    <button mat-menu-item (click)="openProfileDialog()">
-      <img [src]="profileImage" alt="Profile" class="profile-avatar" style="margin-right:8px;" (error)="handleProfileImageError()"> Profile
-    </button>
-    <button mat-menu-item (click)="logout()">Logout</button>
-  </ng-container>
+  <button mat-menu-item routerLink="/login">Login</button>
+  <button mat-menu-item routerLink="/register">Register</button>
 </mat-menu>

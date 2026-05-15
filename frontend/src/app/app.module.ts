@@ -26,6 +26,7 @@ import { ProfileDialogComponent } from './components/profile-dialog/profile-dial
 import { OauthCallbackComponent } from './components/oauth-callback/oauth-callback.component';
 import { AdminUsersComponent } from './components/admin-users/admin-users.component';
 import { HomeComponent } from './components/home/home.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
 
 // Angular Material modules
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -75,7 +76,8 @@ import { AuthInterceptor } from './services/auth.interceptor';
     ProfileDialogComponent,
     OauthCallbackComponent,
     AdminUsersComponent,
-    HomeComponent
+    HomeComponent,
+    SidebarComponent
   ],
   imports: [
     BrowserModule,
