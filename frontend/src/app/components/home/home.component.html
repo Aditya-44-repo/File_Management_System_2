@@ -1,145 +1,93 @@
 <div class="home-container">
-  <!-- Header -->
-  <header class="header">
-    <div class="header-content">
-      <h1 class="logo">DocIT</h1>
-      <div class="header-buttons">
-        <button class="btn btn-login" (click)="navigateTo('login')">Login</button>
-        <button class="btn btn-signup" (click)="navigateTo('register')">Sign Up</button>
-      </div>
-    </div>
-  </header>
-
-  <!-- Main Content -->
   <main class="main-content">
-    <!-- Welcome Section -->
     <section class="welcome-section">
-      <div class="welcome-content">
-        <div class="welcome-text">
-          <h2 class="welcome-title">DocIT</h2>
-          <p class="welcome-description">
-            Your modern file management system for efficient document handling. Manage uploads, monitor processing, and organize files from one secure workspace.
+      <div class="welcome-panel">
+        <div class="hero-copy-wrapper">
+          <img class="hero-logo" src="assets/docit-logo.png" alt="DocIT logo" />
+          
+          <p class="hero-copy">
+            Your modern file management system for efficient document handling. Manage uploads, processing, and organize files from one secure workspace.
           </p>
-          <div class="welcome-actions">
+          <div class="hero-actions">
             <button class="btn btn-primary" (click)="navigateTo('register')">Get Started</button>
             <button class="btn btn-secondary" (click)="navigateTo('register')">Sign Up</button>
           </div>
-          <div class="welcome-features">
-            <span class="feature-tag">SEC</span>
-            <span class="feature-label">Secure storage</span>
-            <span class="feature-tag">BAT</span>
-            <span class="feature-label">Batch processing</span>
-            <span class="feature-tag">ORG</span>
-            <span class="feature-label">Organized access</span>
+          <div class="hero-tags">
+            <span>SEC</span>
+            <span>BAT</span>
+            <span>Batch processing</span>
           </div>
         </div>
-        <div class="welcome-overview">
-          <h3 class="overview-title">System Overview</h3>
-          <p class="overview-subtitle">Experience seamless file management</p>
-          <div class="overview-cards">
-            <div class="overview-card">
-              <h4>Upload Files</h4>
-              <p>Easily upload documents<br><span class="drag-text">Drag and drop or browse</span></p>
+        <div class="hero-feature-list">
+          <div class="feature-item">
+            <div class="feature-icon">📈</div>
+            <div class="feature-copy">
+              <h3>System Overview</h3>
+              <p>Experience seamless file management</p>
             </div>
-            <div class="overview-card">
-              <h4>Organize</h4>
-              <p>Keep files structured<br><span class="drag-text">Folders and metadata</span></p>
+          </div>
+          <div class="feature-item" (click)="navigateTo('register')">
+            <div class="feature-icon">⬆️</div>
+            <div class="feature-copy">
+              <h3>Upload Files</h3>
+              <p>Easily upload documents, drag drop or browse.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">📁</div>
+            <div class="feature-copy">
+              <h3>Organize</h3>
+              <p>Keep files structured, folders and metadata.</p>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Features Section -->
     <section class="features-section">
-      <div class="features-header">
-        <span class="features-label">FEATURES</span>
-        <h2 class="features-title">Powerful file management tools</h2>
-        <p class="features-description">Streamline your document workflow with our comprehensive suite of features.</p>
+      <div class="section-header">
+        <p class="section-tag">FEATURES</p>
+        <h2>Powerful file management tools</h2>
+        <p>Streamline your document workflow with a straightforward, blue-first interface.</p>
       </div>
-      <div class="features-grid">
-        <div class="feature-card">
+      <div class="feature-grid">
+        <article class="feature-card">
           <div class="feature-icon">📁</div>
-          <h3>File Organization</h3>
-          <p>Create folders, add tags, and categorize your documents for easy retrieval.</p>
-        </div>
-        <div class="feature-card">
+          <h3>Organize Files</h3>
+          <p>Create folders, tag documents, and keep everything easy to find.</p>
+        </article>
+        <article class="feature-card">
           <div class="feature-icon">🔒</div>
           <h3>Secure Access</h3>
-          <p>Role-based permissions ensure only authorized users can access sensitive files.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">📊</div>
-          <h3>Analytics & Reporting</h3>
-          <p>Track upload trends, user activity, and generate reports for insights.</p>
-        </div>
-        <div class="feature-card">
+          <p>Protect files with role-based permissions and simple access controls.</p>
+        </article>
+        <article class="feature-card">
           <div class="feature-icon">⚡</div>
           <h3>Fast Processing</h3>
-          <p>Quick upload and download speeds with background processing capabilities.</p>
-        </div>
+          <p>Upload and manage files quickly with responsive performance.</p>
+        </article>
+        <article class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3>Quick Insights</h3>
+          <p>See your document activity at a glance with clean reporting elements.</p>
+        </article>
       </div>
     </section>
 
-    <!-- CTA Section -->
     <section class="cta-section">
-      <div class="cta-content">
-        <h2 class="cta-title">Ready to get started?</h2>
-        <p class="cta-description">Join DocIT to securely manage your files and streamline your operations.</p>
-        <div class="cta-buttons">
-          <div class="cta-card">
-            <h3>Create Account</h3>
-            <p>Sign up for free and start managing your files today.</p>
-            <button class="cta-btn" (click)="navigateTo('register')">Sign Up</button>
-          </div>
-          <div class="cta-card">
-            <h3>Sign In</h3>
-            <p>Already have an account? Log in to access your files.</p>
-            <button class="cta-btn" (click)="navigateTo('login')">Login</button>
-          </div>
-          <div class="cta-card">
-            <h3>Learn More</h3>
-            <p>Explore our features and see how DocIT can help your organization.</p>
-            <button class="cta-btn">View Features</button>
-          </div>
+      <h2 class="cta-heading">Ready to get started?</h2>
+      <div class="cta-card-grid">
+        <div class="cta-card">
+          <h3>Create an account</h3>
+          <p>Sign up now to start managing documents securely.</p>
+          <button class="btn btn-primary" (click)="navigateTo('register')">Sign Up</button>
+        </div>
+        <div class="cta-card">
+          <h3>Already a member?</h3>
+          <p>Log in and continue working with your files right away.</p>
+          <button class="btn btn-secondary" (click)="navigateTo('login')">Login</button>
         </div>
       </div>
     </section>
   </main>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="footer-content">
-      <div class="footer-logo">DocIT</div>
-      <div class="footer-sections">
-        <div class="footer-column">
-          <h4>Product</h4>
-          <ul>
-            <li><a href="#">Features</a></li>
-            <li><a href="#">Pricing</a></li>
-            <li><a href="#">Updates</a></li>
-          </ul>
-        </div>
-        <div class="footer-column">
-          <h4>Company</h4>
-          <ul>
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Careers</a></li>
-            <li><a href="#">Contact</a></li>
-          </ul>
-        </div>
-        <div class="footer-column">
-          <h4>Support</h4>
-          <ul>
-            <li><a href="#">Help Center</a></li>
-            <li><a href="#">Teams of Service</a></li>
-            <li><a href="#">Privacy Policy</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>&copy; 2026 DocIT. All rights reserved.</p>
-    </div>
-  </footer>
 </div>

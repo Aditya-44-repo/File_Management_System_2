@@ -1,0 +1,82 @@
+<!-- Hamburger Toggle Button (only when logged in) -->
+<button
+  class="hamburger-btn"
+  [class.open]="isOpen"
+  (click)="toggleSidebar()"
+  *ngIf="isLoggedIn"
+  title="Toggle Menu"
+>
+  <span class="hamburger-icon"></span>
+  <span class="hamburger-icon"></span>
+  <span class="hamburger-icon"></span>
+</button>
+
+<!-- Overlay (clicks outside sidebar to close) -->
+<div class="sidebar-overlay" *ngIf="isOpen && isLoggedIn" (click)="closeSidebar()"></div>
+
+<!-- Sidebar Navigation (only when logged in) -->
+<nav class="sidebar" [class.open]="isOpen" *ngIf="isLoggedIn">
+  <!-- Sidebar Header -->
+  <div class="sidebar-header">
+    <h3 class="sidebar-title">Navigation</h3>
+    <button class="close-btn" (click)="closeSidebar()" aria-label="Close Menu">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Menu Items -->
+  <ul class="menu-list">
+    <li>
+      <a
+        class="menu-item"
+        [class.active]="isActive('/dashboard')"
+        (click)="navigateTo('/dashboard')"
+      >
+        <mat-icon class="menu-icon">dashboard</mat-icon>
+        <span class="menu-label">Dashboard</span>
+      </a>
+    </li>
+
+    <li>
+      <a
+        class="menu-item"
+        [class.active]="isActive('/upload')"
+        (click)="navigateTo('/upload')"
+      >
+        <mat-icon class="menu-icon">cloud_upload</mat-icon>
+        <span class="menu-label">Upload File</span>
+      </a>
+    </li>
+
+    <li>
+      <a
+        class="menu-item"
+        [class.active]="isActive('/files')"
+        (click)="navigateTo('/files')"
+      >
+        <mat-icon class="menu-icon">assessment</mat-icon>
+        <span class="menu-label">Reports</span>
+      </a>
+    </li>
+
+    <li>
+      <a
+        class="menu-item"
+        [class.active]="isActive('/profile')"
+        (click)="navigateTo('/profile')"
+      >
+        <mat-icon class="menu-icon">settings</mat-icon>
+        <span class="menu-label">Settings</span>
+      </a>
+    </li>
+  </ul>
+
+  <!-- Divider -->
+  <div class="sidebar-divider"></div>
+
+  <!-- Logout Button -->
+  <button class="logout-btn" (click)="logout()">
+    <mat-icon class="menu-icon">logout</mat-icon>
+    <span class="menu-label">Logout</span>
+  </button>
+</nav>

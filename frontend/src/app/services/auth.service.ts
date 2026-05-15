@@ -73,7 +73,7 @@ export class AuthService {
     console.log('[AuthService] Logging out user:', this.currentUserSubject.value?.email || this.currentUserSubject.value?.username);
     this.saveUser(null);
     this.currentUserSubject.next(null);
-    this.router.navigate(['/']);
+    this.router.navigate(['/home']);
   }
 
   isAuthenticated(): boolean {
