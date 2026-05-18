@@ -1,30 +1,56 @@
 <div class="dashboard-container">
   <section class="hero">
     <div class="hero-copy">
-      <span class="eyebrow">Welcome to TradeNest</span>
-      <h1>TradeNest</h1>
-      <p class="tagline">
-        Your modern file load control center for trade operations. Manage uploads, monitor processing,
-        and resolve exceptions from one secure workspace.
-      </p>
-
-      <div class="hero-actions">
-        <a href="" (click)="navigateTo('/upload', $event)" class="btn-primary hero-btn">Start Upload</a>
-        <a href="" (click)="navigateTo('/files', $event)" class="btn-secondary hero-btn">View File Loads</a>
-      </div>
-
-      <div class="hero-highlights">
-        <div class="highlight-item">
-          <span class="mini-badge">SEC</span>
-          <span>Secure handoff</span>
+      <div class="upload-stats-hero">
+        <div class="embedded-title">
+          <span class="embedded-badge">DocIT</span>
+          <h2>DocIT: File Management Analytics Dashboard</h2>
         </div>
-        <div class="highlight-item">
-          <span class="mini-badge">BAT</span>
-          <span>Batch-ready tracking</span>
-        </div>
-        <div class="highlight-item">
-          <span class="mini-badge">OPS</span>
-          <span>Operational visibility</span>
+
+        <div class="dashboard-preview">
+          <div class="preview-panel preview-left">
+            <div class="preview-panel-header preview-left-header">
+              <div class="preview-left-brand">
+                <div class="brand-mark"></div>
+                <span>DocIT</span>
+              </div>
+              <span>MAY 2026 FILE UPLOADS</span>
+            </div>
+            <div class="preview-panel-body">
+              <app-upload-statistics-donut></app-upload-statistics-donut>
+            </div>
+          </div>
+
+          <div class="preview-panel preview-right">
+            <div class="preview-panel-header">
+              <span>DAILY STATUS: MAY 15, 2026</span>
+            </div>
+            <div class="preview-panel-body preview-right-body">
+              <div class="date-controls">
+                <div class="date-chip">May 15</div>
+                <div class="date-chip">2026</div>
+                <div class="toggle-chip active">Daily</div>
+                <div class="toggle-chip">Monthly</div>
+                <div class="toggle-chip">Yearly</div>
+              </div>
+              <div class="rings-chart">
+                <div class="ring ring-large">
+                  <span>83%</span>
+                </div>
+                <div class="ring ring-medium">
+                  <span>12%</span>
+                </div>
+                <div class="ring ring-small">
+                  <span>5%</span>
+                </div>
+              </div>
+              <div class="ring-legend-list">
+                <div class="ring-legend-item success">Success</div>
+                <div class="ring-legend-item warning">Failed to Execute</div>
+                <div class="ring-legend-item danger">Failed to Load</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -74,37 +100,6 @@
           <div class="status-row success-row">
             <span>Completed reconciliations ({{ formatCount(overview?.successCount) }})</span>
             <span class="status-pill success">SUCCESS</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="panel-card timeline-card">
-        <div class="card-header">
-          <span>Processing flow</span>
-          <span class="header-badge subtle">FLOW</span>
-        </div>
-
-        <div class="timeline-list">
-          <div class="timeline-item">
-            <span class="timeline-dot"></span>
-            <div>
-              <h4>Upload received</h4>
-              <p>Files are validated for type, size, and naming conventions.</p>
-            </div>
-          </div>
-          <div class="timeline-item">
-            <span class="timeline-dot"></span>
-            <div>
-              <h4>Batch processing</h4>
-              <p>Status moves from pending to processing while records are ingested.</p>
-            </div>
-          </div>
-          <div class="timeline-item">
-            <span class="timeline-dot"></span>
-            <div>
-              <h4>Exception review</h4>
-              <p>Errors and record counts stay visible for fast operational follow-up.</p>
-            </div>
           </div>
         </div>
       </div>
