@@ -54,57 +54,57 @@
         </div>
       </div>
     </div>
+  </section>
 
-    <div class="hero-panel">
-      <div class="panel-card spotlight-card">
-        <div class="card-header">
-          <span>Today at a glance</span>
-          <span class="header-badge live-pulse">LIVE</span>
+  <div class="hero-panel">
+    <div class="panel-card spotlight-card">
+      <div class="card-header">
+        <span>Today at a glance</span>
+        <span class="header-badge live-pulse">LIVE</span>
+      </div>
+
+      <p class="live-note" *ngIf="loadingOverview">Fetching live metrics...</p>
+      <p class="live-note error-note" *ngIf="overviewError">{{ overviewError }}</p>
+
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <strong>{{ formatCount(overview?.totalUploads) }}</strong>
+          <span>Total uploads</span>
+          <em class="metric-trend neutral">Live global count</em>
         </div>
-
-        <p class="live-note" *ngIf="loadingOverview">Fetching live metrics...</p>
-        <p class="live-note error-note" *ngIf="overviewError">{{ overviewError }}</p>
-
-        <div class="metrics-grid">
-          <div class="metric-card">
-            <strong>{{ formatCount(overview?.totalUploads) }}</strong>
-            <span>Total uploads</span>
-            <em class="metric-trend neutral">Live global count</em>
-          </div>
-          <div class="metric-card">
-            <strong>{{ formatCount(overview?.inProcessing) }}</strong>
-            <span>In processing</span>
-            <em class="metric-trend neutral">Active pipeline right now</em>
-          </div>
-          <div class="metric-card">
-            <strong>{{ formatRate(overview?.successRate) }}</strong>
-            <span>Success rate</span>
-            <em class="metric-trend up">Based on all uploads</em>
-          </div>
-          <div class="metric-card">
-            <strong>{{ formatCount(overview?.exceptionsToday) }}</strong>
-            <span>Exceptions today</span>
-            <em class="metric-trend down">Failed uploads since midnight</em>
-          </div>
+        <div class="metric-card">
+          <strong>{{ formatCount(overview?.inProcessing) }}</strong>
+          <span>In processing</span>
+          <em class="metric-trend neutral">Active pipeline right now</em>
         </div>
+        <div class="metric-card">
+          <strong>{{ formatRate(overview?.successRate) }}</strong>
+          <span>Success rate</span>
+          <em class="metric-trend up">Based on all uploads</em>
+        </div>
+        <div class="metric-card">
+          <strong>{{ formatCount(overview?.exceptionsToday) }}</strong>
+          <span>Exceptions today</span>
+          <em class="metric-trend down">Failed uploads since midnight</em>
+        </div>
+      </div>
 
-        <div class="status-stack">
-          <div class="status-row pending-row">
-            <span>Pending validations ({{ formatCount(overview?.pendingCount) }})</span>
-            <span class="status-pill pending">PENDING</span>
-          </div>
-          <div class="status-row processing-row">
-            <span>Batch execution window ({{ formatCount(overview?.processingCount) }})</span>
-            <span class="status-pill processing">PROCESSING</span>
-          </div>
-          <div class="status-row success-row">
-            <span>Completed reconciliations ({{ formatCount(overview?.successCount) }})</span>
-            <span class="status-pill success">SUCCESS</span>
-          </div>
+      <div class="status-stack">
+        <div class="status-row pending-row">
+          <span>Pending validations ({{ formatCount(overview?.pendingCount) }})</span>
+          <span class="status-pill pending">PENDING</span>
+        </div>
+        <div class="status-row processing-row">
+          <span>Batch execution window ({{ formatCount(overview?.processingCount) }})</span>
+          <span class="status-pill processing">PROCESSING</span>
+        </div>
+        <div class="status-row success-row">
+          <span>Completed reconciliations ({{ formatCount(overview?.successCount) }})</span>
+          <span class="status-pill success">SUCCESS</span>
         </div>
       </div>
     </div>
-  </section>
+  </div>
 
   <section class="features section-block">
     <div class="section-heading">

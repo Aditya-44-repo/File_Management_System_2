@@ -138,19 +138,30 @@
   font-weight: 600;
   font-family: 'Montserrat', sans-serif;
   font-size: 0.95rem;
-  color: #0f172a;
-  background: rgba(15, 23, 42, 0.06);
-  border: 1px solid rgba(15, 23, 42, 0.12);
+  color: #1f4bff; /* primary blue text */
+  background: rgba(31, 75, 255, 0.06); /* subtle blue tint */
+  border: 1px solid rgba(31, 75, 255, 0.14);
   border-radius: 8px;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.25s ease;
 }
 
 .navbar button[mat-button]:hover {
-  background: rgba(15, 23, 42, 0.12);
-  color: #0f172a;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-  border-color: rgba(15, 23, 42, 0.18);
+  background: linear-gradient(180deg, rgba(31,75,255,0.12), rgba(31,75,255,0.08));
+  color: #1030d8;
+  box-shadow: 0 6px 18px rgba(31,75,255,0.12);
+  border-color: rgba(31, 75, 255, 0.22);
+}
+
+/* Mobile / dropdown menu buttons (ensure Login/Register are blue there too) */
+.mobile-dropdown-menu button[mat-menu-item],
+.mobile-dropdown-menu a[mat-menu-item] {
+  color: #1f4bff;
+}
+
+.mobile-dropdown-menu button[mat-menu-item]:hover,
+.mobile-dropdown-menu a[mat-menu-item]:hover {
+  background: rgba(31,75,255,0.06);
 }
 
 .profile-menu-btn {
