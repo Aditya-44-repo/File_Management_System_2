@@ -36,13 +36,42 @@ public class PasswordResetService {
                                  JavaMailSender javaMailSender,
                                 PasswordEncoder passwordEncoder,
                                 @Value("${app.frontend-base-url:https://localhost:4200}") String frontendBaseUrl,
-                                @Value("${mail.from:noreply@filemanagement.com}") String mailFrom) {
+                                @Value("${spring.mail.username:}") String mailSenderUsername,
+                                @Value("${spring.mail.from:}") String mailFrom) {
         this.passwordResetTokenRepository = passwordResetTokenRepository;
         this.userAccountRepository = userAccountRepository;
         this.javaMailSender = javaMailSender;
         this.passwordEncoder = passwordEncoder;
         this.frontendBaseUrl = frontendBaseUrl;
-        this.mailFrom = mailFrom;
+        this.mailFrom = resolveMailFrom(mailSenderUsername, mailFrom);
+    }
+
+    private String resolveMailFrom(String mailSenderUsername, String mailFrom) {
+        String trimmedSender = mailSenderUsername == null ? "" : mailSenderUsername.trim();
+        String trimmedFrom = mailFrom == null ? "" : mailFrom.trim();
+
+        if (trimmedSender.isBlank() && trimmedFrom.isBlank()) {
+            logger.error("Missing mail sender configuration: MAIL_SMTP_USERNAME or MAIL_FROM must be set.");
+            throw new IllegalStateException("Email sender is not configured. Set MAIL_SMTP_USERNAME and optionally MAIL_FROM.");
+        }
+
+        if (trimmedFrom.isBlank()) {
+            logger.info("spring.mail.from is not configured, defaulting password reset sender to spring.mail.username {}", trimmedSender);
+            return trimmedSender;
+        }
+
+        if (trimmedSender.isBlank()) {
+            logger.warn("spring.mail.username is not configured. Using MAIL_FROM {} as sender, but SMTP auth may fail if username is missing.", trimmedFrom);
+            return trimmedFrom;
+        }
+
+        if (!trimmedFrom.equalsIgnoreCase(trimmedSender)) {
+            logger.warn("Configured MAIL_FROM {} does not match MAIL_SMTP_USERNAME {}. Using MAIL_SMTP_USERNAME for Gmail SMTP.", trimmedFrom, trimmedSender);
+            return trimmedSender;
+        }
+
+        logger.info("Using resolved mail sender: {}", trimmedSender);
+        return trimmedSender;
     }
 
     @Transactional
@@ -102,35 +131,56 @@ public class PasswordResetService {
         try {
             String resetLink = frontendBaseUrl + "/reset-password?token=" + token;
 
+            if (mailFrom == null || mailFrom.isBlank()) {
+                logger.error("Password reset email sender is not configured. mailFrom is blank.");
+                throw new IllegalStateException("Password reset email sender is not configured");
+            }
+
+            logger.info("Resolved password reset sender: {}", mailFrom);
+            logger.info("Sending password reset email from={} to={}, frontend URL={}", mailFrom, email, frontendBaseUrl);
+
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(mailFrom);
             message.setTo(email);
             message.setSubject("Password Reset Request - File Management System");
             message.setText(buildResetEmailContent(resetLink));
 
-            logger.info("Sending password reset email to: {}", email);
+            logger.debug("JavaMailSender instance: {}, Message: from={}, to={}, subject={}", 
+                    javaMailSender != null ? "available" : "NULL", mailFrom, email, message.getSubject());
+            
             javaMailSender.send(message);
             logger.info("Password reset email sent successfully to: {}", email);
         } catch (Exception e) {
-            logger.error("Failed to send password reset email to: {}. Error: {}", email, e.getMessage(), e);
-            throw new RuntimeException("Failed to send password reset email: " + e.getMessage(), e);
+            logger.error("Failed to send password reset email to: {}. Exception type: {}, Error: {}", 
+                    email, e.getClass().getSimpleName(), e.getMessage(), e);
+            throw new RuntimeException("Failed to send password reset email: " + e.getClass().getSimpleName() + " - " + e.getMessage(), e);
         }
     }
 
-    private String buildResetEmailContent(String resetLink) {
-        return "Hello,\n\n" +
-                "We received a request to reset your password for your File Management System account. " +
-                "If you did not make this request, you can safely ignore this email.\n\n" +
-                "To reset your password, click the link below:\n" +
-                resetLink + "\n\n" +
-                "This link will expire in " + TOKEN_EXPIRY_HOURS + " hours.\n\n" +
-                "If you did not request a password reset, please ignore this email.\n\n" +
-                "Best regards,\n" +
-                "File Management System Team";
-    }
+private String buildResetEmailContent(String resetLink) {
+    return "Dear User,\n\n" +
+           "We have received a request to reset the password associated with your DocIT account. " +
+           "If you did not initiate this request, please disregard this message and your account will remain secure.\n\n" +
+           "To proceed with resetting your password, kindly click the secure link below:\n\n" +
+           resetLink + "\n\n" +
+           "For your security, this link will remain valid for " + TOKEN_EXPIRY_HOURS + " hours. " +
+           "After it expires, you will need to submit a new password reset request.\n\n" +
+           "If you did not request a password reset, no further action is required.\n\n" +
+           "Thank you for trusting DocIT. We are committed to safeguarding your information and ensuring seamless access to your files.\n\n" +
+           "Best regards,\n" +
+           "DocIT Filemanagent Team"; // signature can be customized as needed
+}
 
     @Transactional
     public void cleanupExpiredTokens() {
         passwordResetTokenRepository.deleteByExpiresAtBefore(LocalDateTime.now());
     }
 }
+
+
+
+
+
+
+
+
