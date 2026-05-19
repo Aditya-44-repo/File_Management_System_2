@@ -16,7 +16,7 @@
   <div class="auth-actions">
     <button mat-button routerLink="/login" *ngIf="!isLoggedIn">Login</button>
     <button mat-button routerLink="/register" *ngIf="!isLoggedIn">Register</button>
-    <button mat-icon-button class="profile-menu-btn" (click)="openProfileDialog()" *ngIf="isLoggedIn">
+    <button mat-icon-button class="profile-menu-btn" [class.profile-open]="profileMenuOpen" (click)="openProfileDialog()" *ngIf="isLoggedIn">
       <img [src]="profileImage" alt="Profile" class="profile-avatar" (error)="handleProfileImageError()">
     </button>
   </div>

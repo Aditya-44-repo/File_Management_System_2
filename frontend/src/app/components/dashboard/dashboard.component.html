@@ -3,35 +3,34 @@
     <div class="hero-copy">
       <div class="upload-stats-hero">
         <div class="embedded-title">
-          <span class="embedded-badge">DocIT</span>
-          <h2>DocIT: File Management Analytics Dashboard</h2>
+          <h2>File Management Analytics Dashboard</h2>
         </div>
 
         <div class="dashboard-preview">
           <div class="preview-panel preview-left">
             <div class="preview-panel-header preview-left-header">
-              <div class="preview-left-brand">
-                <div class="brand-mark"></div>
-                <span>DocIT</span>
-              </div>
+              <div class="preview-left-brand"></div>
               <span>MAY 2026 FILE UPLOADS</span>
             </div>
             <div class="preview-panel-body">
-              <app-upload-statistics-donut></app-upload-statistics-donut>
+              <app-upload-statistics-donut
+                [selectedPeriod]="selectedPeriod"
+                [selectedYear]="selectedYear"
+                [selectedDate]="selectedDate"
+              ></app-upload-statistics-donut>
             </div>
           </div>
 
           <div class="preview-panel preview-right">
             <div class="preview-panel-header">
-              <span>DAILY STATUS: MAY 15, 2026</span>
+              <span>SELECTED DATE: {{ selectedDate }}</span>
             </div>
             <div class="preview-panel-body preview-right-body">
-              <div class="date-controls">
-                <div class="date-chip">May 15</div>
-                <div class="date-chip">2026</div>
-                <div class="toggle-chip active">Daily</div>
-                <div class="toggle-chip">Monthly</div>
-                <div class="toggle-chip">Yearly</div>
+              <div class="picker-row">
+                <label class="calendar-input-label">
+                  <span class="calendar-icon">📅</span>
+                  <input class="picker calendar-input" type="date" [(ngModel)]="selectedDateISO" (change)="onDateChange()" />
+                </label>
               </div>
               <div class="rings-chart">
                 <div class="ring ring-large">

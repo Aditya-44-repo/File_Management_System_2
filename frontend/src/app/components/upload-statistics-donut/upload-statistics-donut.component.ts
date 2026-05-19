@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { FileUploadStatsService, FileUploadStats, UploadStatus } from '../../services/file-upload-stats.service';
@@ -15,12 +15,24 @@ export class UploadStatisticsDonutComponent implements OnInit, OnDestroy {
   error = '';
   hoveredStatus: string | null = null;
   
+  // Accept selection inputs so parent can control the preview
+  @Input() selectedDate?: string;
+  @Input() selectedYear?: string;
+  @Input() selectedPeriod?: 'Daily' | 'Monthly' | 'Yearly';
+  
   private destroy$ = new Subject<void>();
 
   constructor(private fileUploadStatsService: FileUploadStatsService) { }
 
   ngOnInit(): void {
     this.loadStats();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    // reload stats when parent selection changes (basic wiring)
+    if (changes['selectedDate'] || changes['selectedYear'] || changes['selectedPeriod']) {
+      this.loadStats();
+    }
   }
 
   ngOnDestroy(): void {
@@ -30,7 +42,7 @@ export class UploadStatisticsDonutComponent implements OnInit, OnDestroy {
 
   private loadStats(): void {
     this.loading = true;
-    this.fileUploadStatsService.getUploadStats()
+    this.fileUploadStatsService.getUploadStats(this.selectedPeriod, this.selectedYear, this.selectedDate)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (data: FileUploadStats) => {

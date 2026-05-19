@@ -1,9 +1,9 @@
 .footer {
-  background: linear-gradient(135deg, #ffffff 0%, #f0f4ff 50%, #2f6bff 100%);
-  color: #1f2937;
-  padding: 48px 20px 32px;
+  background: #ffffff;
+  color: #0f172a;
+  padding: 56px 20px 32px;
   font-family: 'Montserrat', sans-serif;
-  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  border-top: 1px solid rgba(15, 23, 42, 0.08);
 
   .footer-container {
     max-width: 1200px;
@@ -23,7 +23,7 @@
         align-items: center;
         font-weight: 800;
         font-size: 2rem;
-        color: #111827;
+        color: #0f172a;
         text-decoration: none;
         margin-bottom: 12px;
         transition: all 0.3s ease;
@@ -33,7 +33,7 @@
         }
 
         .brand-accent {
-          color: #2f6bff;
+          color: #2563eb;
         }
 
         .logo {
@@ -60,7 +60,7 @@
 
       .link-group {
         h4 {
-          color: #111827;
+          color: #0f172a;
           margin: 0 0 14px 0;
           font-weight: 700;
           text-decoration: none;
@@ -78,7 +78,7 @@
             margin-bottom: 10px;
 
             a {
-              color: #374151;
+              color: #334155;
               text-decoration: none;
               font-size: 0.9rem;
               font-weight: 500;
@@ -86,7 +86,7 @@
               position: relative;
 
               &:hover {
-                color: #2f6bff;
+                color: #2563eb;
                 padding-left: 4px;
               }
             }
@@ -97,7 +97,7 @@
 
     .footer-divider {
       height: 1px;
-      background: linear-gradient(90deg, rgba(255,255,255,0.3), rgba(47,107,255,0.2), rgba(255,255,255,0.3));
+      background: linear-gradient(90deg, rgba(15,23,42,0.1), rgba(15,23,42,0.06), rgba(15,23,42,0.1));
       margin: 24px 0;
     }
 
@@ -115,12 +115,12 @@
         font-weight: 500;
 
         &:first-child {
-          color: #4b5563;
+          color: #64748b;
         }
       }
 
       .footer-credit {
-        color: #2f6bff;
+        color: #2563eb;
         font-weight: 600;
         letter-spacing: 0.3px;
       }

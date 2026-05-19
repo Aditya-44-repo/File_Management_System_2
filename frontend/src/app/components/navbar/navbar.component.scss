@@ -15,7 +15,7 @@
   }
 
   .hamburger mat-icon {
-    color: #000000;
+    color: #0f172a;
   }
 
   .navbar {
@@ -25,6 +25,9 @@
   .logo {
     height: 28px !important;
     margin-right: 6px !important;
+  }
+  .header-logo {
+    height: 28px !important;
   }
   .profile-avatar {
     width: 32px !important;
@@ -81,6 +84,7 @@
   align-items: center;
   padding: 10px 20px;
   background: #ffffff;
+  color: #0f172a;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
   border-bottom: 1px solid rgba(15, 23, 42, 0.08);
 }
@@ -95,15 +99,11 @@
   display: inline-flex;
   align-items: center;
   text-decoration: none;
-  color: #111827;
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 700;
-  font-size: 2rem;
-  letter-spacing: 1px;
+  color: #0f172a;
 }
 
 .brand .header-logo {
-  height: 40px;
+  height: 32px;
   width: auto;
   display: block;
 }
@@ -121,7 +121,7 @@
 }
 
 .logo {
-  height: 48px;
+  height: 32px;
   width: auto;
   display: block;
   margin-right: 10px;
@@ -134,23 +134,23 @@
 /* Apply custom styling only to toolbar text buttons, not icon/menu buttons */
 .navbar button[mat-button] {
   margin-left: 10px;
-  padding: 8px 18px;
-  font-weight: 600;
+  padding: 10px 20px;
+  font-weight: 700;
   font-family: 'Montserrat', sans-serif;
   font-size: 0.95rem;
-  color: #1f4bff; /* primary blue text */
-  background: rgba(31, 75, 255, 0.06); /* subtle blue tint */
-  border: 1px solid rgba(31, 75, 255, 0.14);
-  border-radius: 8px;
+  color: #ffffff;
+  background: linear-gradient(180deg, #2f6bff 0%, #2152e8 100%);
+  border: none;
+  border-radius: 12px;
   cursor: pointer;
   transition: all 0.25s ease;
+  box-shadow: 0 4px 12px rgba(33, 82, 232, 0.18);
 }
 
 .navbar button[mat-button]:hover {
-  background: linear-gradient(180deg, rgba(31,75,255,0.12), rgba(31,75,255,0.08));
-  color: #1030d8;
-  box-shadow: 0 6px 18px rgba(31,75,255,0.12);
-  border-color: rgba(31, 75, 255, 0.22);
+  background: linear-gradient(180deg, #3a7bff 0%, #2a5af0 100%);
+  color: #ffffff;
+  box-shadow: 0 6px 18px rgba(33, 82, 232, 0.22);
 }
 
 /* Mobile / dropdown menu buttons (ensure Login/Register are blue there too) */
@@ -200,10 +200,11 @@
   transform: scale(1.06);
 }
 
-.profile-menu-btn:hover {
-  background: rgba(255, 255, 255, 0.14);
-  border: 0;
-  box-shadow: none;
+.profile-menu-btn:hover,
+.profile-menu-btn.profile-open {
+  background: linear-gradient(180deg, #2f6bff 0%, #2152e8 100%);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 10px 24px rgba(33, 82, 232, 0.2);
 }
 
 .profile-avatar {
