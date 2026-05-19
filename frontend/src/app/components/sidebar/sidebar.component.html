@@ -28,6 +28,16 @@
     <li>
       <a
         class="menu-item"
+        [class.active]="isActive('/home')"
+        (click)="navigateTo('/home')"
+      >
+        <mat-icon class="menu-icon">home</mat-icon>
+        <span class="menu-label">Home</span>
+      </a>
+    </li>
+    <li>
+      <a
+        class="menu-item"
         [class.active]="isActive('/dashboard')"
         (click)="navigateTo('/dashboard')"
       >
@@ -76,7 +86,7 @@
         (click)="navigateTo('/admin/users')"
       >
         <mat-icon class="menu-icon">admin_panel_settings</mat-icon>
-        <span class="menu-label">Admin Users</span>
+        <span class="menu-label">Users</span>
       </a>
     </li>
   </ul>

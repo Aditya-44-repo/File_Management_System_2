@@ -35,13 +35,14 @@ export class FileUploadStatsService {
       const failed = Math.max(0, total - success - processing - pending);
 
       const statuses: UploadStatus[] = [
-        { name: 'Pending', count: pending, percentage: (pending / total) * 100, color: '#0062cc' },
+        { name: 'Failed', count: pending, percentage: (pending / total) * 100, color: '#dc3545' },
         { name: 'Processing', count: processing, percentage: (processing / total) * 100, color: '#198754' },
         { name: 'Success', count: success, percentage: (success / total) * 100, color: '#0d6efd' }
       ];
 
       if (failed > 0) {
-        statuses.push({ name: 'Failed', count: failed, percentage: (failed / total) * 100, color: '#dc3545' });
+        statuses[0].count += failed;
+        statuses[0].percentage = (statuses[0].count / total) * 100;
       }
 
       return of({ total, statuses });
@@ -58,10 +59,10 @@ export class FileUploadStatsService {
 
         const statuses: UploadStatus[] = [
           {
-            name: 'Pending',
+            name: 'Failed',
             count: pendingCount,
             percentage: total === 0 ? 0 : (pendingCount / total) * 100,
-            color: '#0062cc'
+            color: '#dc3545'
           },
           {
             name: 'Processing',
@@ -78,12 +79,8 @@ export class FileUploadStatsService {
         ];
 
         if (failedCount > 0) {
-          statuses.push({
-            name: 'Failed',
-            count: failedCount,
-            percentage: total === 0 ? 0 : (failedCount / total) * 100,
-            color: '#dc3545'
-          });
+          statuses[0].count += failedCount;
+          statuses[0].percentage = total === 0 ? 0 : (statuses[0].count / total) * 100;
         }
 
         return {
