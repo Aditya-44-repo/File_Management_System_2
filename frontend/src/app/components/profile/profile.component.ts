@@ -3,6 +3,13 @@ import { AuthService } from '../../services/auth.service';
 import { FileLoadService } from '../../services/file-load.service';
 import { User } from '../../models/user.model';
 import { SearchCriteria } from '../../models/search-criteria.model';
+import {
+  ApexNonAxisChartSeries,
+  ApexResponsive,
+  ApexChart,
+  ApexLegend,
+  ApexDataLabels
+} from 'ng-apexcharts';
 
 @Component({
   selector: 'app-profile',
@@ -22,6 +29,9 @@ export class ProfileComponent implements OnInit {
   successFiles = 0;
   failedFiles = 0;
   successRate = 0;
+  //Be
+  totalDownloads = 542;
+
 
   constructor(
     private auth: AuthService,
@@ -184,4 +194,92 @@ finishProfileUpdate(): void {
 
   this.isEditing = false;
   alert('Profile updated successfully!');
-}}
+}
+
+//Backend work to be done
+loginHistory = [
+  {
+    device: 'Windows PC',
+    browser: 'Chrome',
+    ip: '192.168.1.1',
+    time: 'Today, 10:45 AM',
+    status: 'Success'
+  },
+  {
+    device: 'Android Phone',
+    browser: 'Edge',
+    ip: '192.168.1.4',
+    time: 'Yesterday, 8:15 PM',
+    status: 'Success'
+  },
+  {
+    device: 'MacBook',
+    browser: 'Safari',
+    ip: '192.168.1.9',
+    time: 'May 14, 2026',
+    status: 'Success'
+  }
+];
+
+
+// Recent Activity
+recentActivities = [
+  {
+    icon: 'upload',
+    text: 'Uploaded project-report.pdf',
+    time: '2 mins ago'
+  },
+  {
+    icon: 'download',
+    text: 'Downloaded archive.zip',
+    time: '1 hour ago'
+  },
+  {
+    icon: 'delete',
+    text: 'Deleted old-image.png',
+    time: 'Yesterday'
+  },
+  {
+    icon: 'folder',
+    text: 'Created Design Documents folder',
+    time: '2 days ago'
+  }
+];
+// Upload Success Rate Chart
+
+uploadChartSeries: ApexNonAxisChartSeries = [
+  this.successRate,
+  100 - this.successRate
+];
+
+uploadChart: ApexChart = {
+  type: 'donut',
+  height: 260
+};
+
+uploadChartLabels = ['Successful', 'Failed'];
+
+uploadChartColors = ['#10b981', '#ef4444'];
+
+uploadChartLegend: ApexLegend = {
+  position: 'bottom'
+};
+
+uploadChartDataLabels: ApexDataLabels = {
+  enabled: true
+};
+
+uploadChartResponsive: ApexResponsive[] = [
+  {
+    breakpoint: 480,
+    options: {
+      chart: {
+        width: 260
+      },
+      legend: {
+        position: 'bottom'
+      }
+    }
+  }
+];
+}

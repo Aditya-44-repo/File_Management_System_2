@@ -1,271 +1,307 @@
-/* ===== Container ===== */
-.profile-container {
-  max-width: 1200px; /* increased for proper full width */
-  margin: 50px auto;
+.profile-dashboard {
   padding: 24px;
+  background: #f4f7fe;
+  min-height: 100vh;
 }
 
-/* ===== Header ===== */
-.profile-header {
+/* HERO */
+.hero-card {
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  border-radius: 24px;
+  padding: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  margin-bottom: 24px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+}
+
+.hero-left {
   display: flex;
   align-items: center;
-  gap: 28px;
-
-  padding: 28px;
-  border-radius: 18px;
-
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  box-shadow: 0 15px 40px rgba(102, 126, 234, 0.25);
-
-  color: white;
-  position: relative;
-  overflow: hidden;
+  gap: 24px;
 }
 
-.profile-header::after {
-  content: '';
-  position: absolute;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle at top left, rgba(255,255,255,0.2), transparent);
-  top: -50%;
-  left: -50%;
-  pointer-events: none;
-}
-
-.profile-header .profile-image,
-.profile-header .user-info {
-  position: relative;
-  z-index: 1;
-}
-
-/* ===== Profile Image ===== */
-.profile-image {
-  width: 110px;
-  height: 110px;
+.hero-avatar {
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   object-fit: cover;
-
-  border: 4px solid rgba(255,255,255,0.9);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  border: 5px solid rgba(255,255,255,0.3);
 }
 
-/* ===== User Info ===== */
-.user-info h1 {
+.hero-user-info h1 {
   margin: 0;
-  font-size: 26px;
+  font-size: 32px;
   font-weight: 700;
 }
 
-.user-info p {
-  margin: 6px 0 16px;
-  opacity: 0.85;
-  font-size: 14px;
+.hero-user-info p {
+  margin-top: 8px;
+  opacity: 0.9;
 }
 
-.role-pill {
-  display: inline-flex;
-  align-items: center;
-  align-self: flex-start;
-  margin-bottom: 14px;
-  padding: 6px 12px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.18);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+.role-chip {
+  margin-top: 14px;
+  display: inline-block;
+  background: rgba(255,255,255,0.2);
+  padding: 8px 14px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
 }
 
-
-/* ===== Edit Button ===== */
-.edit-btn {
+.edit-profile-btn {
   background: white !important;
-  color: #667eea !important;
+  color: #4f46e5 !important;
+  border-radius: 12px !important;
   font-weight: 600 !important;
-  border-radius: 10px !important;
-  transition: all 0.2s ease;
 }
 
-.edit-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 18px rgba(0,0,0,0.2);
+/* STAT CARDS */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+  margin-bottom: 24px;
 }
 
-/* ===== Edit Section ===== */
-.profile-edit {
-  background: #ffffff;
+.modern-card {
+  border-radius: 22px !important;
   padding: 28px;
-  border-radius: 18px;
-  margin-top: 24px;
-
-  box-shadow: 0 12px 35px rgba(15, 23, 42, 0.08);
-  border: 1px solid rgba(15, 23, 42, 0.05);
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+  transition: 0.3s ease;
 }
 
+.modern-card:hover {
+  transform: translateY(-4px);
+}
+
+.card-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.card-icon mat-icon {
+  font-size: 30px;
+}
+
+.blue {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
+.green {
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.purple {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+}
+
+.red {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.modern-card h2 {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.modern-card p {
+  margin-top: 6px;
+  color: #6b7280;
+}
+
+/* GRID */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.dashboard-card,
+.login-history-card,
+.profile-edit {
+  border-radius: 22px !important;
+  padding: 24px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+}
+
+.section-header {
+  margin-bottom: 20px;
+}
+
+.section-header h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+/* STORAGE */
+
+
+.success-rate-box {
+  margin-top: 30px;
+  background: #eef2ff;
+  padding: 18px;
+  border-radius: 16px;
+}
+.chart-container {
+  margin-top: 20px;
+}
+
+.success-title {
+  color: #6366f1;
+  font-weight: 600;
+}
+
+.success-value {
+  margin-top: 8px;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+/* ACTIVITY */
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.activity-item {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.activity-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: #eef2ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4f46e5;
+}
+
+.activity-text {
+  font-weight: 600;
+}
+
+.activity-time {
+  color: #6b7280;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+/* LOGIN TABLE */
+.login-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.login-table th {
+  text-align: left;
+  padding: 16px;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.login-table td {
+  padding: 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.success-status {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+/* EDIT */
 .edit-form {
   display: flex;
   flex-direction: column;
-  gap: 22px;
-  align-items: center;
+  gap: 20px;
 }
 
-/* ===== Image Upload ===== */
 .profile-image-upload {
+  position: relative;
+  width: 120px;
   cursor: pointer;
 }
 
-.image-wrapper {
-  width: 140px;
-  height: 140px;
+.edit-avatar {
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
-  overflow: hidden;
-  position: relative;
-
-  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-  transition: transform 0.2s ease;
-}
-
-.image-wrapper:hover {
-  transform: scale(1.03);
-}
-
-.profile-image-preview {
-  width: 100%;
-  height: 100%;
   object-fit: cover;
 }
 
-/* ===== Overlay ===== */
-.overlay {
+.upload-overlay {
   position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 45%;
-
-  background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
-  color: white;
-
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.5);
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
-
+  justify-content: center;
+  color: white;
   opacity: 0;
-  transition: 0.25s ease;
+  transition: 0.3s;
 }
 
-.image-wrapper:hover .overlay {
+.profile-image-upload:hover .upload-overlay {
   opacity: 1;
 }
 
-/* ===== Inputs ===== */
 .full-width {
   width: 100%;
-  max-width: 420px;
 }
 
-/* ===== Buttons ===== */
 .button-group {
   display: flex;
   gap: 12px;
 }
 
-/* ===== Stats Section ===== */
-.statistics-section {
-  margin-top: 36px;
-}
+/* MOBILE */
+@media (max-width: 768px) {
 
-/* ===== Grid Layout ===== */
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr)); /* 🔥 IMPORTANT */
-  gap: 22px;
-  width: 100%;
-}
-
-/* ===== Stat Card ===== */
-.stat-card {
-  width: 100%;
-  padding: 22px 24px;
-  border-radius: 16px;
-
-  background: #ffffff;
-  border: 1px solid rgba(15, 23, 42, 0.05);
-
-  box-shadow: 0 8px 25px rgba(15, 23, 42, 0.06);
-
-  transition: all 0.25s ease;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.stat-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 14px 35px rgba(15, 23, 42, 0.12);
-}
-
-/* ===== FULL WIDTH SUCCESS RATE CARD ===== */
-.stat-card.full-width {
-  grid-column: 1 / -1;
-
-  width: 100%;
-  max-width: 100%;
-
-  display: block; /* 🔥 override mat-card flex */
-
-  padding: 28px 32px;
-
-//   background: linear-gradient(135deg, #ecfeff, #f0f9ff);
-  border: 1px solid rgba(14, 165, 233, 0.2);
-
-  box-shadow: 0 10px 30px rgba(14, 165, 233, 0.12);
-}
-
-/* ===== Stat Values ===== */
-.stat-value {
-  font-size: 30px;
-  font-weight: 700;
-  margin-bottom: 6px;
-}
-
-.stat-value.success { color: #22c55e; }
-.stat-value.failed { color: #ef4444; }
-.stat-value.pending { color: #f59e0b; }
-.stat-value.total { color: #667eea; }
-
-/* ===== Labels ===== */
-.stat-label {
-  font-size: 13px;
-  color: #64748b;
-  letter-spacing: 0.03em;
-}
-
-/* ===== Success Rate UI ===== */
-.progress-bar {
-  width: 100%;
-  margin: 10px 0;
-}
-
-.stat-percentage {
-  font-size: 18px;
-  font-weight: 700;
-  color: #0ea5e9;
-}
-
-/* ===== Responsive ===== */
-@media (max-width: 900px) {
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .hero-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 24px;
   }
-}
 
-@media (max-width: 500px) {
-  .stats-grid {
+  .hero-left {
+    flex-direction: column;
+  }
+
+  .dashboard-grid {
     grid-template-columns: 1fr;
   }
+
+  .login-table {
+    display: block;
+    overflow-x: auto;
+  }
 }
+
