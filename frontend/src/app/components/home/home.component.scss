@@ -13,14 +13,19 @@ $border-radius: 24px;
 
 .home-container {
   min-height: 100vh;
-  background: #f1f5f9;
+  width: 100%;
+  position: relative;
+  background: #ffffff;
   color: $text;
   font-family: 'Roboto', sans-serif;
-  padding: 32px 0 40px;
+  padding: 0 0 40px;
+  overflow: hidden;
 }
 
 .main-content {
-  padding: 56px 24px 56px;
+  position: relative;
+  z-index: 1;
+  padding: 0 24px 56px;
   max-width: 1080px;
   margin: 0 auto;
   display: flex;
@@ -28,21 +33,67 @@ $border-radius: 24px;
   gap: 48px;
 }
 
-.welcome-section,
-.features-section,
-.cta-section {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: $border-radius;
-  padding: 40px;
-  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.08);
+.welcome-section {
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  width: 100vw;
+  min-height: 520px;
+  padding: 56px 32px;
+  overflow: hidden;
+  background: url('/assets/background.png') center top/cover no-repeat;
+}
+
+.welcome-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.3) 40%, rgba(255, 255, 255, 0.85) 100%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .welcome-panel {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
   display: grid;
   grid-template-columns: 1.3fr 0.9fr;
   gap: 32px;
   align-items: center;
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: $border-radius;
+  padding: 40px;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.12);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.features-section,
+.cta-section {
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(226, 232, 240, 0.7);
+  border-radius: $border-radius;
+  padding: 40px;
+  box-shadow: 0 24px 48px rgba(15, 23, 42, 0.09);
+}
+
+.home-container::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 180px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(9, 27, 62, 0.06));
+  pointer-events: none;
+  z-index: 0;
 }
 
 .hero-copy-wrapper {
@@ -63,6 +114,19 @@ h1 {
   color: $text;
   line-height: 1.02;
   margin-bottom: 12px;
+}
+
+.hero-title {
+  font-size: clamp(4rem, 6vw, 6.5rem);
+  font-weight: 800;
+  color: $text;
+  line-height: 1.02;
+  margin: 0 0 12px 0;
+  padding: 0;
+}
+
+.hero-title-accent {
+  color: $primary;
 }
 
 .hero-logo {

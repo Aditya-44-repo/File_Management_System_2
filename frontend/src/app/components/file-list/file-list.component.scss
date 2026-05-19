@@ -1,11 +1,12 @@
 /* ---- Page Shell ---- */
 .files-page {
   max-width: 1280px;
-  margin: -40px auto;
-  padding: 100px 24px 48px;
+  margin: 0 auto;
+  padding: 48px 24px 48px;
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 24px;
+  background: #f8fafc;
 }
 
 /* ---- Page Header ---- */
@@ -15,57 +16,65 @@
   justify-content: space-between;
   gap: 20px;
   flex-wrap: wrap;
+  padding: 22px 24px;
+  border-radius: 26px;
+  background: #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.06);
 }
 
 .page-eyebrow {
   display: inline-flex;
-  padding: 6px 14px;
+  padding: 8px 16px;
   border-radius: 999px;
-  background: rgba(0, 151, 167, 0.10);
-  color: #0097a7;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  background: rgba(0, 151, 167, 0.12);
+  color: #0f172a;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   margin-bottom: 10px;
 }
 
 .page-title h1 {
-  margin: 8px 0 6px;
-  font-size: 2rem;
+  margin: 0 0 8px;
+  font-size: clamp(1.9rem, 2.6vw, 2.6rem);
   font-weight: 800;
   color: #0f172a;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
 }
 
 .page-title p {
   margin: 0;
-  color: #64748b;
-  font-size: 0.98rem;
+  color: #475569;
+  font-size: 1rem;
+  max-width: 540px;
 }
 
 .upload-btn {
-  background: linear-gradient(135deg, #0097a7, #6a1b9a) !important;
-  color: #fff !important;
-  border-radius: 12px !important;
-  font-weight: 700 !important;
-  padding: 0 22px !important;
+  background: linear-gradient(180deg, #2f6bff 0%, #2152e8 100%);
+  color: #ffffff;
+  border-radius: 14px;
+  font-weight: 700;
+  padding: 0 22px;
   height: 44px;
-  box-shadow: 0 8px 24px rgba(0, 151, 167, 0.28) !important;
-  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+  box-shadow: 0 10px 24px rgba(33, 82, 232, 0.22);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
 }
 
 .upload-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(0, 151, 167, 0.36) !important;
+  background: linear-gradient(180deg, #3a7bff 0%, #2a5af0 100%);
+  box-shadow: 0 12px 28px rgba(33, 82, 232, 0.30);
+  opacity: 0.98;
 }
 
 /* ---- Table Card ---- */
 .table-card {
   background: #ffffff;
-  border-radius: 22px;
-  border: 1px solid rgba(15, 23, 42, 0.07);
-  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+  border-radius: 28px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 24px 72px rgba(15, 23, 42, 0.08);
   overflow: hidden;
 }
 
@@ -74,19 +83,19 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 12px 16px;
+  padding: 18px 20px;
   border-bottom: 1px solid rgba(15, 23, 42, 0.06);
-  background: #fafafa;
+  background: rgba(0, 151, 167, 0.04);
 }
 
 .bulk-info {
-  color: #334155;
-  font-weight: 600;
-  font-size: 0.9rem;
+  color: #0f172a;
+  font-weight: 700;
+  font-size: 0.95rem;
 }
 .bulk-toolbar.active {
   background: rgba(0, 151, 167, 0.08);
-  box-shadow: inset 0 0 0 1px rgba(0, 151, 167, 0.15);
+  box-shadow: inset 0 0 0 1px rgba(0, 151, 167, 0.12);
 }
 .bulk-actions {
   display: flex;
@@ -104,13 +113,24 @@
   justify-content: center;
   padding: 64px 24px;
   text-align: center;
+  color: #475569;
 }
 
-.empty-icon { font-size: 3.5rem; margin-bottom: 16px; }
+.empty-icon {
+  font-size: 4rem;
+  margin-bottom: 18px;
+}
 
-.empty-state h3 { margin: 0 0 8px; font-size: 1.3rem; color: #0f172a; }
+.empty-state h3 {
+  margin: 0 0 10px;
+  font-size: 1.4rem;
+  color: #0f172a;
+}
 
-.empty-state p { margin: 0 0 20px; color: #64748b; }
+.empty-state p {
+  margin: 0 0 22px;
+  color: #64748b;
+}
 
 /* ---- Table ---- */
 .table-wrapper { overflow-x: auto; }
@@ -154,22 +174,37 @@
 }
 
 /* ---- File Name Cell ---- */
-.file-name-cell { display: flex; align-items: center; gap: 12px; }
+.file-name-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
 
-.file-icon { font-size: 1.4rem; flex-shrink: 0; }
+.file-icon {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
 
 .file-link {
   cursor: pointer;
   color: #0f172a;
-  font-weight: 600;
-  font-size: 0.94rem;
+  font-weight: 700;
+  font-size: 0.95rem;
   text-decoration: none;
-  transition: color 0.15s ease;
+  transition: color 0.15s ease, transform 0.15s ease;
 }
 
-.file-link:hover { color: #0097a7; text-decoration: underline; }
+.file-link:hover {
+  color: #0097a7;
+  text-decoration: none;
+  transform: translateX(2px);
+}
 
-.file-meta { font-size: 0.76rem; color: #94a3b8; margin-top: 2px; }
+.file-meta {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin-top: 4px;
+}
 
 /* ---- Cells ---- */
 .size-label {

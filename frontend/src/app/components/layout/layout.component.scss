@@ -121,19 +121,6 @@
   margin-top: 64px;
   margin-bottom: 80px;
   position: relative;
-  transition: margin-left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-
-  /* Shift content when sidebar is open on desktop */
-  @media (min-width: 769px) {
-    &.sidebar-open {
-      margin-left: 250px;
-    }
-  }
-
-  /* Mobile: no margin shift, overlay handles it */
-  @media (max-width: 768px) {
-    margin-left: 0;
-  }
 }
 
 /* ==================== SIDEBAR ==================== */

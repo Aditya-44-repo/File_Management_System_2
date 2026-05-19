@@ -15,6 +15,7 @@ export class NavbarComponent implements OnInit {
   isLoggedIn: boolean = false;
   isAdmin: boolean = false;
   canManageUsers: boolean = false;
+  profileMenuOpen: boolean = false;
   currentUser: User | null = null;
   profileImage: string = 'assets/default-avatar.svg';
 
@@ -43,7 +44,9 @@ export class NavbarComponent implements OnInit {
   }
 
   openProfileDialog(): void {
-    this.dialog.open(ProfileDialogComponent, {
+    this.profileMenuOpen = true;
+
+    const dialogRef = this.dialog.open(ProfileDialogComponent, {
       width: '320px',
       position: {
         top: '70px',
@@ -51,6 +54,10 @@ export class NavbarComponent implements OnInit {
       },
       panelClass: 'profile-dialog-panel',
       backdropClass: 'transparent-backdrop'
+    });
+
+    dialogRef.afterClosed().subscribe(() => {
+      this.profileMenuOpen = false;
     });
   }
 
