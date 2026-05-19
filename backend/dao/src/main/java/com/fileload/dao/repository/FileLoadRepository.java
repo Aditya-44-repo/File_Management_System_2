@@ -20,6 +20,7 @@ public interface FileLoadRepository extends JpaRepository<FileLoad, Long>, JpaSp
 
 	List<FileLoad> findByUploadedById(Long uploadedById);
 
+//for storage usage calculation(returning 0 if there are no files instead of null,coalescing is used to retuen the numbers instead of null)
 	@Query("select coalesce(sum(f.fileSize), 0) from FileLoad f")
 	long totalStorageBytes();
 }
