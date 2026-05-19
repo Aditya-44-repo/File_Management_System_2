@@ -15,13 +15,20 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+//JwtAuthenticationFilter is a Spring @Component that extends OncePerRequestFilter. Its job is to inspect incoming HTTP requests for a Bearer JWT, validate it,
+// check the user's token version in the database, and if everything matches, populate the Spring Security context with an authenticated UsernamePasswordAuthenticationToken.
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
+    //gets all the details related the user
     private final CustomUserDetailsService userDetailsService;
+    //UserAccountRepository = data-access layer (talks to the database, returns UserAccount entities).
+    //CustomUserDetailsService = security service (implements Spring Security's UserDetailsService, converts user data into a UserDetails object used by Spring Security).
     private final UserAccountRepository userAccountRepository;
 
+    //JwtUtil jwtUtil — token generation/validation + claim extraction.
+    //(to check stored tokenVersion).
     public JwtAuthenticationFilter(JwtUtil jwtUtil,
                                    CustomUserDetailsService userDetailsService,
                                    UserAccountRepository userAccountRepository) {
@@ -30,6 +37,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         this.userAccountRepository = userAccountRepository;
     }
 
+    //Validate token and read claims
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -55,12 +63,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 return;
             }
 
+            //Creates UsernamePasswordAuthenticationToken with user details and authorities and sets it into SecurityContextHolder.
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
             UsernamePasswordAuthenticationToken authToken =
                     new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authToken);
         }
-
+        //Calls filterChain.doFilter(request, response); (whether authentication was set or not).
         filterChain.doFilter(request, response);
     }
 }
