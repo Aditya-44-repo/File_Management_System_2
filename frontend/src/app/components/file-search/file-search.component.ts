@@ -32,15 +32,7 @@ export class FileSearchComponent implements OnInit, OnDestroy {
     this.formChangesSub = this.form.valueChanges
       .pipe(debounceTime(300))
       .subscribe(() => {
-        const wasFilterActive = this.isFilterActive;
         this.isFilterActive = this.hasAnyFilterValue();
-
-        // If user manually clears all filters, restore the default unfiltered list automatically.
-        if (wasFilterActive && !this.isFilterActive) {
-          this.emitDefaultSearch();
-        } else {
-          this.submit(); // Auto-filter on any change
-        }
       });
   }
 

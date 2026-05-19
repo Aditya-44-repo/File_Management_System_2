@@ -3,9 +3,8 @@
   <!-- Page Header -->
   <div class="page-header">
     <div class="page-title">
-      <span class="page-eyebrow">File Management</span>
-      <h1>File Load Registry</h1>
-      <p>Browse, search, and manage all trade file loads in your pipeline.</p>
+      <h1>DocIT Registry</h1>
+      <p>Browse, search, and manage all files.</p>
     </div>
     <button mat-raised-button routerLink="/upload" class="upload-btn">
       <mat-icon>cloud_upload</mat-icon> Upload New File
@@ -60,10 +59,8 @@
 
     <!-- Empty State -->
     <div *ngIf="!loading && dataSource.data.length === 0" class="empty-state">
-      <div class="empty-icon">📂</div>
+      <div class="empty-icon">🗂️</div>
       <h3>No files found</h3>
-      <p>Try adjusting your search filters or upload a new file.</p>
-      <button mat-raised-button routerLink="/upload" color="primary">Upload File</button>
     </div>
 
     <!-- Table -->
@@ -100,10 +97,9 @@
           <th mat-header-cell *matHeaderCellDef mat-sort-header="filename">Filename</th>
           <td mat-cell *matCellDef="let row">
             <div class="file-name-cell">
-              <span class="file-icon">📄</span>
+              <span class="file-icon">📃</span>
               <div>
                 <a class="file-link" (click)="view(row)">{{ fileName(row) }}</a>
-                <div class="file-meta">Record count: {{ row.recordCount | number }}</div>
               </div>
             </div>
           </td>
@@ -138,16 +134,16 @@
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef class="actions-header">Actions</th>
           <td mat-cell *matCellDef="let row" class="actions-cell">
-            <button mat-icon-button class="action-btn view-btn" matTooltip="View details" (click)="view(row)">
+            <button mat-icon-button class="action-btn view-btn" title="View details" (click)="view(row)">
               <mat-icon>visibility</mat-icon>
             </button>
-            <button mat-icon-button class="action-btn download-btn" matTooltip="Download" (click)="download(row)">
+            <button mat-icon-button class="action-btn download-btn" title="Download" (click)="download(row)">
               <mat-icon>download</mat-icon>
             </button>
-            <button mat-icon-button class="action-btn status-btn" matTooltip="Update status" (click)="openStatusDialog(row)">
+            <button mat-icon-button class="action-btn status-btn" title="Update status" (click)="openStatusDialog(row)">
               <mat-icon>edit_note</mat-icon>
             </button>
-            <button mat-icon-button class="action-btn delete-btn" matTooltip="Delete" (click)="delete(row)">
+            <button mat-icon-button class="action-btn delete-btn" title="Delete" (click)="delete(row)">
               <mat-icon>delete_outline</mat-icon>
             </button>
           </td>
@@ -172,4 +168,3 @@
 
   </div>
 </div>
-
