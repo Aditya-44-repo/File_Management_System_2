@@ -351,11 +351,26 @@ button.hamburger svg path {
   filter: none !important;
 }
 
-/* Final force: absolute specificity for page-black-hamburger on all nested elements */
-button.hamburger.page-black-hamburger mat-icon,
-button.hamburger.page-black-hamburger .mat-icon,
-button.hamburger.page-black-hamburger svg,
-button.hamburger.page-black-hamburger svg path {
+/* Final override: always render hamburger icon in black, even on dashboard routes */
+.navbar button.hamburger.dashboard-hamburger,
+.navbar button.hamburger.dashboard-hamburger.mat-icon-button,
+.navbar button.hamburger.dashboard-hamburger:hover,
+.navbar button.hamburger.dashboard-hamburger .mat-icon,
+.navbar button.hamburger.dashboard-hamburger mat-icon,
+.navbar button.hamburger.dashboard-hamburger svg,
+.navbar button.hamburger.dashboard-hamburger svg *,
+.navbar button.hamburger.dashboard-hamburger .material-icons {
+  color: #0f172a !important;
+  fill: #0f172a !important;
+  stroke: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
+}
+
+/* Force hamburger icon black even when mat-toolbar applies primary white */
+::ng-deep .mat-toolbar.navbar .hamburger mat-icon,
+::ng-deep .mat-toolbar.navbar .hamburger .mat-icon,
+::ng-deep .mat-toolbar.navbar .hamburger svg,
+::ng-deep .mat-toolbar.navbar .hamburger svg * {
   color: #0f172a !important;
   fill: #0f172a !important;
   stroke: #0f172a !important;
