@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 import { User } from '../../models/user.model';
 import { MatDialog } from '@angular/material/dialog';
 import { ProfileDialogComponent } from '../profile-dialog/profile-dialog.component';
@@ -16,6 +17,11 @@ export class NavbarComponent implements OnInit {
   isAdmin: boolean = false;
   canManageUsers: boolean = false;
   profileMenuOpen: boolean = false;
+  isDashboardRoute: boolean = false;
+  isHomeRoute: boolean = false;
+  isReportsRoute: boolean = false;
+  isUploadRoute: boolean = false;
+  isSettingsRoute: boolean = false;
   currentUser: User | null = null;
   profileImage: string = 'assets/default-avatar.svg';
 
@@ -33,6 +39,19 @@ export class NavbarComponent implements OnInit {
       this.canManageUsers = this.auth.hasAnyAdminPermission('USER_ACCESS_CONTROL', 'USER_RECORDS_OVERVIEW', 'USER_FILES_DELETE_ALL');
       this.profileImage = this.auth.getProfileImageUrl(user);
     });
+
+    this.updateRouteState(this.router.url);
+    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((event: any) => {
+      this.updateRouteState(event.urlAfterRedirects || event.url);
+    });
+  }
+
+  private updateRouteState(url: string): void {
+    this.isDashboardRoute = url.startsWith('/dashboard');
+    this.isHomeRoute = url === '/home' || url === '/' || url.startsWith('/home');
+    this.isReportsRoute = url.startsWith('/report');
+    this.isUploadRoute = url.startsWith('/upload');
+    this.isSettingsRoute = url.startsWith('/setting');
   }
 
   getProfileImageFallback(): string {

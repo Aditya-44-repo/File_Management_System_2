@@ -1,4 +1,14 @@
 /* Ensure hamburger icon is always visible and clickable on mobile */
+.hamburger,
+.hamburger mat-icon,
+.hamburger .mat-icon,
+.hamburger svg,
+.hamburger svg path {
+  color: #0f172a !important;
+  fill: #0f172a !important;
+  stroke: #0f172a !important;
+}
+
 @media (max-width: 768px) {
   .desktop-nav {
     display: none !important;
@@ -12,10 +22,6 @@
     background: none;
     border: none;
     box-shadow: none;
-  }
-
-  .hamburger mat-icon {
-    color: #0f172a;
   }
 
   .navbar {
@@ -83,7 +89,7 @@
   display: flex;
   align-items: center;
   padding: 10px 20px;
-  background: #ffffff;
+  background: #0000;
   color: #0f172a;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
   border-bottom: 1px solid rgba(15, 23, 42, 0.08);
@@ -276,4 +282,82 @@
 
 .hamburger {
   display: none;
+}
+
+/* Force hamburger icon bars black everywhere */
+button.hamburger,
+button.hamburger mat-icon,
+button.hamburger .mat-icon,
+button.hamburger svg,
+button.hamburger svg path {
+  color: #0f172a !important;
+  fill: #0f172a !important;
+  stroke: #0f172a !important;
+}
+
+/* Strongest override: ensure hamburger shows 3 black bars for all icon types
+   (font ligature, material svg, inline svg paths, masked icons) */
+.navbar button.hamburger,
+.navbar button.hamburger.mat-icon-button,
+.navbar button.hamburger:hover,
+.navbar button.hamburger .mat-icon,
+.navbar button.hamburger mat-icon,
+.navbar button.hamburger svg,
+.navbar button.hamburger svg *,
+.navbar button.hamburger .material-icons,
+.navbar button.hamburger .mat-icon-inline {
+  color: #0f172a !important;
+  fill: #0f172a !important;
+  stroke: #000000 !important;
+  -webkit-text-fill-color: #0f172a !important;
+  background-color: transparent !important;
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+  filter: none !important;
+}
+
+/* When on Home or Dashboard (added via [class.dashboard-hamburger])
+   show the hamburger as white so it contrasts with dark hero backgrounds */
+.navbar button.hamburger.dashboard-hamburger,
+.navbar button.hamburger.dashboard-hamburger.mat-icon-button,
+.navbar button.hamburger.dashboard-hamburger:hover,
+.navbar button.hamburger.dashboard-hamburger .mat-icon,
+.navbar button.hamburger.dashboard-hamburger mat-icon,
+.navbar button.hamburger.dashboard-hamburger svg,
+.navbar button.hamburger.dashboard-hamburger svg *,
+.navbar button.hamburger.dashboard-hamburger .material-icons {
+  color: #ffffff !important;
+  fill: #ffffff !important;
+  stroke: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background-color: transparent !important;
+  filter: none !important;
+}
+
+/* Specific override: force black hamburger on Reports / Upload / Settings pages */
+.navbar button.hamburger.page-black-hamburger,
+.navbar button.hamburger.page-black-hamburger.mat-icon-button,
+.navbar button.hamburger.page-black-hamburger:hover,
+.navbar button.hamburger.page-black-hamburger .mat-icon,
+.navbar button.hamburger.page-black-hamburger mat-icon,
+.navbar button.hamburger.page-black-hamburger svg,
+.navbar button.hamburger.page-black-hamburger svg *,
+.navbar button.hamburger.page-black-hamburger .material-icons {
+  color: #0f172a !important;
+  fill: #0f172a !important;
+  stroke: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
+  background-color: transparent !important;
+  filter: none !important;
+}
+
+/* Final force: absolute specificity for page-black-hamburger on all nested elements */
+button.hamburger.page-black-hamburger mat-icon,
+button.hamburger.page-black-hamburger .mat-icon,
+button.hamburger.page-black-hamburger svg,
+button.hamburger.page-black-hamburger svg path {
+  color: #0f172a !important;
+  fill: #0f172a !important;
+  stroke: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
 }

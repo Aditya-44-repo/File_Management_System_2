@@ -1,3 +1,7 @@
+
+
+
+
 package com.fileload.api.controller;
 
 import org.springframework.web.bind.annotation.*;
@@ -120,11 +124,21 @@ public class AuthController {
                     new ResetPasswordResponseDTO(true, "Password reset link sent to your email")
             );
 
+        } catch (IllegalArgumentException e) {
+            if (e.getMessage().contains("User not found with email")) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ResetPasswordResponseDTO(false, "Email not registered"));
+            }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ResetPasswordResponseDTO(false, e.getMessage()));
+        } catch (RuntimeException e) {
+            // More specific error handling for mail sending failures
+            String errorMsg = e.getMessage() != null ? e.getMessage() : "Failed to send reset email";
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResetPasswordResponseDTO(false, errorMsg));
         } catch (Exception e) {
-            return ResponseEntity.ok(
-                    new ResetPasswordResponseDTO(true,
-                            "If an account exists, a reset link has been sent")
-            );
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResetPasswordResponseDTO(false, "Failed to send reset email - " + e.getClass().getSimpleName()));
         }
     }
 

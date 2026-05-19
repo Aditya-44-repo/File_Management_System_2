@@ -1,6 +1,6 @@
 <mat-toolbar color="primary" class="navbar">
   <!-- Hamburger icon for mobile -->
-  <button mat-icon-button class="hamburger" [matMenuTriggerFor]="mobileMenu" aria-label="Open menu">
+  <button mat-icon-button class="hamburger" [class.dashboard-hamburger]="isDashboardRoute || isHomeRoute" [class.page-black-hamburger]="isReportsRoute || isUploadRoute || isSettingsRoute" [matMenuTriggerFor]="mobileMenu" aria-label="Open menu">
     <mat-icon>menu</mat-icon>
   </button>
 
@@ -11,7 +11,6 @@
   </a>
 
   <span class="spacer"></span>
-
   <!-- Right-side auth actions -->
   <div class="auth-actions">
     <button mat-button routerLink="/login" *ngIf="!isLoggedIn">Login</button>
@@ -25,5 +24,7 @@
 <mat-menu #mobileMenu="matMenu" class="mobile-dropdown-menu">
   <button mat-menu-item routerLink="/login" *ngIf="!isLoggedIn">Login</button>
   <button mat-menu-item routerLink="/register" *ngIf="!isLoggedIn">Register</button>
+  
+  <button mat-menu-item routerLink="/users" *ngIf="isAdmin && isLoggedIn">Users</button>
   <button mat-menu-item (click)="openProfileDialog()" *ngIf="isLoggedIn">Profile</button>
 </mat-menu>

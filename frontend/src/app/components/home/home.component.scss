@@ -117,12 +117,41 @@ h1 {
 }
 
 .hero-title {
-  font-size: clamp(4rem, 6vw, 6.5rem);
+  font-size: clamp(3rem, 4.5vw, 4.5rem);
   font-weight: 800;
   color: $text;
-  line-height: 1.02;
+  line-height: 1.05;
   margin: 0 0 12px 0;
   padding: 0;
+}
+
+.home-welcome {
+  font-size: clamp(2.6rem, 4vw, 4rem);
+}
+
+.home-welcome .home-welcome-line.small {
+  font-size: clamp(1.05rem, 1.8vw, 1.4rem);
+  font-weight: 700;
+  color: $muted;
+  display: block;
+  margin-bottom: 6px;
+  opacity: 0.95;
+}
+
+.home-welcome .home-welcome-line.brand {
+  display: block;
+  font-size: clamp(2.8rem, 4.5vw, 5rem);
+  font-weight: 900;
+  color: $text;
+  line-height: 1.02;
+  transform-origin: center;
+  animation: subtlePop 2200ms ease-in-out infinite alternate;
+}
+
+@keyframes subtlePop {
+  0% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-4px) scale(1.02); }
+  100% { transform: translateY(0) scale(1); }
 }
 
 .hero-title-accent {

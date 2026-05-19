@@ -31,6 +31,16 @@ FRONTEND_BASE_URL=https://localhost:4200
 SERVER_SSL_KEY_STORE=classpath:keystore-local.pfx
 SERVER_SSL_KEY_STORE_PASSWORD=changeit123
 SERVER_SSL_KEY_STORE_TYPE=PKCS12
+
+#mail
+MAIL_SMTP_HOST=smtp.gmail.com
+MAIL_SMTP_PORT=587
+MAIL_SMTP_USERNAME=preetipatilkulkarni49@gmail.com
+MAIL_SMTP_PASSWORD=kcejnfaebmnjczxs
+MAIL_FROM=preetipatilkulkarni49@gmail.com
+MAIL_SMTP_AUTH=true
+MAIL_SMTP_STARTTLS_ENABLE=true
+MAIL_SMTP_SSL_ENABLE=false
 ```
 
 ## Everytime
