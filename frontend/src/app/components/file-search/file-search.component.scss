@@ -108,16 +108,16 @@
 
 /* Filter: Active State */
 .btn-filter.btn-filter--active {
-  background: linear-gradient(135deg, #0097a7, #6a1b9a) !important;
+  background: linear-gradient(180deg, #2f6bff 0%, #2152e8 100%) !important;
   color: #ffffff !important;
   border: none !important;
-  box-shadow: 0 4px 12px rgba(0, 151, 167, 0.3) !important;
+  box-shadow: 0 4px 12px rgba(33, 82, 232, 0.3) !important;
 }
 
 /* Reset: Minimal State */
 .btn-reset {
-  color: #64748b !important;
-  background: #f1f5f9 !important;
+  color: #1d4ed8 !important;
+  background: #eef4ff !important;
   margin-left: 2px;
 }
 

@@ -15,16 +15,33 @@ export class DashboardComponent implements OnInit, OnDestroy {
   overview: DashboardOverview | null = null;
   loadingOverview = true;
   overviewError = '';
+  // UI selections for the small preview controls
+  selectedDate: string = 'May 15';
+  selectedYear: string = '2026';
+  selectedPeriod: 'Daily' | 'Monthly' | 'Yearly' = 'Daily';
   private overviewSub?: Subscription;
+  // pickers model values
+  sampleDisplayDate: string = 'May 15';
+  selectedDateISO: string | null = null; // yyyy-mm-dd for input[type=date]
+  selectedMonth: string | null = null; // yyyy-mm for input[type=month]
+  availableYears: string[] = []; // keep as strings for proper select binding
+  calendarVisible = true;
 
   constructor(private router: Router, private auth: AuthService, private fileLoadService: FileLoadService) {}
 
   ngOnInit(): void {
-  // 1. Check if authenticated immediately
-  if (!this.auth.isAuthenticated()) {
-    this.router.navigate(['/login'], { queryParams: { returnUrl: this.router.url } });
-    return; // Stop execution
-  }
+  // prepare year list and sample date
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  this.availableYears = Array.from({ length: 8 }).map((_, i) => String(currentYear - i));
+  this.selectedYear = String(currentYear);
+  this.selectedDateISO = now.toISOString().slice(0, 10);
+  this.selectedMonth = `${currentYear}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+    this.selectedDate = `${now.toLocaleString(undefined, { month: 'short' })} ${now.getDate()}, ${currentYear}`;
+    this.sampleDisplayDate = this.selectedDate;
+
+  // initial overview should reflect the default selection
+  this.applySelectionToOverview();
 
   // 2. Only if logged in, start the dashboard metrics polling
   this.overviewSub = interval(10000)
@@ -50,6 +67,28 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.overviewSub?.unsubscribe();
   }
 
+  onDateChange(): void {
+    if (this.selectedDateISO) {
+      const d = new Date(this.selectedDateISO);
+      const display = `${d.toLocaleString(undefined, { month: 'short' })} ${d.getDate()}, ${d.getFullYear()}`;
+      this.selectDate(display);
+    }
+  }
+
+  onMonthChange(): void {
+    if (this.selectedMonth) {
+      const [y, m] = this.selectedMonth.split('-');
+      const date = new Date(Number(y), Number(m) - 1, 1);
+      const display = `${date.toLocaleString(undefined, { month: 'short' })} ${y}`;
+      this.selectedDate = display;
+      this.applySelectionToOverview();
+    }
+  }
+
+  toggleCalendar(): void {
+    this.calendarVisible = !this.calendarVisible;
+  }
+
   navigateTo(target: '/upload' | '/files', event?: Event): void {
     event?.preventDefault();
     if (this.auth.isAuthenticated()) {
@@ -66,6 +105,69 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   formatRate(value: number | undefined): string {
     return `${(value ?? 0).toFixed(1)}%`;
+  }
+
+  // UI handlers for preview controls (date / year / period)
+  selectDate(date: string): void {
+    this.selectedDate = date;
+    this.applySelectionToOverview();
+  }
+
+  selectYear(year: string): void {
+    this.selectedYear = year;
+    this.applySelectionToOverview();
+  }
+
+  selectPeriod(period: 'Daily' | 'Monthly' | 'Yearly'): void {
+    this.selectedPeriod = period;
+    this.applySelectionToOverview();
+  }
+
+  getStatusLabel(): string {
+    if (this.selectedPeriod === 'Monthly') {
+      return this.selectedMonth ? this.formatMonthLabel(this.selectedMonth) : this.selectedYear;
+    }
+
+    if (this.selectedPeriod === 'Yearly') {
+      return this.selectedYear;
+    }
+
+    return this.selectedDate;
+  }
+
+  private formatMonthLabel(monthValue: string): string {
+    const [year, month] = monthValue.split('-');
+    const date = new Date(Number(year), Number(month) - 1, 1);
+    return `${date.toLocaleString(undefined, { month: 'short' })} ${year}`;
+  }
+
+  /**
+   * Apply current selection to the main overview and refresh preview components.
+   * This uses lightweight dummy data so UI updates immediately without backend calls.
+   */
+  private applySelectionToOverview(): void {
+    // create deterministic dummy overview based on selections
+    const seed = (this.selectedPeriod?.length ?? 0) * 7 + (Number(this.selectedYear) % 100 || 0) + (this.selectedDate?.length ?? 0);
+    const totalUploads = Math.max(50, (seed % 400) + 80);
+    const successCount = Math.round(totalUploads * 0.6);
+    const processingCount = Math.round(totalUploads * 0.15);
+    const pendingCount = Math.round(totalUploads * 0.12);
+    const exceptionsToday = Math.max(0, totalUploads - successCount - processingCount - pendingCount);
+    const successRate = totalUploads === 0 ? 0 : (successCount * 100) / totalUploads;
+
+    this.overview = {
+      totalUploads,
+      inProcessing: processingCount,
+      successRate,
+      exceptionsToday,
+      pendingCount,
+      processingCount,
+      successCount,
+      lastUpdated: new Date().toISOString()
+    };
+
+    // also trigger a short reload for components that use services
+    // (upload-statistics-donut listens to inputs and will reload itself)
   }
 
   private fetchOverview() {

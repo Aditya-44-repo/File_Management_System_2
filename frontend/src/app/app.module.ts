@@ -27,6 +27,7 @@ import { OauthCallbackComponent } from './components/oauth-callback/oauth-callba
 import { AdminUsersComponent } from './components/admin-users/admin-users.component';
 import { HomeComponent } from './components/home/home.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { UploadStatisticsDonutComponent } from './components/upload-statistics-donut/upload-statistics-donut.component';
 
 // Angular Material modules
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -77,7 +78,8 @@ import { AuthInterceptor } from './services/auth.interceptor';
     OauthCallbackComponent,
     AdminUsersComponent,
     HomeComponent,
-    SidebarComponent
+    SidebarComponent,
+    UploadStatisticsDonutComponent
   ],
   imports: [
     BrowserModule,

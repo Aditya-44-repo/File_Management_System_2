@@ -1,0 +1,58 @@
+<div class="upload-stats-container">
+  <div class="stats-card">
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading upload statistics...</p>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error && !loading" class="error-state">
+      <p>{{ error }}</p>
+    </div>
+
+    <!-- Chart Content -->
+    <div *ngIf="stats && !loading" class="chart-content">
+      <!-- Donut Chart -->
+      <div class="chart-wrapper">
+        <svg class="donut-chart blue-style" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <!-- Background circle (subtle darker ring to match blue-style look) -->
+          <circle cx="100" cy="100" r="90" fill="none" stroke="#e6eef6" stroke-width="30" />
+          
+          <!-- Chart segments -->
+          <g *ngFor="let segment of getSegmentAngles()">
+            <path 
+              [attr.d]="generatePath(segment.startAngle, segment.endAngle)"
+              [attr.fill]="segment.color"
+              [style.opacity]="getSegmentOpacity(segment.name)"
+              class="chart-segment"
+              [title]="segment.name + ': ' + segment.count + ' (' + segment.percentage.toFixed(1) + '%'"
+            />
+          </g>
+
+          <!-- Center text -->
+          <g class="center-text">
+            <text x="100" y="96" text-anchor="middle" class="total-label">{{ stats.total }}</text>
+            <text x="100" y="114" text-anchor="middle" class="total-text">Total Uploads</text>
+          </g>
+        </svg>
+      </div>
+
+      <!-- Legend -->
+      <div class="legend">
+        <div 
+          *ngFor="let status of stats.statuses" 
+          class="legend-item"
+          (mouseenter)="onLegendHover(status.name)"
+          (mouseleave)="onLegendLeave()"
+        >
+          <div class="legend-color" [style.background-color]="status.color"></div>
+          <div class="legend-details">
+            <span class="legend-name">{{ status.name }}</span>
+            <span class="legend-stats">{{ status.count }} ({{ status.percentage.toFixed(1) }}%)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
