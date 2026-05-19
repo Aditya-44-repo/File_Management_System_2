@@ -68,6 +68,17 @@
         <span class="menu-label">Settings</span>
       </a>
     </li>
+
+    <li *ngIf="currentUserRole?.toUpperCase() === 'ADMIN'">
+      <a
+        class="menu-item"
+        [class.active]="isActive('/admin/users')"
+        (click)="navigateTo('/admin/users')"
+      >
+        <mat-icon class="menu-icon">admin_panel_settings</mat-icon>
+        <span class="menu-label">Admin Users</span>
+      </a>
+    </li>
   </ul>
 
   <!-- Divider -->
