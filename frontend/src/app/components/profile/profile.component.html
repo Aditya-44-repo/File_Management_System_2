@@ -1,21 +1,27 @@
 <div class="profile-container">
-  <div class="profile-header" *ngIf="currentUser && !isEditing">
-    <img [src]="profileImage" alt="Profile" class="profile-image" (error)="handleProfileImageError()">
-    <div class="user-info">
-      <h1>{{ currentUser.name || currentUser.username || 'User' }}</h1>
-      <p>{{ currentUser.email }}</p>
-      <span class="role-pill" *ngIf="currentUser.role">
-        {{ getRoleLabel(currentUser.role) }}
-      </span>
+  <section class="profile-hero" *ngIf="currentUser && !isEditing">
+    <div class="hero-left">
+      <img [src]="profileImage" alt="Profile" class="profile-image" (error)="handleProfileImageError()">
+      <div class="user-info">
+        <div class="name-row">
+          <h1>{{ currentUser.name || currentUser.username || 'User' }}</h1>
+          <span class="role-pill" *ngIf="currentUser.role">
+            {{ getRoleLabel(currentUser.role) }}
+          </span>
+        </div>
+        <p class="email">{{ currentUser.email }}</p>
+      </div>
+    </div>
+    <div class="hero-actions">
       <button mat-raised-button color="primary" (click)="enableEdit()" class="edit-btn">
         <mat-icon>edit</mat-icon> Edit Profile
       </button>
     </div>
-  </div>
+  </section>
 
   <!-- Edit Mode -->
   <div class="profile-edit" *ngIf="isEditing">
-    <h2>Edit Profile</h2>
+    <h2 class="section-title">Edit Profile</h2>
     <div class="edit-form">
       <div class="profile-image-upload" (click)="fileInput.click()">
         <div class="image-wrapper">
@@ -60,7 +66,7 @@
 
   <!-- Statistics Section -->
   <div class="statistics-section">
-    <h2>Your File Statistics</h2>
+    <h2 class="section-title">Your File Statistics</h2>
     <div class="stats-grid">
       <mat-card class="stat-card">
         <mat-card-content>

@@ -44,13 +44,10 @@ server:
   http:
     port: ${SERVER_HTTP_PORT:8082}
   ssl:
-    enabled: ${SERVER_SSL_ENABLED:true}
-    key-store: ${SERVER_SSL_KEY_STORE:classpath:keystore-local.pfx}
-    key-store-password: ${SERVER_SSL_KEY_STORE_PASSWORD:changeit123}
-    key-store-type: ${SERVER_SSL_KEY_STORE_TYPE:PKCS12}
+    enabled: ${SERVER_SSL_ENABLED:false}
 
 app:
-  frontend-base-url: ${FRONTEND_BASE_URL:https://localhost:4200}
+  frontend-base-url: ${FRONTEND_BASE_URL:http://localhost:4200}
   admin:
     email: ${ADMIN_EMAIL:admin@filemanagement.local}
     username: ${ADMIN_USERNAME:admin}
@@ -66,7 +63,8 @@ jwt:
   secret: ${JWT_SECRET:}
   expiration: ${JWT_EXPIRATION:86400000}
 
-# Note: Both HTTPS (8080) and HTTP (8082) are enabled for local backend access.
+# Note: HTTP is enabled for local backend access.
+# If you need HTTPS locally, set SERVER_SSL_ENABLED=true and provide a valid keystore.
 # Make sure to register both redirect URIs in Google Console for OAuth:
 #   https://localhost:8080/login/oauth2/code/google
 #   http://localhost:8082/login/oauth2/code/google

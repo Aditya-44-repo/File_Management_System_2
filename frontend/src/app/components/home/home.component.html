@@ -75,7 +75,7 @@
 
     <section class="cta-section">
       <h2 class="cta-heading">Ready to get started?</h2>
-      <div class="cta-card-grid">
+      <div class="cta-card-grid" [class.single-card]="isLoggedIn">
         <div class="cta-card" *ngIf="!isLoggedIn">
           <h3>Create an account</h3>
           <p>Sign up now to start managing documents securely.</p>

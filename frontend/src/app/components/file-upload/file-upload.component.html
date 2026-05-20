@@ -1,39 +1,6 @@
-<mat-card>
-    <h2>Upload Files</h2>
-
-    <div class="meta">
-        <mat-form-field class="full" appearance="outline">
-            <mat-label>Description (optional)</mat-label>
-            <input matInput [(ngModel)]="description">
-        </mat-form-field>
-
-        <mat-form-field class="full" appearance="outline">
-            <mat-label>Tags (comma-separated)</mat-label>
-            <input matInput [(ngModel)]="tagsText" placeholder="finance, invoice, FY25">
-        </mat-form-field>
-    </div>
-
-    <div class="dropzone" [class.over]="isOver" (drop)="onDrop($event)" (dragover)="onDragOver($event)" (dragleave)="onDragLeave()">
-        <div>
-            <mat-icon>cloud_upload</mat-icon>
-            <p>Drag & drop files here or</p>
-            <small class="file-hint">
-                Only CSV files allowed • Max size: 20 MB
-            </small>
-            <button mat-stroked-button (click)="triggerFilePick()">Browse files</button>
-            <input #fileInput type="file" multiple accept=".csv" (change)="onFileSelected($event)" hidden>        </div>
-    </div>
-
-    <div *ngIf="uploads.length">
-        <h3>Queue</h3>
-
-        <div class="overall-progress">
-            <div class="overall-head">
-                <span>{{ overallStatusText }}</span>
-                <span>{{ overallProgress }}%</span>
-            </div>
-            <mat-progress-bar [mode]="isUploading ? 'determinate' : 'determinate'" [value]="overallProgress"></mat-progress-bar>
-        </div>
+<div class="upload-page" [class.has-queue]="uploads.length">
+    <mat-card class="queue-card" *ngIf="uploads.length">
+        <h2>Queue</h2>
 
         <div class="queue-tools">
             <mat-checkbox
@@ -59,12 +26,6 @@
 
                 <div class="row-main">
                     <div class="file-name">{{ u.file.name }} <small>({{ u.file.size | number }} bytes)</small></div>
-                    <div class="file-progress">
-                        <mat-progress-bar *ngIf="u.state !== 'error'" [value]="u.progress" [color]="u.state === 'done' ? 'accent' : 'primary'"></mat-progress-bar>
-                        <span *ngIf="u.state === 'error'" class="error">Error</span>
-                        <span *ngIf="u.state === 'canceled'" class="canceled">Canceled</span>
-                        <span class="percent" *ngIf="u.state !== 'error'">{{ u.progress }}%</span>
-                    </div>
                 </div>
 
                 <div class="row-side">
@@ -77,8 +38,36 @@
         </div>
 
         <div class="actions">
-            <button mat-raised-button color="primary" (click)="startUploads()" [disabled]="isUploading">{{ isUploading ? 'Uploading...' : 'Start Upload' }}</button>
-<!--            <button mat-button (click)="clearDone()">Clear Finished</button>-->
+            <button mat-raised-button color="primary" (click)="startUploads()" [disabled]="isUploading || !anySelected">{{ isUploading ? 'Uploading...' : 'Start Upload' }}</button>
+            <!--            <button mat-button (click)="clearDone()">Clear Finished</button>-->
         </div>
-    </div>
-</mat-card>
+    </mat-card>
+
+    <mat-card class="upload-card">
+        <h2>Upload Files</h2>
+
+        <div class="meta">
+            <mat-form-field class="full" appearance="outline">
+                <mat-label>Description (optional)</mat-label>
+                <input matInput [(ngModel)]="description">
+            </mat-form-field>
+
+            <mat-form-field class="full" appearance="outline">
+                <mat-label>Tags (comma-separated)</mat-label>
+                <input matInput [(ngModel)]="tagsText" placeholder="finance, invoice, FY25">
+            </mat-form-field>
+        </div>
+
+        <div class="dropzone" [class.over]="isOver" (drop)="onDrop($event)" (dragover)="onDragOver($event)" (dragleave)="onDragLeave()">
+            <div>
+                <span class="emoji-icon">📃</span>
+                <p>Drag & drop files here or</p>
+                <small class="file-hint">
+                    Only CSV files allowed • Max size: 20 MB
+                </small>
+                <button mat-stroked-button (click)="triggerFilePick()">Browse files</button>
+                <input #fileInput type="file" multiple accept=".csv" (change)="onFileSelected($event)" hidden>
+            </div>
+        </div>
+    </mat-card>
+</div>

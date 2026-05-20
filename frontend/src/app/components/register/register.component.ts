@@ -15,10 +15,41 @@ export class RegisterComponent {
   form = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(2)]],
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]]
+    password: [
+      '',
+      [
+        Validators.required,
+        Validators.minLength(10),
+        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{10,}$/)
+      ]
+    ]
   });
 
   constructor(private fb: FormBuilder, private auth: AuthService, private router: Router, private snack: MatSnackBar) {}
+
+  get passwordValue(): string {
+    return this.form.controls.password.value ?? '';
+  }
+
+  get hasMinLength(): boolean {
+    return this.passwordValue.length >= 10;
+  }
+
+  get hasUppercase(): boolean {
+    return /[A-Z]/.test(this.passwordValue);
+  }
+
+  get hasLowercase(): boolean {
+    return /[a-z]/.test(this.passwordValue);
+  }
+
+  get hasNumber(): boolean {
+    return /\d/.test(this.passwordValue);
+  }
+
+  get hasSymbol(): boolean {
+    return /[^A-Za-z\d]/.test(this.passwordValue);
+  }
 
   submit() {
     if (this.form.invalid) return;
