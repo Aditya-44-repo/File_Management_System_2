@@ -2,7 +2,7 @@
 <button
   class="hamburger-btn"
   [class.open]="isOpen"
-  [class.dashboard-hamburger]="isDashboardRoute"
+  [class.dashboard-hamburger]="isDashboardRoute || isHomeRoute"
   (click)="toggleSidebar()"
   *ngIf="isLoggedIn"
   title="Toggle Menu"

@@ -1,11 +1,10 @@
 {
   "scripts": {
-    "frontend": "ng serve --ssl true --host localhost --port 4200 --no-open",
-    "start": "ng serve --ssl true --host localhost --port 4200 --no-open",
-    "start:open": "ng serve --ssl true --host localhost --port 4200 --open",
+    "frontend": "ng serve --host localhost --port 4200 --no-open",
+    "start": "ng serve --host localhost --port 4200 --no-open",
+    "start:open": "ng serve --host localhost --port 4200 --open",
     "start:http": "ng serve --host localhost --port 4200 --no-open",
     "frontend:http": "ng serve --host localhost --port 4200 --no-open",
-    "start:https:trusted": "ng serve --ssl true --ssl-cert certs/localhost.pem --ssl-key certs/localhost-key.pem --host localhost --port 4200 --no-open",
     "build": "ng build",
     "prod": "ng serve --configuration production"
   },
