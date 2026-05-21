@@ -9,12 +9,12 @@ npm install
 ## add .env file in backend folder(backend\api) with below content  
 ```powershell
 # Database
-DB_URL=jdbc:mysql://localhost:3306/file_load_mgmt?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-DB_USERNAME=UserName
-DB_PASSWORD=Password
+DB_URL=jdbc:mysql://localhost:3306/file_management?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+DB_USERNAME=root
+DB_PASSWORD=root@39
 
 # JWT (must be 32+ characters)
-JWT_SECRET=Add Here
+JWT_SECRET=MzVjYzE2MmUtZjQzOS00NjdkLTljZjQtNGY4NTI2NjYxY2JhYjZiMjM2ZDgtZTQ2ZS00YzZjLTg5YzAtNDVmNDVmMDA5NTM3
 JWT_EXPIRATION=86400000
 
 # Admin bootstrap (first run)
@@ -24,15 +24,10 @@ ADMIN_PASSWORD=admin@123
 
 # Server / frontend url
 SERVER_PORT=8080
-SERVER_SSL_ENABLED=true
-FRONTEND_BASE_URL=https://localhost:4200
+SERVER_SSL_ENABLED=false
+FRONTEND_BASE_URL=http://localhost:4200
 
-# SSL keystore settings 
-SERVER_SSL_KEY_STORE=classpath:keystore-local.pfx
-SERVER_SSL_KEY_STORE_PASSWORD=changeit123
-SERVER_SSL_KEY_STORE_TYPE=PKCS12
 
-#mail
 MAIL_SMTP_HOST=smtp.gmail.com
 MAIL_SMTP_PORT=587
 MAIL_SMTP_USERNAME=preetipatilkulkarni49@gmail.com

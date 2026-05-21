@@ -132,10 +132,16 @@ constructor(
   startUploads() {
     if (!this.uploads.length || this.isUploading) return;
 
+    const selectedUploads = this.uploads.filter(u => u.selected);
+    if (!selectedUploads.length) {
+      this.snack.open('Select at least one file to upload.', 'Dismiss', { duration: 2500 });
+      return;
+    }
+
     const tags = this.tagsText.split(',').map(t => t.trim()).filter(Boolean);
     const extra = { description: this.description || undefined, tags: tags.length ? tags : undefined };
 
-    const uploadObservables = this.uploads.map(u => {
+    const uploadObservables = selectedUploads.map(u => {
       u.state = 'uploading';
       u.progress = 0;
       return this.api.upload(u.file, extra).toPromise().then(() => {
@@ -148,11 +154,14 @@ constructor(
     });
 
     Promise.all(uploadObservables).then(() => {
+      this.uploads = this.uploads.filter(u => !u.selected);
       this.updateAndPersistUploads();
-      this.snack.open(`All files uploaded successfully!`, 'OK', { duration: 3000 });
-      this.uploads = [];
-      localStorage.removeItem(UPLOADS_STORAGE_KEY);
-      this.router.navigate(['/files'], { queryParams: { refresh: Date.now() } });
+      this.snack.open(`Selected files uploaded successfully!`, 'OK', { duration: 3000 });
+
+      if (!this.uploads.length) {
+        localStorage.removeItem(UPLOADS_STORAGE_KEY);
+        this.router.navigate(['/files'], { queryParams: { refresh: Date.now() } });
+      }
     });
   }
 

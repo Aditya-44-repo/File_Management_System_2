@@ -12,6 +12,8 @@ export class SidebarComponent implements OnInit {
   activeRoute: string = '';
   currentUserRole: string = '';
   isLoggedIn: boolean = false;
+  isDashboardRoute: boolean = false;
+  isHomeRoute: boolean = false;
 
   menuItems = [
     { label: 'Dashboard', icon: 'dashboard', route: '/dashboard' },
@@ -26,6 +28,8 @@ export class SidebarComponent implements OnInit {
   ) {
     this.router.events.subscribe(() => {
       this.activeRoute = this.router.url;
+      this.isDashboardRoute = this.activeRoute.startsWith('/dashboard');
+      this.isHomeRoute = this.activeRoute === '/home' || this.activeRoute === '/';
     });
   }
 

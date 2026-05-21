@@ -144,14 +144,6 @@ h1 {
   font-weight: 900;
   color: $text;
   line-height: 1.02;
-  transform-origin: center;
-  animation: subtlePop 2200ms ease-in-out infinite alternate;
-}
-
-@keyframes subtlePop {
-  0% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-4px) scale(1.02); }
-  100% { transform: translateY(0) scale(1); }
 }
 
 .hero-title-accent {
@@ -383,6 +375,16 @@ h1 {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 20px;
+}
+
+.cta-card-grid.single-card {
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+}
+
+.cta-card-grid.single-card .cta-card {
+  max-width: 520px;
+  width: 100%;
 }
 
 .cta-image-wrapper {

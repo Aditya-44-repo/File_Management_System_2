@@ -1,8 +1,8 @@
 /* ==================== HAMBURGER BUTTON ==================== */
 .hamburger-btn {
   position: fixed;
-  top: 76px;
-  left: 20px;
+  top: 65px;
+  left: 5px;
   z-index: 1001;
   width: 44px;
   height: 44px;
@@ -37,7 +37,7 @@
   display: block;
   width: 24px;
   height: 2.5px;
-  background:white;
+  background: #0f172a;
   border-radius: 2px;
   transition: all 0.3s ease;
 
@@ -54,6 +54,11 @@
       transform: rotate(-45deg) translate(7px, -7px);
     }
   }
+
+}
+
+.hamburger-btn.dashboard-hamburger .hamburger-icon {
+  background: #ffffff;
 }
 
 /* ==================== SIDEBAR OVERLAY ==================== */

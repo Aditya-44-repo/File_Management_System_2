@@ -6,7 +6,9 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
-  background: #f5f9ff;
+  background:
+      radial-gradient(circle at top left, rgba(59, 130, 246, 0.10), transparent 30%),
+      linear-gradient(180deg, #f5f9ff 0%, #ffffff 100%);
 }
 
 /* ---- Page Header ---- */
@@ -42,6 +44,10 @@
   font-weight: 800;
   color: #0f172a;
   letter-spacing: -0.03em;
+}
+
+.page-title h1 .brand-it {
+  color: #1d4ed8;
 }
 
 .page-title p {

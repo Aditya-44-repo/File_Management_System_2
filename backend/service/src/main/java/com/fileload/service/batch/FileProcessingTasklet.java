@@ -17,7 +17,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 @Component
 public class FileProcessingTasklet implements Tasklet {
 
-    private static final long PROCESSING_VISIBLE_DELAY_MS = 10000L;
+    private static final long PROCESSING_VISIBLE_DELAY_MS = 5000L;
 
     private final FileLoadRepository fileLoadRepository;
     private final RecordCountUtil recordCountUtil;
