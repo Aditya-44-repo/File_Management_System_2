@@ -45,8 +45,8 @@ export class LoginComponent implements OnInit {
       // Get the returnUrl if it exists (e.g., if redirected from a specific page)
       const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
 
-      // UPDATE: Change the fallback from '/files' to '/dashboard'
-      this.router.navigateByUrl(returnUrl || '/dashboard');
+      // After login, return to home and allow the user to navigate to the dashboard.
+      this.router.navigateByUrl(returnUrl || '/home');
     },
     error: (err) => {
       this.snack.open(this.normalizeAuthMessage(err?.error?.message), 'Dismiss', { duration: 3500 });

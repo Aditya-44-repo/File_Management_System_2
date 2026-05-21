@@ -1,16 +1,19 @@
 .admin-users-page {
-  padding: 24px;
+  padding-top: 55px;
+  padding-bottom: 24px;
   background:
-    radial-gradient(circle at top left, rgba(0, 151, 167, 0.07), transparent 30%),
-    linear-gradient(180deg, #f8fbfd 0%, #ffffff 100%);
+    radial-gradient(circle at top left, rgba(59, 130, 246, 0.10), transparent 30%),
+    linear-gradient(180deg, #f5f9ff 0%, #ffffff 100%);
 }
 
 .page-card {
   padding: 24px;
   border-radius: 24px;
-  border: 1px solid rgba(15, 23, 42, 0.06);
+  border: 1px solid rgba(30, 64, 175, 0.12);
   background: rgba(255, 255, 255, 0.96);
-  box-shadow: 0 14px 40px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 16px 40px rgba(30, 64, 175, 0.08);
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .page-header {
@@ -41,7 +44,7 @@
 .eyebrow {
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: #0097a7;
+  color: #2563eb;
   font-size: 12px;
   font-weight: 700;
   margin: 0 0 6px;
@@ -55,9 +58,9 @@
 }
 
 .scope-badge {
-  background: linear-gradient(135deg, rgba(0, 151, 167, 0.10), rgba(106, 27, 154, 0.10));
-  color: #334155;
-  border: 1px solid rgba(15, 23, 42, 0.06);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(37, 99, 235, 0.10));
+  border: 1px solid rgba(30, 64, 175, 0.10);
+  color: #1e3a8a;
   padding: 8px 12px;
   border-radius: 999px;
   font-size: 12px;
@@ -75,37 +78,38 @@
 .search-field {
   min-width: min(440px, 100%);
   flex: 1;
+  margin: 0;
 }
 
 ::ng-deep .admin-users-page .mat-mdc-text-field-wrapper {
-  background: #f8fafc !important;
+  background: #f5f9ff !important;
   border-radius: 14px !important;
+  height: auto !important;
 }
 
 ::ng-deep .admin-users-page .mdc-text-field--outlined .mdc-notched-outline__leading,
 ::ng-deep .admin-users-page .mdc-text-field--outlined .mdc-notched-outline__notch,
 ::ng-deep .admin-users-page .mdc-text-field--outlined .mdc-notched-outline__trailing {
-  border-color: rgba(0, 151, 167, 0.22) !important;
+  border-color: rgba(30, 64, 175, 0.20) !important;
 }
 
 ::ng-deep .admin-users-page .mdc-text-field--focused .mdc-notched-outline__leading,
 ::ng-deep .admin-users-page .mdc-text-field--focused .mdc-notched-outline__notch,
 ::ng-deep .admin-users-page .mdc-text-field--focused .mdc-notched-outline__trailing {
-  border-color: #0097a7 !important;
+  border-color: #2563eb !important;
   border-width: 1.5px !important;
 }
 
 .toolbar button[mat-raised-button] {
-  height: 48px;
-  border-radius: 14px;
-  padding: 0 20px;
-  font-weight: 700;
-  box-shadow: 0 10px 24px rgba(0, 151, 167, 0.18);
+  background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.25);
+  align-self: center;
 }
 
 .table-wrapper {
   overflow: auto;
-  border: 1px solid rgba(15, 23, 42, 0.06);
+  border: 1px solid rgba(30, 64, 175, 0.10);
   border-radius: 18px;
   background: #fff;
 }
@@ -116,34 +120,39 @@
 }
 
 ::ng-deep .users-table .mat-mdc-header-row {
-  background: linear-gradient(180deg, #f8fafc, #f3f7fb);
+  background: linear-gradient(180deg, rgba(59, 130, 246, 0.08), rgba(37, 99, 235, 0.05));
 }
 
 ::ng-deep .users-table .mat-mdc-header-cell {
-  color: #334155;
+  color: #1d4ed8;
   font-weight: 700;
   font-size: 0.85rem;
   border-bottom: 1px solid rgba(15, 23, 42, 0.08);
 }
 
 ::ng-deep .users-table .mat-mdc-row {
+  height: 56px;
   transition: background-color 0.18s ease, transform 0.18s ease;
 }
 
 ::ng-deep .users-table .mat-mdc-row:hover {
-  background: #f8fbff;
+  background: rgba(59, 130, 246, 0.05);
 }
 
 ::ng-deep .users-table .mat-mdc-cell {
   border-bottom-color: rgba(15, 23, 42, 0.06);
   color: #0f172a;
+  vertical-align: middle;
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 
 /* Container alignment */
 .actions-cell {
-//   display: flex;
-  gap: 12px; /* Increased gap for better breathing room */
+  display: flex;
+  gap: 16px;
   align-items: center;
+  height: 100%;
   justify-content: flex-start;
 }
 
@@ -165,14 +174,14 @@
 
 /* --- Block / Unblock Button --- */
 .actions-cell button[color="primary"] {
-  background-color: #f1f5f9 !important; /* Light Slate */
-  border-color: #e2e8f0 !important;
-  color: #475569 !important;
+  background-color: #eef4ff !important; /* Light Slate */
+  border-color: #dbe7ff !important;
+  color: #1d4ed8 !important;
 }
 
 .actions-cell button[color="primary"]:hover {
-  background-color: #334155 !important;
-  border-color: #334155 !important;
+  background-color: #1d4ed8 !important;
+  border-color: #1d4ed8 !important;
   color: #ffffff !important;
 }
 
@@ -213,8 +222,7 @@
 }
 
 ::ng-deep .admin-users-page .mat-mdc-paginator {
-  border-top: 1px solid rgba(15, 23, 42, 0.06);
-  border-radius: 0 0 18px 18px;
+  border-top: 1px solid rgba(30, 64, 175, 0.10);
 }
 
 @media (max-width: 900px) {
@@ -256,3 +264,6 @@
   }
 }
 
+::ng-deep .admin-users-page .mat-mdc-form-field-subscript-wrapper {
+  display: none !important;
+}

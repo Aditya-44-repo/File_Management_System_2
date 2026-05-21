@@ -3,19 +3,18 @@
     <section class="welcome-section">
       <div class="welcome-panel">
         <div class="hero-copy-wrapper">
-          <img class="hero-logo" src="assets/docit-logo.png" alt="DocIT logo" />
-          
+          <h1 class="hero-title" *ngIf="!isLoggedIn">Doc<span class="hero-title-accent">IT</span></h1>
+          <h1 class="hero-title home-welcome" *ngIf="isLoggedIn">
+            <span class="home-welcome-line small">Welcome {{ welcomeName }},</span>
+            <span class="home-welcome-line brand">Doc<span class="hero-title-accent">IT</span></span>
+          </h1>
           <p class="hero-copy">
             Your modern file management system for efficient document handling. Manage uploads, processing, and organize files from one secure workspace.
           </p>
           <div class="hero-actions">
-            <button class="btn btn-primary" (click)="navigateTo('register')">Get Started</button>
-            <button class="btn btn-secondary" (click)="navigateTo('register')">Sign Up</button>
-          </div>
-          <div class="hero-tags">
-            <span>SEC</span>
-            <span>BAT</span>
-            <span>Batch processing</span>
+            <button class="btn btn-primary" *ngIf="!isLoggedIn" (click)="navigateTo('register')">Get Started</button>
+            <button class="btn btn-secondary" *ngIf="!isLoggedIn" (click)="navigateTo('register')">Sign Up</button>
+            <button class="btn btn-primary" *ngIf="isLoggedIn" (click)="navigateTo('dashboard')">Go to Dashboard</button>
           </div>
         </div>
         <div class="hero-feature-list">
@@ -77,15 +76,20 @@
     <section class="cta-section">
       <h2 class="cta-heading">Ready to get started?</h2>
       <div class="cta-card-grid">
-        <div class="cta-card">
+        <div class="cta-card" *ngIf="!isLoggedIn">
           <h3>Create an account</h3>
           <p>Sign up now to start managing documents securely.</p>
           <button class="btn btn-primary" (click)="navigateTo('register')">Sign Up</button>
         </div>
-        <div class="cta-card">
+        <div class="cta-card" *ngIf="!isLoggedIn">
           <h3>Already a member?</h3>
           <p>Log in and continue working with your files right away.</p>
-          <button class="btn btn-secondary" (click)="navigateTo('login')">Login</button>
+          <button class="btn btn-primary" (click)="navigateTo('login')">Login</button>
+        </div>
+        <div class="cta-card" *ngIf="isLoggedIn">
+          <h3>Welcome back</h3>
+          <p>You are logged in. Continue to your dashboard or explore your workspace.</p>
+          <button class="btn btn-primary" (click)="navigateTo('dashboard')">Open Dashboard</button>
         </div>
       </div>
     </section>

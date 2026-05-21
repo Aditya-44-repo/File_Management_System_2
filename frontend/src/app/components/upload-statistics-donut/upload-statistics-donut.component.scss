@@ -1,0 +1,248 @@
+.upload-stats-container {
+  width: 100%;
+  max-width: 100%;
+  
+  .stats-card {
+    background: transparent;
+    border-radius: 12px;
+    padding: 0;
+    box-shadow: none;
+    border: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .loading-state,
+  .error-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    gap: 16px;
+
+    p {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 14px;
+      margin: 0;
+    }
+  }
+
+  .error-state {
+    p {
+      color: #fecaca;
+      font-weight: 500;
+    }
+  }
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(255, 255, 255, 0.2);
+    border-top: 4px solid #ffffff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .chart-content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    animation: fadeIn 0.4s ease-in-out;
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  }
+
+  .chart-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: auto;
+
+    .donut-chart {
+      width: 220px;
+      height: 220px;
+      max-width: 100%;
+      animation: chartLoad 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+      /* stronger, darker shadow to match blue-style visual weight */
+      filter: drop-shadow(0 6px 18px rgba(9, 30, 66, 0.12));
+    }
+
+    @keyframes chartLoad {
+      from {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+  }
+
+  .chart-segment {
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    filter: drop-shadow(0 2px 6px rgba(9, 30, 66, 0.09));
+
+    &:hover {
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
+    }
+  }
+
+  .center-text {
+    pointer-events: none;
+
+    .total-label {
+      font-size: 28px;
+      font-weight: 700;
+      fill: #0f172a;
+    }
+
+    .total-text {
+      font-size: 12px;
+      fill: #475569;
+      font-weight: 600;
+    }
+  }
+
+  .legend {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+    .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: rgba(255, 255, 255, 0.08);
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.14);
+      transform: translateX(4px);
+    }
+
+    .legend-color {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .legend-details {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+    }
+
+    .legend-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.3;
+    }
+
+    .legend-stats {
+      font-size: 12px;
+      color: #475569;
+      font-weight: 600;
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .upload-stats-container {
+    .stats-card {
+      padding: 0;
+    }
+
+    .chart-content {
+      gap: 20px;
+    }
+
+    .chart-wrapper {
+      .donut-chart {
+        width: 180px;
+        height: 180px;
+      }
+    }
+
+    .legend {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .upload-stats-container {
+    .stats-card {
+      padding: 0;
+    }
+
+    .chart-wrapper {
+      .donut-chart {
+        width: 150px;
+        height: 150px;
+      }
+    }
+
+    .center-text {
+      .total-label {
+        font-size: 22px;
+      }
+
+      .total-text {
+        font-size: 10px;
+      }
+    }
+
+    .legend {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .legend-item {
+      padding: 10px 12px;
+
+      .legend-color {
+        width: 14px;
+        height: 14px;
+      }
+
+      .legend-name {
+        font-size: 12px;
+      }
+
+      .legend-stats {
+        font-size: 11px;
+      }
+    }
+  }
+}

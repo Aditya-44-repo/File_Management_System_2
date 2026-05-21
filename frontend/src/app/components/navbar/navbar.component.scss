@@ -1,4 +1,14 @@
 /* Ensure hamburger icon is always visible and clickable on mobile */
+.hamburger,
+.hamburger mat-icon,
+.hamburger .mat-icon,
+.hamburger svg,
+.hamburger svg path {
+  color: #0f172a !important;
+  fill: #0f172a !important;
+  stroke: #0f172a !important;
+}
+
 @media (max-width: 768px) {
   .desktop-nav {
     display: none !important;
@@ -13,6 +23,7 @@
     border: none;
     box-shadow: none;
   }
+
   .navbar {
     padding: 8px 8px;
     min-height: 56px;
@@ -20,6 +31,9 @@
   .logo {
     height: 28px !important;
     margin-right: 6px !important;
+  }
+  .header-logo {
+    height: 28px !important;
   }
   .profile-avatar {
     width: 32px !important;
@@ -75,9 +89,10 @@
   display: flex;
   align-items: center;
   padding: 10px 20px;
-  background: linear-gradient(135deg, #0097a7, #6a1b9a);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
-  /* border-radius: 0 0 12px 12px;  if you want rounded bottom edges */
+  background: #0000;
+  color: #0f172a;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
 }
 
 /* Optional: prevent content from hiding under fixed navbar.
@@ -90,15 +105,29 @@
   display: inline-flex;
   align-items: center;
   text-decoration: none;
-  color: #ffffff;
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 700;
-  font-size: 2rem;
-  letter-spacing: 1px;
+  color: #0f172a;
+}
+
+.brand .header-logo {
+  height: 32px;
+  width: auto;
+  display: block;
+}
+
+.brand-text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .logo {
-  height: 48px;
+  height: 32px;
   width: auto;
   display: block;
   margin-right: 10px;
@@ -111,23 +140,34 @@
 /* Apply custom styling only to toolbar text buttons, not icon/menu buttons */
 .navbar button[mat-button] {
   margin-left: 10px;
-  padding: 8px 18px;
-  font-weight: 600;
+  padding: 10px 20px;
+  font-weight: 700;
   font-family: 'Montserrat', sans-serif;
   font-size: 0.95rem;
   color: #ffffff;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 8px;
+  background: linear-gradient(180deg, #2f6bff 0%, #2152e8 100%);
+  border: none;
+  border-radius: 12px;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 12px rgba(33, 82, 232, 0.18);
 }
 
 .navbar button[mat-button]:hover {
-  background: linear-gradient(135deg, #00bcd4, #8e24aa);
+  background: linear-gradient(180deg, #3a7bff 0%, #2a5af0 100%);
   color: #ffffff;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-  border-color: #ffffff;
+  box-shadow: 0 6px 18px rgba(33, 82, 232, 0.22);
+}
+
+/* Mobile / dropdown menu buttons (ensure Login/Register are blue there too) */
+.mobile-dropdown-menu button[mat-menu-item],
+.mobile-dropdown-menu a[mat-menu-item] {
+  color: #1f4bff;
+}
+
+.mobile-dropdown-menu button[mat-menu-item]:hover,
+.mobile-dropdown-menu a[mat-menu-item]:hover {
+  background: rgba(31,75,255,0.06);
 }
 
 .profile-menu-btn {
@@ -166,10 +206,11 @@
   transform: scale(1.06);
 }
 
-.profile-menu-btn:hover {
-  background: rgba(255, 255, 255, 0.14);
-  border: 0;
-  box-shadow: none;
+.profile-menu-btn:hover,
+.profile-menu-btn.profile-open {
+  background: linear-gradient(180deg, #2f6bff 0%, #2152e8 100%);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 10px 24px rgba(33, 82, 232, 0.2);
 }
 
 .profile-avatar {
@@ -241,4 +282,82 @@
 
 .hamburger {
   display: none;
+}
+
+/* Force hamburger icon bars black everywhere */
+button.hamburger,
+button.hamburger mat-icon,
+button.hamburger .mat-icon,
+button.hamburger svg,
+button.hamburger svg path {
+  color: #0f172a !important;
+  fill: #0f172a !important;
+  stroke: #0f172a !important;
+}
+
+/* Strongest override: ensure hamburger shows 3 black bars for all icon types
+   (font ligature, material svg, inline svg paths, masked icons) */
+.navbar button.hamburger,
+.navbar button.hamburger.mat-icon-button,
+.navbar button.hamburger:hover,
+.navbar button.hamburger .mat-icon,
+.navbar button.hamburger mat-icon,
+.navbar button.hamburger svg,
+.navbar button.hamburger svg *,
+.navbar button.hamburger .material-icons,
+.navbar button.hamburger .mat-icon-inline {
+  color: #0f172a !important;
+  fill: #0f172a !important;
+  stroke: #000000 !important;
+  -webkit-text-fill-color: #0f172a !important;
+  background-color: transparent !important;
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+  filter: none !important;
+}
+
+/* When on Home or Dashboard (added via [class.dashboard-hamburger])
+   show the hamburger as white so it contrasts with dark hero backgrounds */
+.navbar button.hamburger.dashboard-hamburger,
+.navbar button.hamburger.dashboard-hamburger.mat-icon-button,
+.navbar button.hamburger.dashboard-hamburger:hover,
+.navbar button.hamburger.dashboard-hamburger .mat-icon,
+.navbar button.hamburger.dashboard-hamburger mat-icon,
+.navbar button.hamburger.dashboard-hamburger svg,
+.navbar button.hamburger.dashboard-hamburger svg *,
+.navbar button.hamburger.dashboard-hamburger .material-icons {
+  color: #ffffff !important;
+  fill: #ffffff !important;
+  stroke: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background-color: transparent !important;
+  filter: none !important;
+}
+
+/* Specific override: force black hamburger on Reports / Upload / Settings pages */
+.navbar button.hamburger.page-black-hamburger,
+.navbar button.hamburger.page-black-hamburger.mat-icon-button,
+.navbar button.hamburger.page-black-hamburger:hover,
+.navbar button.hamburger.page-black-hamburger .mat-icon,
+.navbar button.hamburger.page-black-hamburger mat-icon,
+.navbar button.hamburger.page-black-hamburger svg,
+.navbar button.hamburger.page-black-hamburger svg *,
+.navbar button.hamburger.page-black-hamburger .material-icons {
+  color: #0f172a !important;
+  fill: #0f172a !important;
+  stroke: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
+  background-color: transparent !important;
+  filter: none !important;
+}
+
+/* Final force: absolute specificity for page-black-hamburger on all nested elements */
+button.hamburger.page-black-hamburger mat-icon,
+button.hamburger.page-black-hamburger .mat-icon,
+button.hamburger.page-black-hamburger svg,
+button.hamburger.page-black-hamburger svg path {
+  color: #0f172a !important;
+  fill: #0f172a !important;
+  stroke: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
 }

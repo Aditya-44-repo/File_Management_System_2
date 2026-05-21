@@ -1,0 +1,27 @@
+/* Helper partial for home welcome styling */
+.home-welcome {
+  .home-welcome-line.small {
+    font-size: clamp(1.05rem, 1.8vw, 1.4rem);
+    font-weight: 700;
+    color: $muted;
+    display: block;
+    margin-bottom: 6px;
+    opacity: 0.95;
+  }
+
+  .home-welcome-line.brand {
+    display: block;
+    font-size: clamp(2.8rem, 4.5vw, 5rem);
+    font-weight: 900;
+    color: $text;
+    line-height: 1.02;
+    transform-origin: center;
+    animation: subtlePop 2200ms ease-in-out infinite alternate;
+  }
+
+  @keyframes subtlePop {
+    0% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-4px) scale(1.02); }
+    100% { transform: translateY(0) scale(1); }
+  }
+}
