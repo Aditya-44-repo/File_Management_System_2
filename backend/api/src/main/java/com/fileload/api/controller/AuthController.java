@@ -10,12 +10,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 import com.fileload.api.security.JwtUtil;
 import com.fileload.dao.repository.UserAccountRepository;
+import com.fileload.dao.repository.LoginHistoryRepository;
 import com.fileload.model.dto.*;
 import com.fileload.model.entity.UserAccount;
 import com.fileload.model.entity.UserRole;
+import com.fileload.model.entity.LoginHistory;
 import com.fileload.service.PasswordResetService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,17 +43,20 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
     private final PasswordResetService passwordResetService;
+    private final LoginHistoryRepository loginHistoryRepository;
 
     public AuthController(UserAccountRepository userRepository,
                           PasswordEncoder passwordEncoder,
                           AuthenticationManager authenticationManager,
                           JwtUtil jwtUtil,
-                          PasswordResetService passwordResetService) {
+                          PasswordResetService passwordResetService,
+                          LoginHistoryRepository loginHistoryRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.passwordResetService = passwordResetService;
+        this.loginHistoryRepository = loginHistoryRepository;
     }
 
     // ---------------- REGISTER ----------------
@@ -82,7 +88,7 @@ public class AuthController {
     // ---------------- LOGIN ----------------
     @PostMapping("/login")
     @Operation(summary = "Login user")
-    public ResponseEntity<AuthResponseDTO> login(@Valid @RequestBody LoginRequestDTO request) {
+    public ResponseEntity<AuthResponseDTO> login(@Valid @RequestBody LoginRequestDTO request, HttpServletRequest httpRequest) {
 
         String login = request.login().trim();
 
@@ -97,15 +103,27 @@ public class AuthController {
             throw new IllegalStateException("User is blocked");
         }
 
+        String userAgent = httpRequest.getHeader("User-Agent");
+        String device = parseDevice(userAgent);
+        String browser = parseBrowser(userAgent);
+        String ip = httpRequest.getHeader("X-Forwarded-For");
+        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
+            ip = httpRequest.getRemoteAddr();
+        }
+
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(login, request.password())
             );
         } catch (DisabledException ex) {
+            loginHistoryRepository.save(new LoginHistory(user.getId(), device, browser, ip, java.time.LocalDateTime.now(), "Failed"));
             throw new IllegalStateException(ex.getMessage());
         } catch (Exception ex) {
+            loginHistoryRepository.save(new LoginHistory(user.getId(), device, browser, ip, java.time.LocalDateTime.now(), "Failed"));
             throw new IllegalArgumentException("Invalid credentials");
         }
+
+        loginHistoryRepository.save(new LoginHistory(user.getId(), device, browser, ip, java.time.LocalDateTime.now(), "Success"));
 
         String token = jwtUtil.generateToken(user.getEmail(), user.getTokenVersion(), user.getRole().name());
         return ResponseEntity.ok(toAuthResponse(user, token));
@@ -231,5 +249,28 @@ public class AuthController {
                 user.getProfileImage(),
                 user.getAdminPermissions()
         );
+    }
+
+    private String parseBrowser(String userAgent) {
+        if (userAgent == null) return "Unknown";
+        String ua = userAgent.toLowerCase();
+        if (ua.contains("edg")) return "Edge";
+        if (ua.contains("chrome") && !ua.contains("chromium")) return "Chrome";
+        if (ua.contains("safari") && !ua.contains("chrome")) return "Safari";
+        if (ua.contains("firefox")) return "Firefox";
+        if (ua.contains("opr") || ua.contains("opera")) return "Opera";
+        return "Unknown Browser";
+    }
+
+    private String parseDevice(String userAgent) {
+        if (userAgent == null) return "Unknown";
+        String ua = userAgent.toLowerCase();
+        if (ua.contains("windows")) return "Windows PC";
+        if (ua.contains("macintosh") || ua.contains("mac os x")) return "MacBook";
+        if (ua.contains("android")) return "Android Phone";
+        if (ua.contains("iphone")) return "iPhone";
+        if (ua.contains("ipad")) return "iPad";
+        if (ua.contains("linux")) return "Linux PC";
+        return "Unknown Device";
     }
 }

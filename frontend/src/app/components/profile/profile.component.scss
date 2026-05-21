@@ -1,26 +1,31 @@
 .profile-dashboard {
-  padding: 24px;
-  background: #f4f7fe;
+  padding: 68px 24px 48px;
+  background: radial-gradient(circle at top left, rgba(59, 130, 246, 0.10), transparent 30%),
+              linear-gradient(180deg, #f5f9ff 0%, #ffffff 100%);
   min-height: 100vh;
 }
 
 /* HERO */
 .hero-card {
+  position: relative;
   background: linear-gradient(135deg, #4f46e5, #7c3aed);
   border-radius: 24px;
-  padding: 30px;
+  padding: 60px 30px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   color: white;
   margin-bottom: 24px;
   box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+  min-height: 280px;
 }
 
 .hero-left {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 24px;
+  text-align: center;
+  gap: 16px;
 }
 
 .hero-avatar {
@@ -29,34 +34,55 @@
   border-radius: 50%;
   object-fit: cover;
   border: 5px solid rgba(255,255,255,0.3);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.hero-user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .hero-user-info h1 {
   margin: 0;
   font-size: 32px;
   font-weight: 700;
+  letter-spacing: -0.02em;
 }
 
 .hero-user-info p {
-  margin-top: 8px;
+  margin-top: 6px;
   opacity: 0.9;
+  font-size: 15px;
 }
 
 .role-chip {
-  margin-top: 14px;
+  margin-top: 12px;
   display: inline-block;
-  background: rgba(255,255,255,0.2);
-  padding: 8px 14px;
+  background: rgba(255,255,255,0.25);
+  padding: 6px 14px;
   border-radius: 30px;
   font-size: 13px;
   font-weight: 600;
+  letter-spacing: 0.03em;
+  backdrop-filter: blur(4px);
 }
 
 .edit-profile-btn {
+  position: absolute;
+  top: 24px;
+  right: 24px;
   background: white !important;
   color: #4f46e5 !important;
   border-radius: 12px !important;
   font-weight: 600 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+  transition: all 0.2s ease !important;
+}
+
+.edit-profile-btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15) !important;
 }
 
 /* STAT CARDS */
@@ -68,12 +94,13 @@
 }
 
 .modern-card {
-  border-radius: 22px !important;
+  border-radius: 24px !important;
+  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.06) !important;
   padding: 28px;
   display: flex;
   align-items: center;
   gap: 18px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
   transition: 0.3s ease;
 }
 
@@ -123,19 +150,15 @@
 }
 
 /* GRID */
-.dashboard-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: 24px;
-  margin-bottom: 24px;
-}
-
 .dashboard-card,
 .login-history-card,
 .profile-edit {
-  border-radius: 22px !important;
+  background: #ffffff;
+  border-radius: 24px !important;
+  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.06) !important;
   padding: 24px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+  margin-bottom: 24px;
 }
 
 .section-header {
@@ -146,50 +169,43 @@
   margin: 0;
   font-size: 22px;
   font-weight: 700;
-}
-
-/* STORAGE */
-
-
-.success-rate-box {
-  margin-top: 30px;
-  background: #eef2ff;
-  padding: 18px;
-  border-radius: 16px;
-}
-.chart-container {
-  margin-top: 20px;
-}
-
-.success-title {
-  color: #6366f1;
-  font-weight: 600;
-}
-
-.success-value {
-  margin-top: 8px;
-  font-size: 28px;
-  font-weight: 700;
+  color: #0f172a;
 }
 
 /* ACTIVITY */
 .activity-list {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 12px;
 }
 
 .activity-item {
   display: flex;
-  gap: 16px;
   align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: #f8fafc;
+  border: 1px solid rgba(15, 23, 42, 0.05);
+  border-radius: 16px;
+  transition: all 0.25s ease;
+
+  &:hover {
+    background: #f1f5f9;
+    transform: translateX(4px);
+  }
+}
+
+.activity-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .activity-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 14px;
-  background: #eef2ff;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(79, 70, 229, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -198,12 +214,14 @@
 
 .activity-text {
   font-weight: 600;
+  color: #0f172a;
+  font-size: 14px;
 }
 
 .activity-time {
-  color: #6b7280;
+  color: #64748b;
   font-size: 13px;
-  margin-top: 4px;
+  font-weight: 500;
 }
 
 /* LOGIN TABLE */
@@ -280,6 +298,32 @@
 .button-group {
   display: flex;
   gap: 12px;
+  margin-top: 10px;
+}
+
+.button-group button[mat-raised-button] {
+  background: linear-gradient(180deg, #2f6bff 0%, #2152e8 100%) !important;
+  color: #ffffff !important;
+  border-radius: 12px !important;
+  font-weight: 700 !important;
+  box-shadow: 0 10px 24px rgba(33, 82, 232, 0.18) !important;
+  border: none !important;
+  padding: 0 24px !important;
+  height: 44px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.button-group button[mat-stroked-button] {
+  color: #1d4ed8 !important;
+  border: 1px solid #bfdbfe !important;
+  background: #eef4ff !important;
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.12) !important;
+  border-radius: 12px !important;
+  font-weight: 700 !important;
+  padding: 0 24px !important;
+  height: 44px !important;
 }
 
 /* MOBILE */

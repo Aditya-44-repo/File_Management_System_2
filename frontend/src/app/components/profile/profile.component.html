@@ -34,7 +34,7 @@
 
         <mat-card class="modern-card uploads-card">
             <div class="card-icon blue">
-                <mat-icon>upload</mat-icon>
+                <mat-icon>cloud_upload</mat-icon>
             </div>
 
             <div>
@@ -46,7 +46,7 @@
 
         <mat-card class="modern-card downloads-card">
             <div class="card-icon green">
-                <mat-icon>download</mat-icon>
+                <mat-icon>cloud_download</mat-icon>
             </div>
 
             <div>
@@ -58,7 +58,7 @@
 
         <mat-card class="modern-card success-card">
             <div class="card-icon purple">
-                <mat-icon>check_circle</mat-icon>
+                <mat-icon>cloud_done</mat-icon>
             </div>
 
             <div>
@@ -70,7 +70,7 @@
 
         <mat-card class="modern-card failed-card">
             <div class="card-icon red">
-                <mat-icon>error</mat-icon>
+                <mat-icon>cloud_off</mat-icon>
             </div>
 
             <div>
@@ -82,74 +82,27 @@
     </div>
 
 
-    <!-- ANALYTICS + ACTIVITY -->
-    <div class="dashboard-grid">
+    <!-- RECENT ACTIVITY -->
+    <mat-card class="dashboard-card recent-activity-card">
 
-        <!-- STORAGE CARD -->
-        <mat-card class="dashboard-card">
+        <div class="section-header">
+            <h2>Recent Activity</h2>
+        </div>
 
-            <div class="storage-section">
+        <div class="activity-list">
 
-
-
-
-
-
-                <div class="success-rate-box">
-
-                    <div class="success-title">
-                        Upload Success Rate
-                    </div>
-
-                    <div class="success-value">
-                        {{ successRate }}%
-                    </div>
-
-                    <div class="chart-container">
-
-                        <apx-chart
-                                [series]="uploadChartSeries"
-                                [chart]="uploadChart"
-                                [labels]="uploadChartLabels"
-                                [colors]="uploadChartColors"
-                                [legend]="uploadChartLegend"
-                                [dataLabels]="uploadChartDataLabels"
-                                [responsive]="uploadChartResponsive"
-                        >
-                        </apx-chart>
-
-                    </div>
-
-                </div>
-
-            </div>
-        </mat-card>
-
-
-        <!-- RECENT ACTIVITY -->
-        <mat-card class="dashboard-card">
-
-            <div class="section-header">
-                <h2>Recent Activity</h2>
-            </div>
-
-            <div class="activity-list">
-
-                <div class="activity-item" *ngFor="let activity of recentActivities">
+            <div class="activity-item" *ngFor="let activity of recentActivities">
+                <div class="activity-left">
                     <div class="activity-icon">
                         <mat-icon>{{ activity.icon }}</mat-icon>
                     </div>
-
-                    <div class="activity-info">
-                        <div class="activity-text">{{ activity.text }}</div>
-                        <div class="activity-time">{{ activity.time }}</div>
-                    </div>
+                    <div class="activity-text">{{ activity.text }}</div>
                 </div>
-
+                <div class="activity-time">{{ activity.time }}</div>
             </div>
-        </mat-card>
 
-    </div>
+        </div>
+    </mat-card>
 
 
     <!-- LOGIN HISTORY -->
@@ -190,7 +143,8 @@
 
 
     <!-- EDIT SECTION -->
-    <div class="profile-edit" *ngIf="isEditing">
+    <div class="profile-edit" *ngIf="isEditing" id="edit-section">
+
 
         <div class="edit-header">
             <h2>Edit Profile</h2>
@@ -227,6 +181,16 @@
             </mat-form-field>
 
 
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>New Password (leave blank to keep current)</mat-label>
+                <input matInput type="password" [(ngModel)]="newPassword">
+            </mat-form-field>
+
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Confirm Password</mat-label>
+                <input matInput type="password" [(ngModel)]="confirmPassword">
+            </mat-form-field>
             <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Email</mat-label>
                 <input matInput [value]="currentUser?.email" disabled>
