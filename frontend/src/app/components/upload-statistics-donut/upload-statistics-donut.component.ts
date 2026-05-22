@@ -1,87 +1,66 @@
-import { Component, OnInit, OnDestroy, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FileUploadStatsService, FileUploadStats, UploadStatus } from '../../services/file-upload-stats.service';
+import { DashboardOverview } from '../../models/dashboard-overview.model';
 
 @Component({
   selector: 'app-upload-statistics-donut',
   templateUrl: './upload-statistics-donut.component.html',
   styleUrls: ['./upload-statistics-donut.component.scss']
 })
-export class UploadStatisticsDonutComponent implements OnInit, OnDestroy {
+export class UploadStatisticsDonutComponent implements OnInit, OnChanges {
   
+  @Input() overview: DashboardOverview | null = null;
+
   stats: FileUploadStats | null = null;
-  loading = true;
+  loading = false;
   error = '';
   hoveredStatus: string | null = null;
   
-  // Accept selection inputs so parent can control the preview
-  @Input() selectedDate?: string;
-  @Input() selectedYear?: string;
-  @Input() selectedPeriod?: 'Daily' | 'Monthly' | 'Yearly';
-  
-  private destroy$ = new Subject<void>();
-
   constructor(private fileUploadStatsService: FileUploadStatsService) { }
 
   ngOnInit(): void {
-    this.loadStats();
+    this.updateStats();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    // reload stats when parent selection changes (basic wiring)
-    if (changes['selectedDate'] || changes['selectedYear'] || changes['selectedPeriod']) {
-      this.loadStats();
+    if (changes['overview']) {
+      this.updateStats();
     }
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+  private updateStats(): void {
+    if (this.overview) {
+      this.stats = this.fileUploadStatsService.transformOverviewToStats(this.overview);
+      this.loading = false;
+      this.error = '';
+    } else {
+      this.stats = null;
+    }
   }
 
-  private loadStats(): void {
-    this.loading = true;
-    this.fileUploadStatsService.getUploadStats(this.selectedPeriod, this.selectedYear, this.selectedDate)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (data: FileUploadStats) => {
-          this.stats = data;
-          this.loading = false;
-          this.error = '';
-        },
-        error: (err: any) => {
-          console.error('Error loading upload stats:', err);
-          this.error = 'Failed to load upload statistics';
-          this.loading = false;
-        }
-      });
-  }
-
-  /**
-   * Calculates segment angles for the donut chart
-   */
   getSegmentAngles() {
-    if (!this.stats) return [];
+    if (!this.stats || this.stats.total === 0) return [];
     const gapDegrees = 2; // small gap between segments for a segmented look
     let currentAngle = -90; // Start at top
-    return this.stats.statuses.map((status: UploadStatus) => {
-      const rawAngle = (status.count / this.stats!.total) * 360;
-      const startAngle = currentAngle + gapDegrees / 2;
-      const endAngle = currentAngle + rawAngle - gapDegrees / 2;
-      // advance currentAngle by the raw angle (including gap)
-      currentAngle += rawAngle;
+    return this.stats.statuses
+      .filter((status: UploadStatus) => status.count > 0)
+      .map((status: UploadStatus) => {
+        const rawAngle = (status.count / this.stats!.total) * 360;
+        const startAngle = currentAngle + gapDegrees / 2;
+        const endAngle = currentAngle + rawAngle - gapDegrees / 2;
+        // advance currentAngle by the raw angle (including gap)
+        currentAngle += rawAngle;
 
-      return {
-        name: status.name,
-        count: status.count,
-        percentage: status.percentage,
-        color: status.color,
-        startAngle,
-        endAngle,
-        midAngle: (startAngle + endAngle) / 2
-      };
-    });
+        return {
+          name: status.name,
+          count: status.count,
+          percentage: status.percentage,
+          color: status.color,
+          startAngle,
+          endAngle,
+          midAngle: (startAngle + endAngle) / 2
+        };
+      });
   }
 
   /**
