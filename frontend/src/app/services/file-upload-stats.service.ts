@@ -28,16 +28,15 @@ export class FileUploadStatsService {
 
   transformOverviewToStats(overview: DashboardOverview): FileUploadStats {
     const total = Number(overview.totalUploads ?? 0);
-    const pendingCount = Number(overview.pendingCount ?? 0);
     const processingCount = Number(overview.processingCount ?? 0);
     const successCount = Number(overview.successCount ?? 0);
-    const failedCount = Math.max(0, total - pendingCount - processingCount - successCount);
+    const failedCount = Math.max(0, total - processingCount - successCount);
 
     const statuses: UploadStatus[] = [
       {
         name: 'Failed',
-        count: pendingCount,
-        percentage: total === 0 ? 0 : (pendingCount / total) * 100,
+        count: failedCount,
+        percentage: total === 0 ? 0 : (failedCount / total) * 100,
         color: '#dc3545'
       },
       {
@@ -54,10 +53,6 @@ export class FileUploadStatsService {
       }
     ];
 
-    if (failedCount > 0) {
-      statuses[0].count += failedCount;
-      statuses[0].percentage = total === 0 ? 0 : (statuses[0].count / total) * 100;
-    }
 
     return {
       total,
