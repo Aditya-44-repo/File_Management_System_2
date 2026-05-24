@@ -6,9 +6,17 @@
       <h1>Doc<span class="brand-it">IT</span> Registry</h1>
       <p>Browse, search, and manage all files.</p>
     </div>
-    <button mat-raised-button routerLink="/upload" class="upload-btn">
-      <mat-icon>cloud_upload</mat-icon> Upload New File
-    </button>
+    <div class="header-quicklinks">
+      <button mat-icon-button routerLink="/" aria-label="Home" title="Home" class="hl-icon">
+        <mat-icon>home</mat-icon>
+      </button>
+      <button mat-icon-button routerLink="/dashboard" aria-label="Dashboard" title="Dashboard" class="hl-icon">
+        <mat-icon>dashboard</mat-icon>
+      </button>
+      <button mat-icon-button routerLink="/upload" aria-label="Upload" title="Upload" class="hl-icon">
+        <mat-icon>cloud_upload</mat-icon>
+      </button>
+    </div>
   </div>
 
   <!-- Search & Filters -->
@@ -21,13 +29,21 @@
     <div class="bulk-toolbar" *ngIf="dataSource.data.length > 0">
 
       <div class="bulk-info">
-    <span *ngIf="selectedCount() === 0">
-      {{ total }} files
-    </span>
+        <ng-container *ngIf="selectedCount() === 0">
+          <mat-paginator
+            class="top-paginator"
+            [length]="total"
+            [pageIndex]="criteria.page || 0"
+            [pageSize]="criteria.size || 10"
+            [pageSizeOptions]="[5, 10, 25, 50]"
+            showFirstLastButtons
+            (page)="pageChange($event)">
+          </mat-paginator>
+        </ng-container>
 
         <span *ngIf="selectedCount() > 0">
-      <strong>{{ selectedCount() }}</strong> selected
-    </span>
+          <strong>{{ selectedCount() }}</strong> selected
+        </span>
       </div>
 
       <div class="bulk-actions">
@@ -155,16 +171,7 @@
       </table>
     </div>
 
-    <!-- Paginator -->
-    <mat-paginator
-      *ngIf="total > 0"
-      [length]="total"
-      [pageIndex]="criteria.page || 0"
-      [pageSize]="criteria.size || 10"
-      [pageSizeOptions]="[5, 10, 25, 50]"
-      showFirstLastButtons
-      (page)="pageChange($event)">
-    </mat-paginator>
+    <!-- bottom paginator removed (moved to top) -->
 
   </div>
 </div>

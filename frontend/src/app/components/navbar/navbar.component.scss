@@ -224,6 +224,11 @@
   display: block;
 }
 
+/* Ensure navbar doesn't clip the avatar when page-level elements are positioned nearby */
+.navbar {
+  overflow: visible;
+}
+
 .profile-dropdown {
   .profile-header-menu {
     display: flex;
