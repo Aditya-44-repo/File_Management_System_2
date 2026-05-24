@@ -3,11 +3,13 @@
     <!-- Header -->
     <div class="header">
         <img [src]="profileImage" class="avatar" alt="Profile" (error)="handleProfileImageError()">
-        <h3>{{ currentUser?.name || currentUser?.username || 'User' }}</h3>
-        <p>{{ currentUser?.email }}</p>
-        <span class="role-pill" *ngIf="currentUser?.role">
-            {{ getRoleLabel(currentUser?.role) }}
-        </span>
+        <div class="header-user">
+            <h3>{{ currentUser?.name || currentUser?.username || 'User' }}</h3>
+            <p>{{ currentUser?.email }}</p>
+            <span class="role-pill" *ngIf="currentUser?.role">
+                {{ getRoleLabel(currentUser?.role) }}
+            </span>
+        </div>
     </div>
 
     <!-- Actions -->

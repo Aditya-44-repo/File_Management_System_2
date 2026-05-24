@@ -132,10 +132,11 @@ export class AuthService {
   }
 
   // Update username/name of the user and optionally password
-  updateProfileDetails(username: string, password?: string): Observable<User> {
+  updateProfileDetails(username: string, password?: string, currentPassword?: string): Observable<User> {
     const body: any = { username };
     if (password && password.trim()) {
       body.password = password.trim();
+      body.currentPassword = currentPassword?.trim();
     }
     return this.http.put<User>(`${environment.apiBaseUrl}/profile`, body).pipe(
       tap({

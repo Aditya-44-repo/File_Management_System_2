@@ -109,6 +109,14 @@ public class ProfileServiceImpl implements ProfileService {
         user.setUsername(newUsername);
 
         if (request.password() != null && !request.password().trim().isEmpty()) {
+            if (request.currentPassword() == null || request.currentPassword().trim().isEmpty()) {
+                throw new IllegalArgumentException("Current password is required to set a new password");
+            }
+
+            if (!passwordEncoder.matches(request.currentPassword(), user.getPassword())) {
+                throw new IllegalArgumentException("Current password is incorrect");
+            }
+
             String newPassword = request.password().trim();
             if (newPassword.length() < 6) {
                 throw new IllegalArgumentException("Password must be at least 6 characters");

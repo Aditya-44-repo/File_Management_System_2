@@ -30,7 +30,7 @@
   width: 140px;
   height: 140px;
   border-radius: 50%;
-  background: rgba(99, 102, 241, 0.12);
+  background: rgba(59, 130, 246, 0.12);
   filter: blur(14px);
   pointer-events: none;
 }
@@ -39,9 +39,12 @@
 .header {
   position: relative;
   padding: 28px 22px 20px;
-  background: linear-gradient(135deg, #4f46e5 0%, #4338ca 45%, #1f2937 100%);
+  background: linear-gradient(135deg, #2f6bff 0%, #2152e8 58%, #1e40af 100%);
   color: white;
-  text-align: center;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 18px;
 }
 
 .header::after {
@@ -52,15 +55,16 @@
   pointer-events: none;
 }
 
-/* Avatar */
 .avatar {
   width: 76px;
   height: 76px;
+  flex: 0 0 76px;
   border-radius: 50%;
   border: 3px solid rgba(255, 255, 255, 0.9);
-  margin-bottom: 12px;
   box-shadow: 0 12px 30px rgba(15, 23, 42, 0.18);
   background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%);
+  object-fit: cover;
+  z-index: 1;
 }
 
 .role-pill {
@@ -79,12 +83,19 @@
   text-transform: uppercase;
 }
 
+.header-user {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+}
+
 /* Name */
 .header h3 {
-  margin: 10px 0 4px;
+  margin: 0 0 4px;
   font-size: 18px;
   font-weight: 700;
   letter-spacing: 0.02em;
+  overflow-wrap: anywhere;
 }
 
 /* Email */
@@ -92,6 +103,7 @@
   margin: 0;
   font-size: 13px;
   opacity: 0.86;
+  overflow-wrap: anywhere;
 }
 
 /* Menu */
@@ -112,13 +124,13 @@
 
 .menu button mat-icon {
   margin-right: 12px;
-  color: #4338ca;
+  color: #1d4ed8;
 }
 
 .menu button:hover {
-  background: rgba(99, 102, 241, 0.08);
+  background: rgba(59, 130, 246, 0.10);
   transform: translateX(2px);
-  box-shadow: 0 10px 24px rgba(99, 102, 241, 0.08);
+  box-shadow: 0 10px 24px rgba(59, 130, 246, 0.10);
 }
 
 .menu button:first-of-type {

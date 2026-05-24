@@ -20,10 +20,12 @@ export class ProfileComponent implements OnInit {
   currentUser: User | null = null;
   isEditing = false;
   newName: string = '';
+  currentPassword: string = '';
   newPassword: string = '';
   confirmPassword: string = '';
+  currentPasswordError = false;
+  passwordMismatchError = false;
   profileImage: string = 'assets/default-avatar.svg';
-  selectedFile: File | null = null;
 
   // Statistics
   totalFiles = 0;
@@ -102,7 +104,10 @@ export class ProfileComponent implements OnInit {
         }
 
         if (data.recentActivities) {
-          this.recentActivities = data.recentActivities.map((act: any) => ({
+          this.recentActivities = [...data.recentActivities]
+            .sort((a: any, b: any) => this.getTimeValue(b.timestamp) - this.getTimeValue(a.timestamp))
+            .slice(0, 10)
+            .map((act: any) => ({
             icon: act.icon === 'upload' ? 'cloud_upload' : act.icon,
             text: act.text,
             time: this.formatTime(act.timestamp)
@@ -115,7 +120,7 @@ export class ProfileComponent implements OnInit {
             browser: log.browser,
             ip: log.ip,
             time: this.formatLoginTime(log.time),
-            status: log.status === 'SUCCESS' ? 'Success' : (log.status === 'FAILED' ? 'Failed' : log.status)
+            status: this.normalizeLoginStatus(log.status)
           }));
         }
       },
@@ -178,6 +183,26 @@ export class ProfileComponent implements OnInit {
     }) + `, ${timeStr}`;
   }
 
+  getTimeValue(dateString: any): number {
+    const value = new Date(dateString).getTime();
+    return Number.isNaN(value) ? 0 : value;
+  }
+
+  normalizeLoginStatus(status: string): string {
+    const normalized = (status || '').toLowerCase();
+    if (normalized === 'success') {
+      return 'Success';
+    }
+    if (normalized === 'failed' || normalized === 'failure') {
+      return 'Failed';
+    }
+    return status;
+  }
+
+  getLoginStatusClass(status: string): string {
+    return (status || '').toLowerCase() === 'failed' ? 'failed-status' : 'success-status';
+  }
+
   enableEdit(): void {
     this.isEditing = true;
     // Scroll to the edit form at the bottom
@@ -192,81 +217,67 @@ export class ProfileComponent implements OnInit {
   cancelEdit(): void {
     this.isEditing = false;
     this.newName = this.currentUser?.name || this.currentUser?.username || '';
+    this.currentPassword = '';
     this.newPassword = '';
-    this.selectedFile = null;
+    this.confirmPassword = '';
+    this.currentPasswordError = false;
+    this.passwordMismatchError = false;
     this.loadProfileImage();
   }
 
-  onFileSelected(event: any): void {
-    const file: File = event.target.files[0];
+  clearPasswordErrors(): void {
+    this.currentPasswordError = false;
+    this.passwordMismatchError = false;
+  }
 
-    if (!file || !file.type.startsWith('image/')) {
-      alert('Please select a valid image file');
-      return;
+  validateCurrentPassword(): boolean {
+    if (!this.newPassword) {
+      this.currentPasswordError = false;
+      return true;
     }
 
-    if (file.size > 2 * 1024 * 1024) {
-      alert('Image should be less than 2MB');
-      return;
+    this.currentPasswordError = !this.currentPassword.trim();
+    return !this.currentPasswordError;
+  }
+
+  validateConfirmPassword(): boolean {
+    if (!this.newPassword) {
+      this.passwordMismatchError = false;
+      return true;
     }
 
-    this.selectedFile = file;
-
-    const reader = new FileReader();
-    reader.onload = (e: any) => {
-      this.profileImage = e.target.result;
-    };
-    reader.readAsDataURL(file);
+    this.passwordMismatchError = this.newPassword !== this.confirmPassword;
+    return !this.passwordMismatchError;
   }
 
   saveProfile(): void {
     if (!this.currentUser) return;
 
-    if (this.selectedFile) {
-      const formData = new FormData();
-      formData.append('file', this.selectedFile);
-      formData.append('userId', this.currentUser.id.toString());
-
-      this.auth.uploadProfileImage(formData).subscribe({
-        next: (res: any) => {
-          this.auth.fetchProfile().subscribe({
-            next: (user) => {
-              this.currentUser = user;
-              this.auth.updateUser(user);
-              this.loadProfileImage();
-              this.finishProfileUpdate();
-            },
-            error: () => {
-              this.loadProfileImage();
-              this.finishProfileUpdate();
-            }
-          });
-        },
-        error: () => {
-          this.loadProfileImage();
-          this.finishProfileUpdate();
-        }
-      });
-    } else {
-      this.finishProfileUpdate();
+    if (!this.validateCurrentPassword() || !this.validateConfirmPassword()) {
+      return;
     }
+
+    this.finishProfileUpdate();
   }
 
   finishProfileUpdate(): void {
     if (this.newName.trim() && this.currentUser) {
-      if (this.newPassword && this.newPassword !== this.confirmPassword) {
-        alert('Password and Confirm Password do not match.');
-        return;
-      }
-      this.auth.updateProfileDetails(this.newName.trim(), this.newPassword || undefined).subscribe({
+      this.auth.updateProfileDetails(
+        this.newName.trim(),
+        this.newPassword || undefined,
+        this.currentPassword || undefined
+      ).subscribe({
         next: (updatedUser) => {
           this.currentUser = updatedUser;
           this.currentUser.name = updatedUser.username; // Bind frontend 'name' to the updated username
           this.auth.updateUser(this.currentUser);
           this.loadProfileImage();
           this.isEditing = false;
+          this.currentPassword = '';
           this.newPassword = '';
           this.confirmPassword = '';
+          this.currentPasswordError = false;
+          this.passwordMismatchError = false;
           alert('Profile updated successfully!');
           this.loadProfileData(); // Refresh history/activities
         },
