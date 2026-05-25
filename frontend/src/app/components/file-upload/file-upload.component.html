@@ -43,8 +43,24 @@
         </div>
     </mat-card>
 
+    <div class="page-icons">
+        <button mat-icon-button aria-label="Home" (click)="navigateTo('')" title="Home">
+            <mat-icon>home</mat-icon>
+        </button>
+        <button mat-icon-button aria-label="Dashboard" (click)="navigateTo('dashboard')" title="Dashboard">
+            <mat-icon>dashboard</mat-icon>
+        </button>
+    </div>
+
     <mat-card class="upload-card">
         <h2>Upload Files</h2>
+
+        <div class="reupload-banner" *ngIf="reuploadId">
+            <div class="reupload-text">
+                <div><strong>Re-upload</strong> for file: <span class="file-name">{{ reuploadFileName || reuploadId }}</span></div>
+                <div class="reupload-help">Select a replacement file below and click Start Upload to re-upload.</div>
+            </div>
+        </div>
 
         <div class="meta">
             <mat-form-field class="full" appearance="outline">

@@ -1,4 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { HttpEventType } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -33,10 +34,14 @@ description = '';
 tagsText = '';
 isOver = false;
 
-constructor(
+  reuploadId?: number | string;
+  reuploadFileName?: string;
+
+  constructor(
     private api: FileLoadService,
     private snack: MatSnackBar,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   get acceptedFileHint(): string {
@@ -227,5 +232,30 @@ constructor(
 
   ngOnInit() {
     this.restoreUploadsFromStorage();
+    // Check if navigation requested a re-upload for an existing file
+    const rid = this.route.snapshot.queryParams['reuploadId'];
+    if (rid) {
+      this.reuploadId = rid;
+      this.api.details(rid).subscribe({
+        next: (f) => {
+          this.reuploadFileName = f.filename || f.name;
+        },
+        error: () => {
+          this.reuploadFileName = undefined;
+        }
+      });
+    }
+  }
+
+  navigateTo(route: string) {
+    // empty string should navigate to root
+    const path = route ? `/${route}` : '/';
+    this.router.navigate([path]);
+  }
+
+  clearReupload() {
+    this.reuploadId = undefined;
+    this.reuploadFileName = undefined;
+    this.router.navigate(['/upload']);
   }
 }

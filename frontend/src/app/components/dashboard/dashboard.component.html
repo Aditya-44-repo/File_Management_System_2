@@ -4,8 +4,19 @@
       <div class="dashboard-header">
         <div>
           <p class="dashboard-kicker">Analytics Overview</p>
-          <h2>File Management Analytics Dashboard</h2>
+          <h2>File<span class="dashboard-title-accent">Management</span> Analytics Dashboard</h2>
           <p class="dashboard-subtitle">Live operational insights and daily performance</p>
+        </div>
+        <div class="header-quicklinks">
+          <button mat-icon-button routerLink="/" aria-label="Home" title="Home" class="hl-icon">
+            <mat-icon>home</mat-icon>
+          </button>
+          <button mat-icon-button routerLink="/upload" aria-label="Upload" title="Upload" class="hl-icon">
+            <mat-icon>cloud_upload</mat-icon>
+          </button>
+          <button mat-icon-button routerLink="/files" aria-label="Report" title="Report" class="hl-icon">
+            <mat-icon>assessment</mat-icon>
+          </button>
         </div>
       </div>
 
@@ -25,79 +36,64 @@
         </div>
 
         <div class="bento-tile tile-rings">
-          <div class="tile-header" style="flex-direction: column; align-items: stretch; gap: 8px;">
-            <span>Custom date metrics</span>
-            <div style="display: flex; gap: 8px;">
-              <input type="date" class="picker calendar-input" [(ngModel)]="ringStartDate" (change)="onRingDateChange()" style="flex: 1;" />
-              <input type="date" class="picker calendar-input" [(ngModel)]="ringEndDate" (change)="onRingDateChange()" style="flex: 1;" />
+          <div class="tile-header tile-header-stack">
+            <span>CUSTOM DATE METRICS</span>
+            <div class="date-inputs">
+              <mat-form-field appearance="outline" class="date-field">
+                <input matInput [matDatepicker]="startPicker" [(ngModel)]="ringStartDateObj" (dateChange)="onRingDateChange()" />
+                <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+                <mat-datepicker #startPicker></mat-datepicker>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="date-field">
+                <input matInput [matDatepicker]="endPicker" [(ngModel)]="ringEndDateObj" (dateChange)="onRingDateChange()" />
+                <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+                <mat-datepicker #endPicker></mat-datepicker>
+              </mat-form-field>
             </div>
           </div>
-          <div class="tile-body" style="position: relative;">
-            <div *ngIf="ringMetrics.loading" style="position: absolute; inset: 0; background: rgba(255,255,255,0.7); display: flex; align-items: center; justify-content: center; z-index: 10;">
-              Loading...
-            </div>
-            <div class="rings-chart-container" style="display: flex; justify-content: center; align-items: center; width: 100%; min-height: 260px; padding: 10px 0;">
-              <svg viewBox="0 0 320 220" width="100%" height="100%" style="max-height: 260px; overflow: visible;">
-                <!-- Axis Markers -->
-                <text x="200" y="10" text-anchor="middle" font-size="10" fill="#94a3b8" font-weight="600">0%</text>
-                <text x="290" y="78" text-anchor="middle" font-size="10" fill="#94a3b8" font-weight="600">25%</text>
-                <text x="270" y="182" text-anchor="middle" font-size="10" fill="#94a3b8" font-weight="600">50%</text>
-                <text x="160" y="205" text-anchor="middle" font-size="10" fill="#94a3b8" font-weight="600">75%</text>
-                <text x="95" y="114" text-anchor="middle" font-size="10" fill="#94a3b8" font-weight="600">100%</text>
+          <div class="tile-body tile-body-metrics" style="position: relative;">
+            <div *ngIf="ringMetrics.loading" class="ring-loading">Loading...</div>
 
-                <!-- Rotated Group so arcs start at 12 o'clock -->
-                <g transform="rotate(-90 200 110)">
-                  <!-- Outer Ring (Success) -->
-                  <circle cx="200" cy="110" r="80" fill="none" stroke="#e2e8f0" stroke-width="16" stroke-linecap="round" stroke-dasharray="376.99 125.66" />
-                  <circle cx="200" cy="110" r="80" fill="none" stroke="#10b981" stroke-width="16" stroke-linecap="round" 
-                          [style.stroke-dasharray]="(376.99 * ringMetrics.successPercent / 100) + ' 502.65'" 
-                          style="transition: stroke-dasharray 1s cubic-bezier(0.4, 0, 0.2, 1);" />
-                  
-                  <!-- Inner Ring (Failed) -->
-                  <circle cx="200" cy="110" r="60" fill="none" stroke="#e2e8f0" stroke-width="16" stroke-linecap="round" stroke-dasharray="282.74 94.25" />
-                  <circle cx="200" cy="110" r="60" fill="none" stroke="#ef4444" stroke-width="16" stroke-linecap="round" 
-                          [style.stroke-dasharray]="(282.74 * ringMetrics.failedPercent / 100) + ' 376.99'" 
-                          style="transition: stroke-dasharray 1s cubic-bezier(0.4, 0, 0.2, 1);" />
-                </g>
-
-                <!-- Labels -->
-                <text x="175" y="34" text-anchor="end" fill="#10b981" font-size="12" font-weight="700">Success</text>
-                <text x="175" y="54" text-anchor="end" fill="#ef4444" font-size="12" font-weight="700">Failed</text>
-                
-                <!-- Percentages -->
-                <text x="210" y="34" text-anchor="start" fill="#0f172a" font-size="11" font-weight="600">{{ formatRate(ringMetrics.successPercent) }}</text>
-                <text x="210" y="54" text-anchor="start" fill="#0f172a" font-size="11" font-weight="600">{{ formatRate(ringMetrics.failedPercent) }}</text>
-              </svg>
+            <div class="mini-rings">
+              <div class="mini-ring success">
+                <svg viewBox="0 0 80 80" aria-label="Success percentage ring">
+                  <circle cx="40" cy="40" r="34" stroke="#e2e8f0" stroke-width="12" fill="none"></circle>
+                  <circle cx="40" cy="40" r="34" stroke="#10b981" stroke-width="12" fill="none"
+                          [style.stroke-dasharray]="(213.63 * ringMetrics.successPercent / 100) + ' 213.63'"
+                          stroke-linecap="round" transform="rotate(-90 40 40)"></circle>
+                  <text x="40" y="44" text-anchor="middle" class="mini-value">{{ formatRate(ringMetrics.successPercent) }}</text>
+                </svg>
+                <span class="mini-label">Success</span>
+              </div>
+              <div class="mini-ring failed">
+                <svg viewBox="0 0 80 80" aria-label="Failed percentage ring">
+                  <circle cx="40" cy="40" r="34" stroke="#e2e8f0" stroke-width="12" fill="none"></circle>
+                  <circle cx="40" cy="40" r="34" stroke="#ef4444" stroke-width="12" fill="none"
+                          [style.stroke-dasharray]="(213.63 * ringMetrics.failedPercent / 100) + ' 213.63'"
+                          stroke-linecap="round" transform="rotate(-90 40 40)"></circle>
+                  <text x="40" y="44" text-anchor="middle" class="mini-value">{{ formatRate(ringMetrics.failedPercent) }}</text>
+                </svg>
+                <span class="mini-label">Failed</span>
+              </div>
             </div>
-            <div class="ring-legend-list">
-              <div class="ring-legend-item success">Success ({{ formatCount(ringMetrics.success) }})</div>
-              <div class="ring-legend-item danger">Failed ({{ formatCount(ringMetrics.failed) }})</div>
+
+            <div class="summary-rows">
+              <div class="summary-row success">
+                <span>Success ({{ formatCount(ringMetrics.success) }})</span>
+                <div class="summary-values">
+                  <strong>{{ formatCount(ringMetrics.success) }}</strong>
+                  <small>{{ formatRate(ringMetrics.successPercent) }}</small>
+                </div>
+              </div>
+              <div class="summary-row failed">
+                <span>Failed ({{ formatCount(ringMetrics.failed) }})</span>
+                <div class="summary-values">
+                  <strong>{{ formatCount(ringMetrics.failed) }}</strong>
+                  <small>{{ formatRate(ringMetrics.failedPercent) }}</small>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-
-        <div class="bento-tile tile-metric">
-          <strong>{{ formatCount(overview?.totalUploads) }}</strong>
-          <span>Total uploads</span>
-          <em class="metric-trend neutral">Live global count</em>
-        </div>
-
-        <div class="bento-tile tile-metric">
-          <strong>{{ formatCount(overview?.inProcessing) }}</strong>
-          <span>In processing</span>
-          <em class="metric-trend neutral">Active pipeline right now</em>
-        </div>
-
-        <div class="bento-tile tile-metric">
-          <strong>{{ formatRate(overview?.successRate) }}</strong>
-          <span>Success rate</span>
-          <em class="metric-trend up">Based on all uploads</em>
-        </div>
-
-        <div class="bento-tile tile-metric">
-          <strong>{{ formatCount(overview?.exceptionsToday) }}</strong>
-          <span>Exceptions today</span>
-          <em class="metric-trend down">Failed uploads since midnight</em>
         </div>
 
       </div>

@@ -14,7 +14,7 @@ public interface FileLoadRepository extends JpaRepository<FileLoad, Long>, JpaSp
 
 	long countByStatusAndLoadDateBetween(FileStatus status, LocalDateTime start, LocalDateTime end);
 
-	long countByLoadDateBetween(LocalDateTime start, LocalDateTime end);
+ 	long countByLoadDateBetween(LocalDateTime start, LocalDateTime end);
 
 	long countByUploadedById(Long uploadedById);
 

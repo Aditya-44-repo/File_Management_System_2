@@ -22,7 +22,8 @@
   gap: 24px;
   max-width: 1200px;
   margin: 28px auto;
-  padding: 0 16px;
+  /* leave a small room for fixed `.page-icons` so cards aren't overlapped */
+  padding: 56px 16px 28px;
 }
 
 .upload-page.has-queue {
@@ -50,7 +51,11 @@
 
 .queue-card .queue-list {
   flex: 1 1 auto;
-  max-height: none;
+  /* constrain the queue height so long lists scroll inside the card */
+  max-height: 360px;
+  min-height: 120px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .queue-card .actions {
@@ -120,6 +125,72 @@ mat-form-field.full {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+/* -------------------- Header icons -------------------- */
+.upload-header {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.upload-header button[mat-icon-button] {
+  background: rgba(0,0,0,0.04);
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.upload-header mat-icon {
+  color: var(--primary);
+}
+
+/* page-level icons placed in body (outside card) */
+.page-icons {
+  /* fix to viewport so icons sit below the profile avatar */
+  position: fixed;
+  top: 64px; /* align icons vertically with the navbar toggle */
+  right: 20px; /* align under the avatar on the right */
+  display: flex;
+  gap: 10px;
+  z-index: 999; /* below navbar (1000) so avatar remains interactive */
+  pointer-events: auto;
+}
+
+.page-icons button[mat-icon-button] {
+  background: #ffffff;
+  border-radius: 10px;
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 18px rgba(15,23,42,0.08);
+  border: 1px solid rgba(15,23,42,0.04);
+}
+
+.page-icons button[mat-icon-button]:hover {
+  transform: translateY(-2px);
+}
+
+.page-icons mat-icon {
+  color: var(--primary);
+  font-size: 20px;
+}
+
+@media (max-width: 768px) {
+  .page-icons {
+    right: 12px;
+    top: 56px;
+  }
+  .page-icons button[mat-icon-button] {
+    width: 40px;
+    height: 40px;
+  }
 }
 
 .dropzone:hover {
@@ -201,6 +272,22 @@ h3 {
   border: 1px solid rgba(0,0,0,0.08);
 
   background: #ffffff;
+}
+
+/* Custom light scrollbar for modern browsers */
+.queue-card .queue-list::-webkit-scrollbar {
+  width: 10px;
+}
+.queue-card .queue-list::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.03);
+  border-radius: 8px;
+}
+.queue-card .queue-list::-webkit-scrollbar-thumb {
+  background: rgba(15,23,42,0.12);
+  border-radius: 8px;
+}
+.queue-card .queue-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(15,23,42,0.18);
 }
 
 .queue-row {
@@ -351,4 +438,30 @@ h3 {
 
 .btn-cancel-inline:hover {
   background: rgba(211, 47, 47, 0.08);
+}
+
+/* Re-upload banner: center text and remove icon spacing */
+.reupload-banner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 12px 16px;
+  gap: 8px;
+  background: var(--primary-very-light);
+  border-radius: 8px;
+  margin-bottom: 18px;
+}
+
+.reupload-banner .reupload-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.reupload-banner .reupload-help {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 13px;
 }

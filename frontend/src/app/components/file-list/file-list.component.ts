@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort, Sort } from '@angular/material/sort';
@@ -12,7 +11,6 @@ import { FileItem, PagedResult } from '../../models/file-load.model';
 import { SearchCriteria } from '../../models/search-criteria.model';
 import { AuthService } from '../../services/auth.service';
 import { FileLoadService } from '../../services/file-load.service';
-import { StatusUpdateComponent } from '../status-update/status-update.component';
 
 @Component({
   selector: 'app-file-list',
@@ -37,8 +35,7 @@ export class FileListComponent implements OnInit, OnDestroy {
     private api: FileLoadService,
     private snack: MatSnackBar,
     private router: Router,
-    private auth: AuthService,
-    private dialog: MatDialog
+    private auth: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -122,31 +119,10 @@ export class FileListComponent implements OnInit, OnDestroy {
     this.router.navigate(['/files', row.id]);
   }
 
-  openStatusDialog(row: FileItem) {
-    this.dialog
-      .open(StatusUpdateComponent, {
-        width: '420px',
-        panelClass: 'status-dialog',
-        data: { fileId: row.id, currentStatus: row.status }
-      })
-      .afterClosed()
-      .subscribe((updated) => {
-        if (updated) this.fetch(true);
-      });
-  }
-
-
   download(row: FileItem) {
     this.api.download(row.id).subscribe({
       next: (blob) => {
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = row.filename || row.name;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        URL.revokeObjectURL(url);
+        this.startDownload(blob, row.filename || row.name || `file-${row.id}`);
         this.snack.open('Download started', 'OK', { duration: 1500 });
       },
       error: (err) => {
@@ -154,6 +130,35 @@ export class FileListComponent implements OnInit, OnDestroy {
         this.snack.open('Download failed', 'Dismiss', { duration: 3000 });
       }
     });
+  }
+
+  async downloadSelected(): Promise<void> {
+    if (this.selectedIds.size === 0) {
+      this.snack.open('Select the files to download', 'OK', { duration: 2500 });
+      return;
+    }
+
+    const ids = Array.from(this.selectedIds);
+    let failureCount = 0;
+
+    this.snack.open(`Downloading ${ids.length} file(s)`, 'OK', { duration: 1500 });
+
+    for (const id of ids) {
+      const row = this.dataSource.data.find((item) => Number(item.id) === id);
+      const filename = row?.filename || row?.name || `file-${id}`;
+
+      try {
+        const blob = await firstValueFrom(this.api.download(id));
+        this.startDownload(blob, filename);
+      } catch (err) {
+        console.error('[FileListComponent] Bulk download failed for file:', id, err);
+        failureCount++;
+      }
+    }
+
+    if (failureCount > 0) {
+      this.snack.open(`${failureCount} file(s) failed to download`, 'Dismiss', { duration: 3000 });
+    }
   }
 
   delete(row: FileItem) {
@@ -172,6 +177,11 @@ export class FileListComponent implements OnInit, OnDestroy {
         this.snack.open('Delete failed', 'Dismiss', { duration: 3000 });
       }
     });
+  }
+
+  reupload(row: FileItem) {
+    if (!row?.id) return;
+    this.router.navigate(['/upload'], { queryParams: { reuploadId: row.id } });
   }
 
   isRowSelected(row: FileItem): boolean {
@@ -212,7 +222,11 @@ export class FileListComponent implements OnInit, OnDestroy {
   }
 
   async deleteSelected(): Promise<void> {
-    if (this.isBulkDeleting || this.selectedIds.size === 0) {
+    if (this.isBulkDeleting) {
+      return;
+    }
+    if (this.selectedIds.size === 0) {
+      this.snack.open('Select the files to delete', 'OK', { duration: 2500 });
       return;
     }
     if (!confirm(`Delete ${this.selectedIds.size} selected file(s)? This cannot be undone.`)) {
@@ -334,5 +348,16 @@ export class FileListComponent implements OnInit, OnDestroy {
       FAILED: 'badge-failed'
     };
     return map[status] || 'badge-default';
+  }
+
+  private startDownload(blob: Blob, filename: string): void {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
   }
 }

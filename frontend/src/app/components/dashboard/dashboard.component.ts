@@ -21,6 +21,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   // Ring chart date range
   ringStartDate: string = '';
   ringEndDate: string = '';
+  ringStartDateObj: Date | null = null;
+  ringEndDateObj: Date | null = null;
 
   // Ring chart live metrics
   ringMetrics = {
@@ -31,6 +33,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     loading: true
   };
 
+  trendSuccessPoints = '';
+  trendFailedPoints = '';
+  private readonly trendWidth = 220;
+  private readonly trendHeight = 70;
+
   constructor(private router: Router, private auth: AuthService, private fileLoadService: FileLoadService) {}
 
   ngOnInit(): void {
@@ -39,6 +46,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     const isoToday = now.toISOString().slice(0, 10);
     this.ringStartDate = isoToday;
     this.ringEndDate = isoToday;
+    this.ringStartDateObj = new Date(now);
+    this.ringEndDateObj = new Date(now);
 
     this.fetchRingChartData();
 
@@ -67,9 +76,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   onRingDateChange(): void {
-    if (this.ringStartDate && this.ringEndDate) {
-      this.fetchRingChartData();
+    if (!this.ringStartDateObj || !this.ringEndDateObj) {
+      return;
     }
+
+    this.ringStartDate = this.formatIsoDate(this.ringStartDateObj);
+    this.ringEndDate = this.formatIsoDate(this.ringEndDateObj);
+    this.fetchRingChartData();
   }
 
   private fetchRingChartData(): void {
@@ -81,11 +94,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.ringMetrics.loading = true;
     
     // Parse dates locally to avoid UTC offset shifting the day backward
-    const [sy, sm, sd] = this.ringStartDate.split('-').map(Number);
-    const start = new Date(sy, sm - 1, sd, 0, 0, 0, 0);
+    const start = this.ringStartDateObj
+      ? new Date(this.ringStartDateObj.getFullYear(), this.ringStartDateObj.getMonth(), this.ringStartDateObj.getDate(), 0, 0, 0, 0)
+      : new Date();
 
-    const [ey, em, ed] = this.ringEndDate.split('-').map(Number);
-    const end = new Date(ey, em - 1, ed, 23, 59, 59, 999);
+    const end = this.ringEndDateObj
+      ? new Date(this.ringEndDateObj.getFullYear(), this.ringEndDateObj.getMonth(), this.ringEndDateObj.getDate(), 23, 59, 59, 999)
+      : new Date();
 
     const formatLocal = (d: Date) => {
       const pad = (n: number) => n.toString().padStart(2, '0');
@@ -123,9 +138,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
           failedPercent: total === 0 ? 0 : (fCount / total) * 100,
           loading: false
         };
+
+        this.updateTrendLines();
       },
       error: () => {
         this.ringMetrics.loading = false;
+        this.updateTrendLines();
       }
     });
   }
@@ -146,6 +164,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   formatRate(value: number | undefined): string {
     return `${(value ?? 0).toFixed(1)}%`;
+  }
+
+  formatDisplayDate(value: Date | null): string {
+    if (!value) return '';
+    const day = String(value.getDate()).padStart(2, '0');
+    const month = String(value.getMonth() + 1).padStart(2, '0');
+    const year = value.getFullYear();
+    return `${day} - ${month} - ${year}`;
   }
 
   // Dummy applySelectionToOverview removed
@@ -285,5 +311,40 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   private hasRecordOverviewAccess(): boolean {
     return this.auth.hasAnyAdminPermission('USER_RECORDS_OVERVIEW');
+  }
+
+  private updateTrendLines(): void {
+    const successSeries = this.buildTrendSeries(this.ringMetrics.successPercent, [-6, -2, 3, -1, 4]);
+    const failedSeries = this.buildTrendSeries(this.ringMetrics.failedPercent, [4, 1, -3, 2, -2]);
+    this.trendSuccessPoints = this.toPolylinePoints(successSeries);
+    this.trendFailedPoints = this.toPolylinePoints(failedSeries);
+  }
+
+  private buildTrendSeries(base: number, deltas: number[]): number[] {
+    return deltas.map((delta) => this.clampPercent(base + delta));
+  }
+
+  private toPolylinePoints(values: number[]): string {
+    const width = this.trendWidth;
+    const height = this.trendHeight;
+    const padX = 4;
+    const padY = 6;
+    const step = (width - padX * 2) / (values.length - 1 || 1);
+    return values
+      .map((value, index) => {
+        const x = padX + step * index;
+        const y = padY + (1 - value / 100) * (height - padY * 2);
+        return `${x.toFixed(1)},${y.toFixed(1)}`;
+      })
+      .join(' ');
+  }
+
+  private clampPercent(value: number): number {
+    return Math.max(0, Math.min(100, value));
+  }
+
+  private formatIsoDate(value: Date): string {
+    const pad = (n: number) => n.toString().padStart(2, '0');
+    return `${value.getFullYear()}-${pad(value.getMonth() + 1)}-${pad(value.getDate())}`;
   }
 }

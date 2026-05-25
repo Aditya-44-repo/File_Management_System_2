@@ -2,10 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatDialog } from '@angular/material/dialog';
 import { FileLoadService } from '../../services/file-load.service';
 import { FileItem } from '../../models/file-load.model';
-import { StatusUpdateComponent } from '../status-update/status-update.component';
 
 @Component({
   selector: 'app-file-details',
@@ -29,8 +27,7 @@ export class FileDetailsComponent implements OnInit {
     private router: Router,
     private api: FileLoadService,
     private fb: FormBuilder,
-    private snack: MatSnackBar,
-    private dialog: MatDialog
+    private snack: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -103,17 +100,6 @@ export class FileDetailsComponent implements OnInit {
     });
   }
 
-  openStatusDialog() {
-    if (!this.file) return;
-    this.dialog.open(StatusUpdateComponent, {
-      width: '420px',
-      data: { fileId: this.file.id, currentStatus: this.file.status }
-    }).afterClosed().subscribe((updated) => {
-      if (updated) this.load();
-    });
-  }
-
-
   download() {
     if (!this.file) return;
     this.api.download(this.file.id).subscribe({
@@ -155,6 +141,10 @@ export class FileDetailsComponent implements OnInit {
     return this.file?.fileType || this.file?.mimeType || '—';
   }
 
+  get formattedErrors(): string[] {
+    return this.splitErrors(this.file?.errors);
+  }
+
   formatSize(bytes: number): string {
     if (bytes < 1024) return bytes + ' B';
     if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
@@ -170,5 +160,45 @@ export class FileDetailsComponent implements OnInit {
       FAILED: 'badge-failed'
     };
     return map[status] || 'badge-default';
+  }
+
+  private splitErrors(errors?: string | null): string[] {
+    if (!errors) return [];
+
+    const raw = errors.trim();
+    if (!raw) return [];
+
+    if (raw.includes('\n') || raw.includes(';') || raw.includes('|')) {
+      return raw
+        .split(/\s*[\n;|]+\s*/)
+        .map((part) => part.trim())
+        .filter(Boolean);
+    }
+
+    const normalized = raw.replace(/\s+/g, ' ');
+    const parts = normalized
+      .split(/(?=\b[A-Z][^\n]*?\bat line\s+\d+)/)
+      .map((part) => part.trim())
+      .filter(Boolean);
+
+    if (parts.length === 0) {
+      return [normalized];
+    }
+
+    const merged: string[] = [];
+    for (let i = 0; i < parts.length; i++) {
+      const current = parts[i];
+      const next = parts[i + 1];
+
+      if (next && !/\bat line\s+\d+/i.test(current) && /\bat line\s+\d+/i.test(next)) {
+        merged.push(`${current} ${next}`.trim());
+        i++;
+        continue;
+      }
+
+      merged.push(current);
+    }
+
+    return merged.length > 0 ? merged : [normalized];
   }
 }
