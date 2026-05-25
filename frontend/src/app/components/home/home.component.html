@@ -1,9 +1,12 @@
 <div class="home-container">
   <main class="main-content">
     <section class="welcome-section">
+      <div class="logo-container">
+        <img src="assets/mphasis-logo.png" alt="Mphasis Logo" class="company-logo">
+      </div>
       <div class="welcome-panel">
         <div class="hero-copy-wrapper">
-          <h1 class="hero-title" *ngIf="!isLoggedIn">File <span class="hero-title-accent">Management</span></h1>
+          <h1 class="hero-title" *ngIf="!isLoggedIn">File<span class="hero-title-accent">Management</span></h1>
           <h1 class="hero-title home-welcome" *ngIf="isLoggedIn">
             <span class="home-welcome-line small">Welcome {{ welcomeName }},</span>
             <span class="home-welcome-line brand">File<span class="hero-title-accent">Management</span></span>

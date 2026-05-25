@@ -91,19 +91,19 @@
 /* STAT CARDS */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 24px;
-  margin-bottom: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  margin-bottom: 18px;
 }
 
 .modern-card {
-  border-radius: 24px !important;
+  border-radius: 20px !important;
   border: 1px solid rgba(15, 23, 42, 0.08) !important;
-  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.06) !important;
-  padding: 28px;
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.06) !important;
+  padding: 14px 16px;
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 12px;
   transition: 0.3s ease;
 }
 
@@ -112,30 +112,31 @@
 }
 
 .card-icon {
-  width: 76px;
-  height: 76px;
-  flex: 0 0 76px;
+  width: 50px;
+  height: 50px;
+  flex: 0 0 50px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .stat-card-image {
-  width: 76px;
-  height: 76px;
+  width: 50px;
+  height: 50px;
   object-fit: contain;
   display: block;
 }
 
 .modern-card h2 {
   margin: 0;
-  font-size: 32px;
+  font-size: 22px;
   font-weight: 700;
 }
 
 .modern-card p {
-  margin-top: 6px;
+  margin-top: 4px;
   color: #6b7280;
+  font-size: 12px;
 }
 
 /* GRID */

@@ -109,7 +109,7 @@ export class ProfileComponent implements OnInit {
             .slice(0, 10)
             .map((act: any) => ({
             icon: act.icon === 'upload' ? 'cloud_upload' : act.icon,
-            text: act.text,
+            text: this.formatActivityText(act.text),
             time: this.formatTime(act.timestamp)
           }));
         }
@@ -151,6 +151,17 @@ export class ProfileComponent implements OnInit {
       day: 'numeric',
       year: 'numeric'
     });
+  }
+
+  private formatActivityText(text: string): string {
+    if (!text) return '';
+
+    const failedPrefix = 'Failed to upload ';
+    if (text.startsWith(failedPrefix)) {
+      return `Status failed for ${text.slice(failedPrefix.length)}`;
+    }
+
+    return text;
   }
 
   formatLoginTime(dateString: any): string {

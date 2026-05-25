@@ -69,7 +69,7 @@ public class ProfileServiceImpl implements ProfileService {
                         text = "Uploaded " + file.getFilename();
                         icon = "upload";
                     } else if (file.getStatus() == FileStatus.FAILED) {
-                        text = "Failed to upload " + file.getFilename();
+                        text = "Status failed for " + file.getFilename();
                         icon = "cloud_off";
                     } else {
                         text = "Processing " + file.getFilename();
