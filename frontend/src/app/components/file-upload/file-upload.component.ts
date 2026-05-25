@@ -1,4 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { HttpEventType } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -33,10 +34,14 @@ description = '';
 tagsText = '';
 isOver = false;
 
-constructor(
+  reuploadId?: number | string;
+  reuploadFileName?: string;
+
+  constructor(
     private api: FileLoadService,
     private snack: MatSnackBar,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   get acceptedFileHint(): string {
@@ -132,10 +137,16 @@ constructor(
   startUploads() {
     if (!this.uploads.length || this.isUploading) return;
 
+    const selectedUploads = this.uploads.filter(u => u.selected);
+    if (!selectedUploads.length) {
+      this.snack.open('Select at least one file to upload.', 'Dismiss', { duration: 2500 });
+      return;
+    }
+
     const tags = this.tagsText.split(',').map(t => t.trim()).filter(Boolean);
     const extra = { description: this.description || undefined, tags: tags.length ? tags : undefined };
 
-    const uploadObservables = this.uploads.map(u => {
+    const uploadObservables = selectedUploads.map(u => {
       u.state = 'uploading';
       u.progress = 0;
       return this.api.upload(u.file, extra).toPromise().then(() => {
@@ -148,11 +159,14 @@ constructor(
     });
 
     Promise.all(uploadObservables).then(() => {
+      this.uploads = this.uploads.filter(u => !u.selected);
       this.updateAndPersistUploads();
-      this.snack.open(`All files uploaded successfully!`, 'OK', { duration: 3000 });
-      this.uploads = [];
-      localStorage.removeItem(UPLOADS_STORAGE_KEY);
-      this.router.navigate(['/files'], { queryParams: { refresh: Date.now() } });
+      this.snack.open(`Selected files uploaded successfully!`, 'OK', { duration: 3000 });
+
+      if (!this.uploads.length) {
+        localStorage.removeItem(UPLOADS_STORAGE_KEY);
+        this.router.navigate(['/files'], { queryParams: { refresh: Date.now() } });
+      }
     });
   }
 
@@ -218,5 +232,30 @@ constructor(
 
   ngOnInit() {
     this.restoreUploadsFromStorage();
+    // Check if navigation requested a re-upload for an existing file
+    const rid = this.route.snapshot.queryParams['reuploadId'];
+    if (rid) {
+      this.reuploadId = rid;
+      this.api.details(rid).subscribe({
+        next: (f) => {
+          this.reuploadFileName = f.filename || f.name;
+        },
+        error: () => {
+          this.reuploadFileName = undefined;
+        }
+      });
+    }
+  }
+
+  navigateTo(route: string) {
+    // empty string should navigate to root
+    const path = route ? `/${route}` : '/';
+    this.router.navigate([path]);
+  }
+
+  clearReupload() {
+    this.reuploadId = undefined;
+    this.reuploadFileName = undefined;
+    this.router.navigate(['/upload']);
   }
 }

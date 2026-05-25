@@ -3,6 +3,13 @@ import { AuthService } from '../../services/auth.service';
 import { FileLoadService } from '../../services/file-load.service';
 import { User } from '../../models/user.model';
 import { SearchCriteria } from '../../models/search-criteria.model';
+import {
+  ApexNonAxisChartSeries,
+  ApexResponsive,
+  ApexChart,
+  ApexLegend,
+  ApexDataLabels
+} from 'ng-apexcharts';
 
 @Component({
   selector: 'app-profile',
@@ -13,8 +20,12 @@ export class ProfileComponent implements OnInit {
   currentUser: User | null = null;
   isEditing = false;
   newName: string = '';
+  currentPassword: string = '';
+  newPassword: string = '';
+  confirmPassword: string = '';
+  currentPasswordError = false;
+  passwordMismatchError = false;
   profileImage: string = 'assets/default-avatar.svg';
-  selectedFile: File | null = null;
 
   // Statistics
   totalFiles = 0;
@@ -22,11 +33,14 @@ export class ProfileComponent implements OnInit {
   successFiles = 0;
   failedFiles = 0;
   successRate = 0;
+  //Be
+  totalDownloads = 542;
+
 
   constructor(
     private auth: AuthService,
     private fileService: FileLoadService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.auth.currentUser$.subscribe(user => {
@@ -34,13 +48,11 @@ export class ProfileComponent implements OnInit {
       if (user) {
         this.newName = user.name || user.username || '';
         this.loadProfileImage();
-        this.loadFileStatistics();
+        this.loadProfileData();
       } else {
-        // Reset profile image to default on logout or no user
         this.profileImage = 'assets/default-avatar.svg';
       }
     });
-
   }
 
   getBackendBaseUrl(): string {
@@ -72,116 +84,254 @@ export class ProfileComponent implements OnInit {
       .replace(/\b\w/g, (match) => match.toUpperCase());
   }
 
-  loadFileStatistics(): void {
-    // Fetch all files with default criteria
-    const criteria: SearchCriteria = {
-      page: 0,
-      size: 1000  // Get all files
-    };
+  loadProfileData(): void {
+    this.auth.getFullProfile().subscribe({
+      next: (data) => {
+        if (data.stats) {
+          this.totalFiles = data.stats.totalUploads;
+          this.successFiles = data.stats.successfulUploads;
+          this.failedFiles = data.stats.failedUploads;
+          this.totalDownloads = data.stats.totalDownloads;
+          this.successRate = this.totalFiles > 0
+            ? Math.round((this.successFiles / this.totalFiles) * 100)
+            : 0;
 
-    this.fileService.myList(criteria).subscribe(
-      (result) => {
-        const currentUserId = Number(this.currentUser?.id);
-        const files = result.items.filter((file) => {
-          const uploadedById = Number(file.uploadedById);
-          if (!Number.isNaN(currentUserId) && !Number.isNaN(uploadedById)) {
-            return uploadedById === currentUserId;
-          }
-          return false;
-        });
-        this.totalFiles = files.length;
-        this.pendingFiles = files.filter(f => f.status === 'PENDING').length;
-        this.successFiles = files.filter(f => f.status === 'SUCCESS').length;
-        this.failedFiles = files.filter(f => f.status === 'FAILED').length;
+          // Update chart series dynamically
+          this.uploadChartSeries = [
+            this.successFiles,
+            this.failedFiles
+          ];
+        }
 
-        this.successRate = this.totalFiles > 0
-          ? Math.round((this.successFiles / this.totalFiles) * 100)
-          : 0;
+        if (data.recentActivities) {
+          this.recentActivities = [...data.recentActivities]
+            .sort((a: any, b: any) => this.getTimeValue(b.timestamp) - this.getTimeValue(a.timestamp))
+            .slice(0, 10)
+            .map((act: any) => ({
+            icon: act.icon === 'upload' ? 'cloud_upload' : act.icon,
+            text: this.formatActivityText(act.text),
+            time: this.formatTime(act.timestamp)
+          }));
+        }
+
+        if (data.loginHistory) {
+          this.loginHistory = data.loginHistory.map((log: any) => ({
+            device: log.device,
+            browser: log.browser,
+            ip: log.ip,
+            time: this.formatLoginTime(log.time),
+            status: this.normalizeLoginStatus(log.status)
+          }));
+        }
       },
-      (error) => {
-        console.error('[ProfileComponent] Error loading file statistics:', error);
+      error: (err) => {
+        console.error('[ProfileComponent] Error loading profile data:', err);
       }
-    );
+    });
+  }
+
+  formatTime(dateString: any): string {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    const now = new Date();
+    const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+    if (seconds < 0) return 'Just now';
+    if (seconds < 60) return `${seconds}s ago`;
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return `${minutes}m ago`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours}h ago`;
+    const days = Math.floor(hours / 24);
+    if (days === 1) return 'Yesterday';
+    if (days < 7) return `${days} days ago`;
+
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    });
+  }
+
+  private formatActivityText(text: string): string {
+    if (!text) return '';
+
+    const failedPrefix = 'Failed to upload ';
+    if (text.startsWith(failedPrefix)) {
+      return `Status failed for ${text.slice(failedPrefix.length)}`;
+    }
+
+    return text;
+  }
+
+  formatLoginTime(dateString: any): string {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    const now = new Date();
+
+    const isToday = date.toDateString() === now.toDateString();
+    const yesterday = new Date(now);
+    yesterday.setDate(now.getDate() - 1);
+    const isYesterday = date.toDateString() === yesterday.toDateString();
+
+    const timeStr = date.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    });
+
+    if (isToday) {
+      return `Today, ${timeStr}`;
+    }
+    if (isYesterday) {
+      return `Yesterday, ${timeStr}`;
+    }
+
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    }) + `, ${timeStr}`;
+  }
+
+  getTimeValue(dateString: any): number {
+    const value = new Date(dateString).getTime();
+    return Number.isNaN(value) ? 0 : value;
+  }
+
+  normalizeLoginStatus(status: string): string {
+    const normalized = (status || '').toLowerCase();
+    if (normalized === 'success') {
+      return 'Success';
+    }
+    if (normalized === 'failed' || normalized === 'failure') {
+      return 'Failed';
+    }
+    return status;
+  }
+
+  getLoginStatusClass(status: string): string {
+    return (status || '').toLowerCase() === 'failed' ? 'failed-status' : 'success-status';
   }
 
   enableEdit(): void {
     this.isEditing = true;
+    // Scroll to the edit form at the bottom
+    setTimeout(() => {
+      const editSection = document.getElementById('edit-section');
+      if (editSection) {
+        editSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 0);
   }
 
   cancelEdit(): void {
     this.isEditing = false;
     this.newName = this.currentUser?.name || this.currentUser?.username || '';
-    this.selectedFile = null;
+    this.currentPassword = '';
+    this.newPassword = '';
+    this.confirmPassword = '';
+    this.currentPasswordError = false;
+    this.passwordMismatchError = false;
     this.loadProfileImage();
   }
 
- onFileSelected(event: any): void {
-   const file: File = event.target.files[0];
+  clearPasswordErrors(): void {
+    this.currentPasswordError = false;
+    this.passwordMismatchError = false;
+  }
 
-   if (!file || !file.type.startsWith('image/')) {
-     alert('Please select a valid image file');
-     return;
-   }
+  validateCurrentPassword(): boolean {
+    if (!this.newPassword) {
+      this.currentPasswordError = false;
+      return true;
+    }
 
-   // Limit size (optional but recommended)
-   if (file.size > 2 * 1024 * 1024) {
-     alert('Image should be less than 2MB');
-     return;
-   }
+    this.currentPasswordError = !this.currentPassword.trim();
+    return !this.currentPasswordError;
+  }
 
-   this.selectedFile = file;
+  validateConfirmPassword(): boolean {
+    if (!this.newPassword) {
+      this.passwordMismatchError = false;
+      return true;
+    }
 
-   // Show preview only until upload
-   const reader = new FileReader();
-   reader.onload = (e: any) => {
-     this.profileImage = e.target.result; // base64 preview
-   };
-   reader.readAsDataURL(file);
- }
+    this.passwordMismatchError = this.newPassword !== this.confirmPassword;
+    return !this.passwordMismatchError;
+  }
 
   saveProfile(): void {
     if (!this.currentUser) return;
 
-    if (this.selectedFile) {
-      const formData = new FormData();
-      formData.append('file', this.selectedFile);
-      formData.append('userId', this.currentUser.id.toString());
+    if (!this.validateCurrentPassword() || !this.validateConfirmPassword()) {
+      return;
+    }
 
-      this.auth.uploadProfileImage(formData).subscribe({
-        next: (res: any) => {
-          // Always fetch the latest profile from backend after upload
-          this.auth.fetchProfile().subscribe({
-            next: (user) => {
-              this.currentUser = user;
-              this.auth.updateUser(user); // <--- ensure all components get the update
-              this.loadProfileImage();
-              this.finishProfileUpdate();
-            },
-            error: () => {
-                  this.loadProfileImage();
-              this.finishProfileUpdate();
-            }
-          });
+    this.finishProfileUpdate();
+  }
+
+  finishProfileUpdate(): void {
+    if (this.newName.trim() && this.currentUser) {
+      this.auth.updateProfileDetails(
+        this.newName.trim(),
+        this.newPassword || undefined,
+        this.currentPassword || undefined
+      ).subscribe({
+        next: (updatedUser) => {
+          this.currentUser = updatedUser;
+          this.currentUser.name = updatedUser.username; // Bind frontend 'name' to the updated username
+          this.auth.updateUser(this.currentUser);
+          this.loadProfileImage();
+          this.isEditing = false;
+          this.currentPassword = '';
+          this.newPassword = '';
+          this.confirmPassword = '';
+          this.currentPasswordError = false;
+          this.passwordMismatchError = false;
+          alert('Profile updated successfully!');
+          this.loadProfileData(); // Refresh history/activities
         },
-        error: () => {
-              this.loadProfileImage();
-          this.finishProfileUpdate();
+        error: (err) => {
+          console.error('[ProfileComponent] Failed to update profile:', err);
+          alert('Failed to update profile name/username or password.');
         }
       });
     } else {
-      this.finishProfileUpdate();
+      this.isEditing = false;
     }
   }
 
-finishProfileUpdate(): void {
-  if (this.newName.trim() && this.currentUser) {
-    this.currentUser.name = this.newName;
+  loginHistory: any[] = [];
+  recentActivities: any[] = [];
 
+  uploadChartSeries: ApexNonAxisChartSeries = [0, 100];
 
-    this.auth.updateUser(this.currentUser!);
-    this.loadProfileImage();
-  }
+  uploadChart: ApexChart = {
+    type: 'donut',
+    height: 260
+  };
 
-  this.isEditing = false;
-  alert('Profile updated successfully!');
-}}
+  uploadChartLabels = ['Successful', 'Failed'];
+  uploadChartColors = ['#10b981', '#ef4444'];
+  uploadChartLegend: ApexLegend = {
+    position: 'bottom'
+  };
+  uploadChartDataLabels: ApexDataLabels = {
+    enabled: true
+  };
+  uploadChartResponsive: ApexResponsive[] = [
+    {
+      breakpoint: 480,
+      options: {
+        chart: {
+          width: 260
+        },
+        legend: {
+          position: 'bottom'
+        }
+      }
+    }
+  ];
+}
+

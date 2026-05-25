@@ -1,9 +1,7 @@
 <div class="login-page">
   <mat-card class="auth-card">
     <div class="form-container">
-      <div class="brand">
-        <img class="brand-logo" src="assets/docit-logo.png" alt="DocIT logo" />
-      </div>
+      <!-- brand removed per request -->
 
       <h2>Create account</h2>
       <p class="subtitle">Sign up to get started</p>
@@ -29,9 +27,27 @@
         <label class="input-label">Password</label>
         <mat-form-field appearance="outline" class="full">
           <mat-icon matPrefix>lock</mat-icon>
-          <input matInput type="password" formControlName="password" placeholder="Create a password" />
-          <mat-error *ngIf="form.controls.password.hasError('minlength')">Password must be at least 6 characters</mat-error>
+          <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" placeholder="Create a password" />
+          <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
+            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
           <mat-error *ngIf="form.controls.password.hasError('required')">Password is required</mat-error>
+          <mat-error *ngIf="form.controls.password.hasError('minlength')">Password must be at least 10 characters</mat-error>
+        </mat-form-field>
+
+        <label class="input-label">Confirm Password</label>
+        <mat-form-field appearance="outline" class="full">
+          <mat-icon matPrefix>lock</mat-icon>
+          <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" formControlName="confirmPassword" placeholder="Confirm your password" />
+          <button mat-icon-button matSuffix (click)="hideConfirmPassword = !hideConfirmPassword" type="button">
+            <mat-icon>{{ hideConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-error *ngIf="form.controls.confirmPassword.hasError('required')">Please confirm password</mat-error>
+          <mat-error *ngIf="form.controls.confirmPassword.hasError('minlength')">Password must be at least 10 characters</mat-error>
+          <mat-error *ngIf="form.controls.confirmPassword.hasError('pattern')">Password must include uppercase, lowercase, number, and symbol</mat-error>
+          <mat-error class="password-mismatch" *ngIf="form.hasError('passwordMismatch') && form.get('confirmPassword')?.touched">
+            Passwords do not match
+          </mat-error>
         </mat-form-field>
 
         <button mat-raised-button color="primary" type="submit" class="register-btn" [disabled]="loading || form.invalid">

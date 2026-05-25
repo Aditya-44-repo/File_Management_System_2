@@ -126,6 +126,36 @@ export class AuthService {
     );
   }
 
+  // Get full aggregated profile including stats, login history, and activities
+  getFullProfile(): Observable<any> {
+    return this.http.get<any>(`${environment.apiBaseUrl}/profile`);
+  }
+
+  // Update username/name of the user and optionally password
+  updateProfileDetails(username: string, password?: string, currentPassword?: string): Observable<User> {
+    const body: any = { username };
+    if (password && password.trim()) {
+      body.password = password.trim();
+      body.currentPassword = currentPassword?.trim();
+    }
+    return this.http.put<User>(`${environment.apiBaseUrl}/profile`, body).pipe(
+      tap({
+        next: (user) => {
+          const current = this.getCurrentUser();
+          if (current && user) {
+            const updated = { ...current, ...user };
+            this.saveUser(updated);
+            this.currentUserSubject.next(updated);
+          }
+        },
+        error: (err) => {
+          console.error('[AuthService] Failed to update user profile details:', err);
+        }
+      })
+    );
+  }
+
+
 
   /**
    * Returns the correct profile image URL for a user, with cache-busting.

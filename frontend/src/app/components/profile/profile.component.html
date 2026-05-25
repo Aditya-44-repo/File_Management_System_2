@@ -1,102 +1,236 @@
-<div class="profile-container">
-  <div class="profile-header" *ngIf="currentUser && !isEditing">
-    <img [src]="profileImage" alt="Profile" class="profile-image" (error)="handleProfileImageError()">
-    <div class="user-info">
-      <h1>{{ currentUser.name || currentUser.username || 'User' }}</h1>
-      <p>{{ currentUser.email }}</p>
-      <span class="role-pill" *ngIf="currentUser.role">
-        {{ getRoleLabel(currentUser.role) }}
-      </span>
-      <button mat-raised-button color="primary" (click)="enableEdit()" class="edit-btn">
-        <mat-icon>edit</mat-icon> Edit Profile
-      </button>
-    </div>
-  </div>
+<div class="profile-dashboard">
 
-  <!-- Edit Mode -->
-  <div class="profile-edit" *ngIf="isEditing">
-    <h2>Edit Profile</h2>
-    <div class="edit-form">
-      <div class="profile-image-upload" (click)="fileInput.click()">
-        <div class="image-wrapper">
-          <img [src]="profileImage" alt="Profile" class="profile-image-preview" (error)="handleProfileImageError()">
+    <!-- HERO SECTION -->
+    <div class="hero-card" *ngIf="currentUser">
 
-          <!-- Overlay -->
-          <div class="overlay">
-            <mat-icon>camera_alt</mat-icon>
-            <span>Change</span>
-          </div>
+        <div class="hero-left">
+            <img
+                    [src]="profileImage"
+                    alt="Profile"
+                    class="hero-avatar"
+                    (error)="handleProfileImageError()"
+            >
+
+            <div class="hero-user-info">
+                <h1>{{ currentUser.name || currentUser.username }}</h1>
+                <p>{{ currentUser.email }}</p>
+
+                <div class="role-chip">
+                    {{ getRoleLabel(currentUser.role) }}
+                </div>
+            </div>
         </div>
 
-        <input
-                type="file"
-                accept="image/*"
-                (change)="onFileSelected($event)"
-                #fileInput
-                hidden
-        >
-      </div>
-
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Name</mat-label>
-        <input matInput [(ngModel)]="newName" placeholder="Enter your name">
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" class="full-width" disabled>
-        <mat-label>Email</mat-label>
-        <input matInput [value]="currentUser?.email" disabled>
-      </mat-form-field>
-
-      <div class="button-group">
-        <button mat-raised-button color="primary" (click)="saveProfile()">
-          <mat-icon>save</mat-icon> Save Changes
+        <button mat-raised-button class="edit-profile-btn" (click)="enableEdit()">
+            <mat-icon>edit</mat-icon>
+            Edit Profile
         </button>
-        <button mat-stroked-button (click)="cancelEdit()">
-          <mat-icon>close</mat-icon> Cancel
-        </button>
-      </div>
+
     </div>
-  </div>
 
-  <!-- Statistics Section -->
-  <div class="statistics-section">
-    <h2>Your File Statistics</h2>
+
+    <!-- STATISTICS CARDS -->
     <div class="stats-grid">
-      <mat-card class="stat-card">
-        <mat-card-content>
-          <div class="stat-value">{{ totalFiles }}</div>
-          <div class="stat-label">Total Files</div>
-        </mat-card-content>
-      </mat-card>
 
-      <mat-card class="stat-card">
-        <mat-card-content>
-          <div class="stat-value pending">{{ pendingFiles }}</div>
-          <div class="stat-label">Pending</div>
-        </mat-card-content>
-      </mat-card>
+        <mat-card class="modern-card uploads-card">
+            <div class="card-icon">
+                <img src="assets/stat-total-uploads.png" alt="Total uploads" class="stat-card-image">
+            </div>
 
-      <mat-card class="stat-card">
-        <mat-card-content>
-          <div class="stat-value success">{{ successFiles }}</div>
-          <div class="stat-label">Successful</div>
-        </mat-card-content>
-      </mat-card>
+            <div>
+                <h2>{{ totalFiles }}</h2>
+                <p>Total Uploads</p>
+            </div>
+        </mat-card>
 
-      <mat-card class="stat-card">
-        <mat-card-content>
-          <div class="stat-value failed">{{ failedFiles }}</div>
-          <div class="stat-label">Failed</div>
-        </mat-card-content>
-      </mat-card>
 
-      <mat-card class="stat-card full-width">
-        <mat-card-content>
-          <div class="stat-label">Success Rate</div>
-          <mat-progress-bar mode="determinate" [value]="successRate" class="progress-bar"></mat-progress-bar>
-          <div class="stat-percentage">{{ successRate }}%</div>
-        </mat-card-content>
-      </mat-card>
+        <mat-card class="modern-card downloads-card">
+            <div class="card-icon">
+                <img src="assets/stat-total-downloads.png" alt="Total downloads" class="stat-card-image">
+            </div>
+
+            <div>
+                <h2>{{ totalDownloads }}</h2>
+                <p>Total Downloads</p>
+            </div>
+        </mat-card>
+
+
+        <mat-card class="modern-card success-card">
+            <div class="card-icon">
+                <img src="assets/stat-successful-uploads.png" alt="Successful uploads" class="stat-card-image">
+            </div>
+
+            <div>
+                <h2>{{ successFiles }}</h2>
+                <p>Successful Uploads</p>
+            </div>
+        </mat-card>
+
+
+        <mat-card class="modern-card failed-card">
+            <div class="card-icon">
+                <img src="assets/stat-failed-uploads.png" alt="Failed uploads" class="stat-card-image">
+            </div>
+
+            <div>
+                <h2>{{ failedFiles }}</h2>
+                <p>Failed Uploads</p>
+            </div>
+        </mat-card>
+
     </div>
-  </div>
+
+
+    <!-- RECENT ACTIVITY -->
+    <mat-card class="dashboard-card recent-activity-card">
+
+        <div class="section-header">
+            <h2>Recent Activity</h2>
+        </div>
+
+        <div class="activity-list">
+
+            <div class="activity-item" *ngFor="let activity of recentActivities">
+                <div class="activity-left">
+                    <div class="activity-icon">
+                        <mat-icon>{{ activity.icon }}</mat-icon>
+                    </div>
+                    <div class="activity-text">{{ activity.text }}</div>
+                </div>
+                <div class="activity-time">{{ activity.time }}</div>
+            </div>
+
+        </div>
+    </mat-card>
+
+
+    <!-- LOGIN HISTORY -->
+    <mat-card class="login-history-card">
+
+        <div class="section-header">
+            <h2>Login History</h2>
+        </div>
+
+        <table class="login-table">
+            <thead>
+            <tr>
+                <th>Device</th>
+                <th>Browser</th>
+                <th>IP Address</th>
+                <th>Login Time</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr *ngFor="let login of loginHistory">
+                <td>{{ login.device }}</td>
+                <td>{{ login.browser }}</td>
+                <td>{{ login.ip }}</td>
+                <td>{{ login.time }}</td>
+
+                <td>
+            <span class="status-badge" [ngClass]="getLoginStatusClass(login.status)">
+              {{ login.status }}
+            </span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    </mat-card>
+
+
+    <!-- EDIT SECTION -->
+    <div class="profile-edit" *ngIf="isEditing" id="edit-section">
+
+
+        <div class="edit-header">
+            <h2>Edit Profile</h2>
+        </div>
+
+        <div class="edit-form">
+
+            <div class="profile-image-upload">
+
+                <img
+                        [src]="profileImage"
+                        class="edit-avatar"
+                        (error)="handleProfileImageError()"
+                >
+
+            </div>
+
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Name</mat-label>
+                <input matInput [(ngModel)]="newName">
+            </mat-form-field>
+
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Current Password</mat-label>
+                <input
+                        matInput
+                        type="password"
+                        [(ngModel)]="currentPassword"
+                        (blur)="validateCurrentPassword()"
+                        (ngModelChange)="clearPasswordErrors()"
+                >
+            </mat-form-field>
+            <div class="field-error" *ngIf="currentPasswordError">Current password is required to change password</div>
+
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>New Password (leave blank to keep current)</mat-label>
+                <input
+                        matInput
+                        type="password"
+                        [(ngModel)]="newPassword"
+                        [disabled]="!currentPassword"
+                        (ngModelChange)="clearPasswordErrors()"
+                >
+            </mat-form-field>
+
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Confirm Password</mat-label>
+                <input
+                        matInput
+                        type="password"
+                        [(ngModel)]="confirmPassword"
+                        (blur)="validateConfirmPassword()"
+                        [disabled]="!newPassword"
+                        (ngModelChange)="clearPasswordErrors()"
+                >
+            </mat-form-field>
+            <div class="field-error" *ngIf="passwordMismatchError">Passwords do not match</div>
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Email</mat-label>
+                <input matInput [value]="currentUser?.email" disabled>
+            </mat-form-field>
+
+
+            <div class="button-group">
+
+                <button
+                        mat-raised-button
+                        color="primary"
+                        (click)="saveProfile()"
+                        [disabled]="currentPasswordError || passwordMismatchError"
+                >
+                    <mat-icon>save</mat-icon>
+                    Save
+                </button>
+
+                <button mat-stroked-button (click)="cancelEdit()">
+                    Cancel
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+
 </div>

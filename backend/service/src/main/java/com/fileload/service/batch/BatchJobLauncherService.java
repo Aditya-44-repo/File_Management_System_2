@@ -17,7 +17,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 @Service
 public class BatchJobLauncherService {
 
-    private static final long PENDING_VISIBLE_DELAY_MS = 10000L;
+    private static final long PENDING_VISIBLE_DELAY_MS = 5000L;
 
     private final JobLauncher jobLauncher;
     private final Job fileProcessingJob;

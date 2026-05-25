@@ -3,12 +3,20 @@
   <!-- Page Header -->
   <div class="page-header">
     <div class="page-title">
-      <h1>DocIT Registry</h1>
+      <h1>File<span class="brand-it">Management</span> Registry</h1>
       <p>Browse, search, and manage all files.</p>
     </div>
-    <button mat-raised-button routerLink="/upload" class="upload-btn">
-      <mat-icon>cloud_upload</mat-icon> Upload New File
-    </button>
+    <div class="header-quicklinks">
+      <button mat-icon-button routerLink="/" aria-label="Home" title="Home" class="hl-icon">
+        <mat-icon>home</mat-icon>
+      </button>
+      <button mat-icon-button routerLink="/dashboard" aria-label="Dashboard" title="Dashboard" class="hl-icon">
+        <mat-icon>dashboard</mat-icon>
+      </button>
+      <button mat-icon-button routerLink="/upload" aria-label="Upload" title="Upload" class="hl-icon">
+        <mat-icon>cloud_upload</mat-icon>
+      </button>
+    </div>
   </div>
 
   <!-- Search & Filters -->
@@ -21,35 +29,44 @@
     <div class="bulk-toolbar" *ngIf="dataSource.data.length > 0">
 
       <div class="bulk-info">
-    <span *ngIf="selectedCount() === 0">
-      {{ total }} files
-    </span>
+        <ng-container *ngIf="selectedCount() === 0">
+          <mat-paginator
+            class="top-paginator"
+            [length]="total"
+            [pageIndex]="criteria.page || 0"
+            [pageSize]="criteria.size || 10"
+            [pageSizeOptions]="[5, 10, 25, 50]"
+            showFirstLastButtons
+            (page)="pageChange($event)">
+          </mat-paginator>
+        </ng-container>
 
         <span *ngIf="selectedCount() > 0">
-      <strong>{{ selectedCount() }}</strong> selected
-    </span>
+          <strong>{{ selectedCount() }}</strong> selected
+        </span>
       </div>
 
       <div class="bulk-actions">
 
-        <!-- Show only when needed -->
         <button
-                *ngIf="selectedCount() > 0"
                 mat-flat-button
-                color="warn"
-                (click)="deleteSelected()">
+          class="download-selected-btn"
+          (click)="downloadSelected()">
+
+          <mat-icon>download</mat-icon>
+          Download
+        </button>
+
+        <button
+                mat-flat-button
+          class="delete-selected-btn"
+          (click)="deleteSelected()">
 
           <mat-icon>delete</mat-icon>
-          Delete Selected
+          Delete
         </button>
 
-        <!-- Optional -->
-        <button
-                mat-stroked-button
-                (click)="deleteAllMatching()">
-
-          Delete All
-        </button>
+        
 
       </div>
     </div>
@@ -140,8 +157,14 @@
             <button mat-icon-button class="action-btn download-btn" title="Download" (click)="download(row)">
               <mat-icon>download</mat-icon>
             </button>
-            <button mat-icon-button class="action-btn status-btn" title="Update status" (click)="openStatusDialog(row)">
-              <mat-icon>edit_note</mat-icon>
+            <button
+              mat-icon-button
+              class="action-btn reupload-btn"
+              title="Reupload"
+              matTooltip="Reupload"
+              [disabled]="row.status !== 'FAILED'"
+              (click)="reupload(row)">
+              <mat-icon>refresh</mat-icon>
             </button>
             <button mat-icon-button class="action-btn delete-btn" title="Delete" (click)="delete(row)">
               <mat-icon>delete_outline</mat-icon>
@@ -155,16 +178,7 @@
       </table>
     </div>
 
-    <!-- Paginator -->
-    <mat-paginator
-      *ngIf="total > 0"
-      [length]="total"
-      [pageIndex]="criteria.page || 0"
-      [pageSize]="criteria.size || 10"
-      [pageSizeOptions]="[5, 10, 25, 50]"
-      showFirstLastButtons
-      (page)="pageChange($event)">
-    </mat-paginator>
+    <!-- bottom paginator removed (moved to top) -->
 
   </div>
 </div>

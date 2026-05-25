@@ -89,7 +89,7 @@
   display: flex;
   align-items: center;
   padding: 10px 20px;
-  background: #0000;
+  background: #ffffff;
   color: #0f172a;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
   border-bottom: 1px solid rgba(15, 23, 42, 0.08);
@@ -222,6 +222,11 @@
   object-position: center;
   border: 2px solid #ffffff;
   display: block;
+}
+
+/* Ensure navbar doesn't clip the avatar when page-level elements are positioned nearby */
+.navbar {
+  overflow: visible;
 }
 
 .profile-dropdown {

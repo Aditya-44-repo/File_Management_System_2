@@ -6,7 +6,9 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
-  background: #f5f9ff;
+  background:
+      radial-gradient(circle at top left, rgba(59, 130, 246, 0.10), transparent 30%),
+      linear-gradient(180deg, #f5f9ff 0%, #ffffff 100%);
 }
 
 /* ---- Page Header ---- */
@@ -44,6 +46,10 @@
   letter-spacing: -0.03em;
 }
 
+.page-title h1 .brand-it {
+  color: #1d4ed8;
+}
+
 .page-title p {
   margin: 0;
   color: #475569;
@@ -60,6 +66,74 @@
   height: 44px;
   box-shadow: 0 10px 24px rgba(33, 82, 232, 0.22);
   transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.header-quicklinks {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.header-quicklinks button[mat-icon-button] {
+  background: #ffffff;
+  border-radius: 10px;
+  width: 44px;
+  height: 44px;
+  box-shadow: 0 6px 18px rgba(15,23,42,0.08);
+  border: 1px solid rgba(15,23,42,0.04);
+}
+
+.top-paginator {
+  transform: translateY(-6px);
+}
+
+/* Make the top paginator visually 'normal' (no extra white box) */
+.top-paginator {
+  background: transparent;
+  box-shadow: none;
+  border: none;
+  padding: 0;
+}
+
+/* Target Material paginator internal wrappers to ensure transparency */
+.top-paginator ::ng-deep .mat-mdc-paginator,
+.top-paginator ::ng-deep .mat-mdc-paginator-outer-container,
+.top-paginator ::ng-deep .mat-mdc-paginator-range-actions {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  padding: 0 !important;
+}
+
+.top-paginator ::ng-deep .mat-mdc-paginator-range-label {
+  color: #334155; /* match table text */
+}
+
+.header-quicklinks .hl-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 6px 18px rgba(15,23,42,0.06);
+  border: 1px solid rgba(15,23,42,0.04);
+}
+
+.header-quicklinks .hl-icon mat-icon {
+  color: #1d4ed8;
+  font-size: 20px;
+}
+
+.header-quicklinks .hl-icon.primary {
+  background: linear-gradient(180deg, #2f6bff 0%, #2152e8 100%);
+  box-shadow: 0 10px 24px rgba(33, 82, 232, 0.22);
+  border: none;
+}
+
+.header-quicklinks .hl-icon.primary mat-icon {
+  color: #ffffff;
 }
 
 .upload-btn:hover {
@@ -108,6 +182,47 @@
   gap: 10px;
 }
 
+.download-selected-btn {
+  background: #ffffff;
+  color: #1d4ed8 !important;
+  font-weight: 700;
+  border-radius: 12px;
+  border: 1px solid rgba(29, 78, 216, 0.25);
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+}
+
+.download-selected-btn .mat-icon,
+.download-selected-btn mat-icon {
+  color: #1d4ed8 !important;
+}
+
+.delete-selected-btn {
+  background: #ffffff;
+  color: #dc2626 !important;
+  font-weight: 700;
+  border-radius: 12px;
+  border: 1px solid rgba(220, 38, 38, 0.25);
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+}
+
+.delete-selected-btn .mat-icon,
+.delete-selected-btn mat-icon {
+  color: #dc2626 !important;
+}
+
+.delete-selected-btn.mat-mdc-button-disabled {
+  background: #f8fafc;
+  color: #b91c1c !important;
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  box-shadow: none;
+  opacity: 0.7;
+}
+
+.delete-selected-btn.mat-mdc-button-disabled .mat-icon,
+.delete-selected-btn.mat-mdc-button-disabled mat-icon {
+  color: #b91c1c !important;
+}
+
 .progress-bar { border-radius: 0; }
 
 /* ---- Empty State ---- */
@@ -141,6 +256,24 @@
 .table-wrapper { overflow-x: auto; }
 
 .files-table { width: 100%; }
+
+/* ---- Checkbox color (selected/indeterminate) ---- */
+.files-page ::ng-deep .mat-mdc-checkbox .mdc-checkbox__background {
+  border-color: #1d4ed8 !important;
+}
+
+.files-page ::ng-deep .mat-mdc-checkbox.mat-mdc-checkbox-checked .mdc-checkbox__background,
+.files-page ::ng-deep .mat-mdc-checkbox.mat-mdc-checkbox-indeterminate .mdc-checkbox__background,
+.files-page ::ng-deep .mat-mdc-checkbox .mdc-checkbox--selected .mdc-checkbox__background,
+.files-page ::ng-deep .mat-mdc-checkbox .mdc-checkbox--indeterminate .mdc-checkbox__background {
+  background-color: #1d4ed8 !important;
+  border-color: #1d4ed8 !important;
+}
+
+.files-page ::ng-deep .mat-mdc-checkbox .mdc-checkbox__checkmark-path,
+.files-page ::ng-deep .mat-mdc-checkbox .mdc-checkbox__mixedmark {
+  stroke: #ffffff !important;
+}
 
 ::ng-deep .files-table .mat-mdc-header-row {
   background: linear-gradient(135deg, rgba(59,130,246,0.10), rgba(37,99,235,0.05));
@@ -276,4 +409,12 @@
 .action-btn:focus-visible:not([disabled]) {
   transform: none;
   box-shadow: none;
+}
+
+.reupload-btn mat-icon {
+  color: #1d4ed8;
+}
+
+.reupload-btn[disabled] mat-icon {
+  color: #94a3b8;
 }

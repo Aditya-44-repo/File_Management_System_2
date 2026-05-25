@@ -15,33 +15,41 @@ export class DashboardComponent implements OnInit, OnDestroy {
   overview: DashboardOverview | null = null;
   loadingOverview = true;
   overviewError = '';
-  // UI selections for the small preview controls
-  selectedDate: string = 'May 15';
-  selectedYear: string = '2026';
-  selectedPeriod: 'Daily' | 'Monthly' | 'Yearly' = 'Daily';
+
   private overviewSub?: Subscription;
-  // pickers model values
-  sampleDisplayDate: string = 'May 15';
-  selectedDateISO: string | null = null; // yyyy-mm-dd for input[type=date]
-  selectedMonth: string | null = null; // yyyy-mm for input[type=month]
-  availableYears: string[] = []; // keep as strings for proper select binding
-  calendarVisible = true;
+
+  // Ring chart date range
+  ringStartDate: string = '';
+  ringEndDate: string = '';
+  ringStartDateObj: Date | null = null;
+  ringEndDateObj: Date | null = null;
+
+  // Ring chart live metrics
+  ringMetrics = {
+    success: 0,
+    failed: 0,
+    successPercent: 0,
+    failedPercent: 0,
+    loading: true
+  };
+
+  trendSuccessPoints = '';
+  trendFailedPoints = '';
+  private readonly trendWidth = 220;
+  private readonly trendHeight = 70;
 
   constructor(private router: Router, private auth: AuthService, private fileLoadService: FileLoadService) {}
 
   ngOnInit(): void {
-  // prepare year list and sample date
-  const now = new Date();
-  const currentYear = now.getFullYear();
-  this.availableYears = Array.from({ length: 8 }).map((_, i) => String(currentYear - i));
-  this.selectedYear = String(currentYear);
-  this.selectedDateISO = now.toISOString().slice(0, 10);
-  this.selectedMonth = `${currentYear}-${String(now.getMonth() + 1).padStart(2, '0')}`;
-    this.selectedDate = `${now.toLocaleString(undefined, { month: 'short' })} ${now.getDate()}, ${currentYear}`;
-    this.sampleDisplayDate = this.selectedDate;
+    // Initialize ring dates to today
+    const now = new Date();
+    const isoToday = now.toISOString().slice(0, 10);
+    this.ringStartDate = isoToday;
+    this.ringEndDate = isoToday;
+    this.ringStartDateObj = new Date(now);
+    this.ringEndDateObj = new Date(now);
 
-  // initial overview should reflect the default selection
-  this.applySelectionToOverview();
+    this.fetchRingChartData();
 
   // 2. Only if logged in, start the dashboard metrics polling
   this.overviewSub = interval(10000)
@@ -67,26 +75,77 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.overviewSub?.unsubscribe();
   }
 
-  onDateChange(): void {
-    if (this.selectedDateISO) {
-      const d = new Date(this.selectedDateISO);
-      const display = `${d.toLocaleString(undefined, { month: 'short' })} ${d.getDate()}, ${d.getFullYear()}`;
-      this.selectDate(display);
+  onRingDateChange(): void {
+    if (!this.ringStartDateObj || !this.ringEndDateObj) {
+      return;
     }
+
+    this.ringStartDate = this.formatIsoDate(this.ringStartDateObj);
+    this.ringEndDate = this.formatIsoDate(this.ringEndDateObj);
+    this.fetchRingChartData();
   }
 
-  onMonthChange(): void {
-    if (this.selectedMonth) {
-      const [y, m] = this.selectedMonth.split('-');
-      const date = new Date(Number(y), Number(m) - 1, 1);
-      const display = `${date.toLocaleString(undefined, { month: 'short' })} ${y}`;
-      this.selectedDate = display;
-      this.applySelectionToOverview();
+  private fetchRingChartData(): void {
+    if (!this.auth.isAuthenticated()) {
+      this.ringMetrics.loading = false;
+      return;
     }
-  }
 
-  toggleCalendar(): void {
-    this.calendarVisible = !this.calendarVisible;
+    this.ringMetrics.loading = true;
+    
+    // Parse dates locally to avoid UTC offset shifting the day backward
+    const start = this.ringStartDateObj
+      ? new Date(this.ringStartDateObj.getFullYear(), this.ringStartDateObj.getMonth(), this.ringStartDateObj.getDate(), 0, 0, 0, 0)
+      : new Date();
+
+    const end = this.ringEndDateObj
+      ? new Date(this.ringEndDateObj.getFullYear(), this.ringEndDateObj.getMonth(), this.ringEndDateObj.getDate(), 23, 59, 59, 999)
+      : new Date();
+
+    const formatLocal = (d: Date) => {
+      const pad = (n: number) => n.toString().padStart(2, '0');
+      return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    };
+
+    const base: SearchCriteria = { 
+      page: 0, 
+      size: 1, 
+      startDate: formatLocal(start), 
+      endDate: formatLocal(end)
+    };
+
+    const callSuccess = this.hasRecordOverviewAccess() 
+      ? this.fileLoadService.list({ ...base, status: 'SUCCESS' }) 
+      : this.fileLoadService.myList({ ...base, status: 'SUCCESS' });
+      
+    const callFailed = this.hasRecordOverviewAccess() 
+      ? this.fileLoadService.list({ ...base, status: 'FAILED' }) 
+      : this.fileLoadService.myList({ ...base, status: 'FAILED' });
+
+    forkJoin({
+      success: callSuccess,
+      failed: callFailed
+    }).subscribe({
+      next: (res) => {
+        const sCount = Number(res.success?.total ?? 0);
+        const fCount = Number(res.failed?.total ?? 0);
+        const total = sCount + fCount;
+        
+        this.ringMetrics = {
+          success: sCount,
+          failed: fCount,
+          successPercent: total === 0 ? 0 : (sCount / total) * 100,
+          failedPercent: total === 0 ? 0 : (fCount / total) * 100,
+          loading: false
+        };
+
+        this.updateTrendLines();
+      },
+      error: () => {
+        this.ringMetrics.loading = false;
+        this.updateTrendLines();
+      }
+    });
   }
 
   navigateTo(target: '/upload' | '/files', event?: Event): void {
@@ -107,68 +166,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return `${(value ?? 0).toFixed(1)}%`;
   }
 
-  // UI handlers for preview controls (date / year / period)
-  selectDate(date: string): void {
-    this.selectedDate = date;
-    this.applySelectionToOverview();
+  formatDisplayDate(value: Date | null): string {
+    if (!value) return '';
+    const day = String(value.getDate()).padStart(2, '0');
+    const month = String(value.getMonth() + 1).padStart(2, '0');
+    const year = value.getFullYear();
+    return `${day} - ${month} - ${year}`;
   }
 
-  selectYear(year: string): void {
-    this.selectedYear = year;
-    this.applySelectionToOverview();
-  }
-
-  selectPeriod(period: 'Daily' | 'Monthly' | 'Yearly'): void {
-    this.selectedPeriod = period;
-    this.applySelectionToOverview();
-  }
-
-  getStatusLabel(): string {
-    if (this.selectedPeriod === 'Monthly') {
-      return this.selectedMonth ? this.formatMonthLabel(this.selectedMonth) : this.selectedYear;
-    }
-
-    if (this.selectedPeriod === 'Yearly') {
-      return this.selectedYear;
-    }
-
-    return this.selectedDate;
-  }
-
-  private formatMonthLabel(monthValue: string): string {
-    const [year, month] = monthValue.split('-');
-    const date = new Date(Number(year), Number(month) - 1, 1);
-    return `${date.toLocaleString(undefined, { month: 'short' })} ${year}`;
-  }
-
-  /**
-   * Apply current selection to the main overview and refresh preview components.
-   * This uses lightweight dummy data so UI updates immediately without backend calls.
-   */
-  private applySelectionToOverview(): void {
-    // create deterministic dummy overview based on selections
-    const seed = (this.selectedPeriod?.length ?? 0) * 7 + (Number(this.selectedYear) % 100 || 0) + (this.selectedDate?.length ?? 0);
-    const totalUploads = Math.max(50, (seed % 400) + 80);
-    const successCount = Math.round(totalUploads * 0.6);
-    const processingCount = Math.round(totalUploads * 0.15);
-    const pendingCount = Math.round(totalUploads * 0.12);
-    const exceptionsToday = Math.max(0, totalUploads - successCount - processingCount - pendingCount);
-    const successRate = totalUploads === 0 ? 0 : (successCount * 100) / totalUploads;
-
-    this.overview = {
-      totalUploads,
-      inProcessing: processingCount,
-      successRate,
-      exceptionsToday,
-      pendingCount,
-      processingCount,
-      successCount,
-      lastUpdated: new Date().toISOString()
-    };
-
-    // also trigger a short reload for components that use services
-    // (upload-statistics-donut listens to inputs and will reload itself)
-  }
+  // Dummy applySelectionToOverview removed
 
   private fetchOverview() {
     return this.fileLoadService.getDashboardOverview().pipe(
@@ -305,5 +311,40 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   private hasRecordOverviewAccess(): boolean {
     return this.auth.hasAnyAdminPermission('USER_RECORDS_OVERVIEW');
+  }
+
+  private updateTrendLines(): void {
+    const successSeries = this.buildTrendSeries(this.ringMetrics.successPercent, [-6, -2, 3, -1, 4]);
+    const failedSeries = this.buildTrendSeries(this.ringMetrics.failedPercent, [4, 1, -3, 2, -2]);
+    this.trendSuccessPoints = this.toPolylinePoints(successSeries);
+    this.trendFailedPoints = this.toPolylinePoints(failedSeries);
+  }
+
+  private buildTrendSeries(base: number, deltas: number[]): number[] {
+    return deltas.map((delta) => this.clampPercent(base + delta));
+  }
+
+  private toPolylinePoints(values: number[]): string {
+    const width = this.trendWidth;
+    const height = this.trendHeight;
+    const padX = 4;
+    const padY = 6;
+    const step = (width - padX * 2) / (values.length - 1 || 1);
+    return values
+      .map((value, index) => {
+        const x = padX + step * index;
+        const y = padY + (1 - value / 100) * (height - padY * 2);
+        return `${x.toFixed(1)},${y.toFixed(1)}`;
+      })
+      .join(' ');
+  }
+
+  private clampPercent(value: number): number {
+    return Math.max(0, Math.min(100, value));
+  }
+
+  private formatIsoDate(value: Date): string {
+    const pad = (n: number) => n.toString().padStart(2, '0');
+    return `${value.getFullYear()}-${pad(value.getMonth() + 1)}-${pad(value.getDate())}`;
   }
 }

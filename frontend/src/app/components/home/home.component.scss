@@ -18,19 +18,19 @@ $border-radius: 24px;
   background: #ffffff;
   color: $text;
   font-family: 'Roboto', sans-serif;
-  padding: 0 0 40px;
+  padding: 0 0 20px;
   overflow: hidden;
 }
 
 .main-content {
   position: relative;
   z-index: 1;
-  padding: 0 24px 56px;
+  padding: 0 24px 24px;
   max-width: 1080px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 48px;
+  gap: 36px;
 }
 
 .welcome-section {
@@ -40,8 +40,8 @@ $border-radius: 24px;
   margin-left: -50vw;
   margin-right: -50vw;
   width: 100vw;
-  min-height: 520px;
-  padding: 56px 32px;
+  min-height: 420px;
+  padding: 44px 28px;
   overflow: hidden;
   background: url('/assets/background.png') center top/cover no-repeat;
 }
@@ -54,6 +54,17 @@ $border-radius: 24px;
   right: 0;
   bottom: 0;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.3) 40%, rgba(255, 255, 255, 0.85) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+.welcome-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255,255,255,0.3) 40%, rgba(255,255,255,0.85) 100%);
   pointer-events: none;
   z-index: 0;
 }
@@ -75,33 +86,40 @@ $border-radius: 24px;
   border: 1px solid rgba(226, 232, 240, 0.8);
 }
 
-.features-section,
-.cta-section {
-  background: rgba(255, 255, 255, 0.94);
-  border: 1px solid rgba(226, 232, 240, 0.7);
-  border-radius: $border-radius;
-  padding: 40px;
-  box-shadow: 0 24px 48px rgba(15, 23, 42, 0.09);
+.logo-container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 200px;
+  margin: 0 auto 20px 0;
+  display: flex;
+  justify-content: flex-start;
 }
 
-.home-container::after {
+.company-logo {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* page-level overlay: darker at top, lighter towards bottom */
+.home-container::before {
   content: '';
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 180px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(9, 27, 62, 0.06));
+  inset: 0;
+  /* top transparent, keep lower white wash to mute pattern */
+  background: linear-gradient(180deg, rgba(255,255,255,0.0) 0%, rgba(255,255,255,0.35) 45%, rgba(255,255,255,0.15) 100%);
   pointer-events: none;
   z-index: 0;
 }
 
-.hero-copy-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+/* keep footer area free of the background image by layering a solid footer */
+.site-footer {
+  background: #ffffff;
+  position: relative;
+  z-index: 5;
 }
-
+/* removed page-level overlay so background image displays without wash */
 .eyebrow {
   color: $primary;
   font-weight: 700;
@@ -144,14 +162,6 @@ h1 {
   font-weight: 900;
   color: $text;
   line-height: 1.02;
-  transform-origin: center;
-  animation: subtlePop 2200ms ease-in-out infinite alternate;
-}
-
-@keyframes subtlePop {
-  0% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-4px) scale(1.02); }
-  100% { transform: translateY(0) scale(1); }
 }
 
 .hero-title-accent {
@@ -337,8 +347,9 @@ h1 {
 
 .feature-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 20px;
+  justify-items: center;
 }
 
 .feature-card {
@@ -347,6 +358,8 @@ h1 {
   border-radius: 24px;
   padding: 28px;
   min-height: 210px;
+  width: 100%;
+  max-width: 320px;
   box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
   transition: all 0.25s ease;
 }
@@ -383,6 +396,16 @@ h1 {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 20px;
+}
+
+.cta-card-grid.single-card {
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+}
+
+.cta-card-grid.single-card .cta-card {
+  max-width: 520px;
+  width: 100%;
 }
 
 .cta-image-wrapper {
@@ -450,4 +473,31 @@ h1 {
   .hero-actions {
     flex-direction: column;
   }
+}
+
+/* Footer centering for compact home footer */
+.site-footer .footer-inner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.site-footer .footer-link,
+.site-footer .footer-note {
+  color: $primary;
+  font-weight: 700;
+}
+
+/* Reduce vertical spacing in footer on home page */
+.site-footer {
+  padding: 8px 0;
+  margin-top: 8px;
+}
+
+.site-footer .footer-inner {
+  gap: 6px;
+  padding: 6px 12px;
+  font-size: 0.95rem;
 }

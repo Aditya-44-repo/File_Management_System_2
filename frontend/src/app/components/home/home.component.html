@@ -1,43 +1,24 @@
 <div class="home-container">
   <main class="main-content">
     <section class="welcome-section">
+      <div class="logo-container">
+        <img src="assets/mphasis-logo.png" alt="Mphasis Logo" class="company-logo">
+      </div>
       <div class="welcome-panel">
         <div class="hero-copy-wrapper">
-          <h1 class="hero-title" *ngIf="!isLoggedIn">Doc<span class="hero-title-accent">IT</span></h1>
+          <h1 class="hero-title" *ngIf="!isLoggedIn">File<span class="hero-title-accent">Management</span></h1>
           <h1 class="hero-title home-welcome" *ngIf="isLoggedIn">
             <span class="home-welcome-line small">Welcome {{ welcomeName }},</span>
-            <span class="home-welcome-line brand">Doc<span class="hero-title-accent">IT</span></span>
+            <span class="home-welcome-line brand">File<span class="hero-title-accent">Management</span></span>
           </h1>
           <p class="hero-copy">
             Your modern file management system for efficient document handling. Manage uploads, processing, and organize files from one secure workspace.
           </p>
           <div class="hero-actions">
-            <button class="btn btn-primary" *ngIf="!isLoggedIn" (click)="navigateTo('register')">Get Started</button>
-            <button class="btn btn-secondary" *ngIf="!isLoggedIn" (click)="navigateTo('register')">Sign Up</button>
+            <button class="btn btn-primary" *ngIf="!isLoggedIn" (click)="navigateTo('login')">Get Started</button>
+            <button class="btn btn-secondary" *ngIf="!isLoggedIn" (click)="navigateTo('upload')">Upload</button>
             <button class="btn btn-primary" *ngIf="isLoggedIn" (click)="navigateTo('dashboard')">Go to Dashboard</button>
-          </div>
-        </div>
-        <div class="hero-feature-list">
-          <div class="feature-item">
-            <div class="feature-icon">📈</div>
-            <div class="feature-copy">
-              <h3>System Overview</h3>
-              <p>Experience seamless file management</p>
-            </div>
-          </div>
-          <div class="feature-item" (click)="navigateTo('register')">
-            <div class="feature-icon">⬆️</div>
-            <div class="feature-copy">
-              <h3>Upload Files</h3>
-              <p>Easily upload documents, drag drop or browse.</p>
-            </div>
-          </div>
-          <div class="feature-item">
-            <div class="feature-icon">📁</div>
-            <div class="feature-copy">
-              <h3>Organize</h3>
-              <p>Keep files structured, folders and metadata.</p>
-            </div>
+            <button class="btn btn-secondary" *ngIf="isLoggedIn" (click)="navigateTo('upload')">Upload</button>
           </div>
         </div>
       </div>
@@ -50,11 +31,7 @@
         <p>Streamline your document workflow with a straightforward, blue-first interface.</p>
       </div>
       <div class="feature-grid">
-        <article class="feature-card">
-          <div class="feature-icon">📁</div>
-          <h3>Organize Files</h3>
-          <p>Create folders, tag documents, and keep everything easy to find.</p>
-        </article>
+        
         <article class="feature-card">
           <div class="feature-icon">🔒</div>
           <h3>Secure Access</h3>
@@ -73,25 +50,6 @@
       </div>
     </section>
 
-    <section class="cta-section">
-      <h2 class="cta-heading">Ready to get started?</h2>
-      <div class="cta-card-grid">
-        <div class="cta-card" *ngIf="!isLoggedIn">
-          <h3>Create an account</h3>
-          <p>Sign up now to start managing documents securely.</p>
-          <button class="btn btn-primary" (click)="navigateTo('register')">Sign Up</button>
-        </div>
-        <div class="cta-card" *ngIf="!isLoggedIn">
-          <h3>Already a member?</h3>
-          <p>Log in and continue working with your files right away.</p>
-          <button class="btn btn-primary" (click)="navigateTo('login')">Login</button>
-        </div>
-        <div class="cta-card" *ngIf="isLoggedIn">
-          <h3>Welcome back</h3>
-          <p>You are logged in. Continue to your dashboard or explore your workspace.</p>
-          <button class="btn btn-primary" (click)="navigateTo('dashboard')">Open Dashboard</button>
-        </div>
-      </div>
-    </section>
+    <!-- Footer moved to global `app-footer` component -->
   </main>
 </div>

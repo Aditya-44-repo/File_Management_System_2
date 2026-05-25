@@ -1,7 +1,7 @@
 /* ==================== REGISTER PAGE LAYOUT ==================== */
 
 .login-page {
-  height: 100dvh;
+  min-height: 100vh;
   width: 100%;
   box-sizing: border-box;
   display: flex;
@@ -9,64 +9,75 @@
   justify-content: center;
   padding: 40px 36px 24px 72px;
   background: url('/assets/background.png') no-repeat center/cover;
+  /* keep background attached to viewport so zoom/scale affects full page uniformly */
+  background-attachment: fixed;
   position: relative;
-  overflow: hidden;
+  /* allow children to extend when browser zooms or scales so card isn't clipped */
+  overflow-y: auto;
   font-family: 'Roboto', sans-serif;
+  isolation: isolate;
 }
 
 .login-page::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(120deg, rgba(5, 13, 36, 0.7) 0%, rgba(5, 13, 36, 0.35) 55%, rgba(5, 13, 36, 0.05) 100%);
+  background: linear-gradient(
+    120deg,
+    rgba(5, 13, 36, 0.7) 0%,
+    rgba(5, 13, 36, 0.35) 55%,
+    rgba(5, 13, 36, 0.05) 100%
+  );
+  z-index: 0;
 }
 
 /* ==================== REGISTER CARD ==================== */
 
 .auth-card {
   position: relative;
-  z-index: 1;
+  z-index: 2;
+
   max-width: 550px;
   width: 100%;
   min-height: 650px;
-  margin: 0;
+
+  /* give some vertical breathing room so scaled card doesn't touch viewport edges */
+  margin: 24px auto;
   padding: 0;
+
   border-radius: 20px;
   background: #ffffff;
+
   box-shadow: 0 20px 48px rgba(0, 0, 0, 0.22);
-  overflow: hidden;
+  /* allow card shadows and scaled content to remain visible */
+  overflow: visible;
+
+  display: flex;
+  flex-direction: column;
+
+  transform-origin: center center;
+  transition: transform 0.2s ease;
 }
 
 .form-container {
-  padding: 32px 34px 40px;
+  padding: 26px 32px 28px;
   display: flex;
   flex-direction: column;
   min-height: 100%;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-/* ==================== BRAND ==================== */
-
-.brand {
-  text-align: center;
-  margin-bottom: 18px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-}
-
-.brand-logo {
-  width: 210px;
-  max-width: 85%;
-  height: auto;
-  display: block;
-  margin: 0 auto;
+/* ==================== REMOVE CARD-ONLY ZOOM EFFECT ==================== */
+/* Prevent scaling on hover so page zoom affects the whole page uniformly */
+.auth-card:hover {
+  transform: none;
 }
 
 /* ==================== TITLES ==================== */
 
 .auth-card h2 {
-  margin: 16px 0 0;
+  margin: 10px 0 0;
   font-size: 24px;
   font-weight: 700;
   color: #111827;
@@ -74,7 +85,7 @@
 }
 
 .subtitle {
-  margin: 6px 0 18px;
+  margin: 4px 0 12px;
   font-size: 14px;
   color: #6b7280;
   text-align: center;
@@ -85,7 +96,7 @@
 .input-label {
   display: block;
   width: 80%;
-  margin: 0 auto 8px;
+  margin: 0 auto 4px;
   font-size: 13px;
   font-weight: 600;
   color: #111827;
@@ -93,8 +104,16 @@
 
 mat-form-field.full {
   width: 80%;
-  margin: 0 auto 16px;
+  margin: 0 auto 6px;
   display: block;
+}
+
+/* REDUCE MATERIAL FIELD HEIGHT */
+
+::ng-deep .mat-mdc-form-field-infix {
+  min-height: 44px !important;
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
 }
 
 ::ng-deep .mat-mdc-text-field-wrapper {
@@ -138,13 +157,25 @@ mat-form-field.full {
   border-color: #3b82f6;
 }
 
+::ng-deep .mat-mdc-form-field.ng-invalid.ng-touched .mdc-notched-outline__leading,
+::ng-deep .mat-mdc-form-field.ng-invalid.ng-touched .mdc-notched-outline__notch,
+::ng-deep .mat-mdc-form-field.ng-invalid.ng-touched .mdc-notched-outline__trailing {
+  border-color: #ef4444;
+}
+
+/* REDUCE ERROR MESSAGE SPACING */
+
+::ng-deep .mat-mdc-form-field-subscript-wrapper {
+  margin-top: 2px !important;
+}
+
 /* ==================== REGISTER BUTTON ==================== */
 
 .register-btn {
   width: 80%;
-  margin: 0 auto 28px;
+  margin: 10px auto 18px;
   display: block;
-  height: 48px;
+  height: 46px;
   border-radius: 10px;
   font-size: 15px;
   font-weight: 600;
@@ -166,10 +197,32 @@ mat-form-field.full {
   }
 }
 
+.password-hints {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin: -6px 0 10px;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.password-hints .hint {
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.password-hints .hint.met {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
 /* ==================== LOGIN LINK ==================== */
 
 .login-link {
-  margin-top: 28px;
+  margin-top: 10px;
   margin-bottom: 0;
   text-align: center;
   font-size: 13px;
@@ -195,19 +248,15 @@ mat-form-field.full {
   }
 
   .form-container {
-    padding: 26px 28px 24px;
-  }
-
-  .brand {
-    margin-bottom: 14px;
+    padding: 22px 26px 20px;
   }
 
   .subtitle {
-    margin-bottom: 14px;
+    margin-bottom: 10px;
   }
 
   .register-btn {
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
 }
 
@@ -230,6 +279,8 @@ mat-form-field.full {
   }
 }
 
+/* ==================== MOBILE ==================== */
+
 @media (max-width: 480px) {
   .login-page {
     padding: 32px 16px;
@@ -237,7 +288,7 @@ mat-form-field.full {
   }
 
   .form-container {
-    padding: 30px 22px;
+    padding: 24px 18px;
   }
 
   .auth-card h2 {
@@ -247,5 +298,14 @@ mat-form-field.full {
   .register-btn {
     height: 44px;
   }
-}
 
+  .auth-card:hover {
+    transform: none;
+  }
+
+  .input-label,
+  mat-form-field.full,
+  .register-btn {
+    width: 92%;
+  }
+}

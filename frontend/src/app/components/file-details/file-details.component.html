@@ -1,4 +1,4 @@
-<div class="details-page">
+<div class="details-page modern-details">
 
   <!-- Loading -->
   <mat-progress-bar *ngIf="loading" mode="indeterminate" class="top-loader"></mat-progress-bar>
@@ -16,20 +16,20 @@
           <h1 class="file-title">{{ fileName }}</h1>
         </div>
       </div>
-      <div class="header-actions">
-        <button mat-stroked-button class="hdr-btn download" (click)="download()" matTooltip="Download file">
-          <mat-icon>download</mat-icon> Download
+      <div class="header-quicklinks">
+        <button mat-icon-button routerLink="/" aria-label="Home" title="Home" class="hl-icon">
+          <mat-icon>home</mat-icon>
         </button>
-        <button mat-stroked-button class="hdr-btn status" (click)="openStatusDialog()" matTooltip="Update status">
-          <mat-icon>edit_note</mat-icon> Update Status
+        <button mat-icon-button routerLink="/dashboard" aria-label="Dashboard" title="Dashboard" class="hl-icon">
+          <mat-icon>dashboard</mat-icon>
         </button>
-        <button mat-stroked-button class="hdr-btn danger" (click)="delete()" matTooltip="Delete file">
-          <mat-icon>delete_outline</mat-icon> Delete
+        <button mat-icon-button routerLink="/upload" aria-label="Upload" title="Upload" class="hl-icon">
+          <mat-icon>cloud_upload</mat-icon>
         </button>
       </div>
     </div>
 
-    <!-- ── Two-column layout ── -->
+    <!-- ── Single-column layout ── -->
     <div class="detail-grid">
 
       <!-- LEFT: meta + tags/desc -->
@@ -37,8 +37,18 @@
 
         <!-- Status banner -->
         <div class="status-banner">
-          <span class="status-badge" [ngClass]="statusClass(file.status)">{{ file.status }}</span>
-          <span class="status-hint">Current processing state</span>
+          <div class="status-meta">
+            <span class="status-badge" [ngClass]="statusClass(file.status)">{{ file.status }}</span>
+            <span class="status-hint">Current processing state</span>
+          </div>
+          <div class="status-actions">
+            <button mat-stroked-button class="hdr-btn download" (click)="download()" matTooltip="Download file">
+              <mat-icon>download</mat-icon> Download
+            </button>
+            <button mat-stroked-button class="hdr-btn danger" (click)="delete()" matTooltip="Delete file">
+              <mat-icon>delete_outline</mat-icon> Delete
+            </button>
+          </div>
         </div>
 
         <!-- Info cards -->
@@ -59,15 +69,21 @@
             <span class="info-label">File Type</span>
             <span class="info-value">{{ fileType }}</span>
           </div>
-          <div class="info-card">
+          <div class="info-card" [class.full-row]="!file.errors">
             <span class="info-label">Uploaded By</span>
             <span class="info-value">{{ file.uploadedBy || 'System' }}</span>
           </div>
-          <div class="info-card">
+          <div class="info-card errors-card" *ngIf="file.errors">
+            <span class="info-label">Errors</span>
+            <ol class="error-list">
+              <li *ngFor="let err of formattedErrors">{{ err }}</li>
+            </ol>
+          </div>
+          <div class="info-card full-row">
             <span class="info-label">Upload Date</span>
             <span class="info-value">{{ uploadDate | date:'dd MMM yyyy, HH:mm' }}</span>
           </div>
-          <div class="info-card">
+          <div class="info-card full-row">
             <span class="info-label">Record Count</span>
             <span class="info-value">{{ file.recordCount | number }}</span>
           </div>
@@ -79,10 +95,7 @@
             <span class="info-label">Checksum</span>
             <span class="info-value mono">{{ file.checksum }}</span>
           </div>
-          <div class="info-card wide" *ngIf="file.errors">
-            <span class="info-label">Errors</span>
-            <span class="info-value error-text">{{ file.errors }}</span>
-          </div>
+          
         </div>
 
         <!-- Tags display -->
@@ -93,10 +106,7 @@
           </div>
         </div>
 
-      </div>
-
-      <!-- RIGHT: editable metadata -->
-      <div class="right-col">
+        <!-- Edit metadata -->
         <div class="edit-card">
           <div class="edit-card-header">
             <mat-icon class="edit-icon">edit</mat-icon>
@@ -132,16 +142,6 @@
             </div>
           </form>
         </div>
-      </div>
-    </div>
-
-    <div class="status-wide">
-      <div class="status-card">
-        <div class="edit-card-header">
-          <mat-icon class="edit-icon">swap_horiz</mat-icon>
-          <span>Update Status</span>
-        </div>
-        <app-status-update [fileId]="file.id" [currentStatus]="file.status" (updated)="load()"></app-status-update>
       </div>
     </div>
 
