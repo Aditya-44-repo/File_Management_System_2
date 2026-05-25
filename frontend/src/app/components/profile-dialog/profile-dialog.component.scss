@@ -7,41 +7,33 @@
   border: 1px solid rgba(15, 23, 42, 0.08);
   box-shadow: 0 28px 70px rgba(15, 23, 42, 0.12);
   position: relative;
-}
-
-.profile-dialog::before {
-  content: '';
-  position: absolute;
-  top: -40px;
-  left: -30px;
-  width: 160px;
-  height: 160px;
-  border-radius: 50%;
-  background: rgba(96, 165, 250, 0.18);
-  filter: blur(15px);
-  pointer-events: none;
+  box-sizing: border-box;
+  max-width: 100%;
 }
 
 .profile-dialog::after {
   content: '';
   position: absolute;
   bottom: 0;
-  right: -20px;
+  right: 0;
   width: 140px;
   height: 140px;
   border-radius: 50%;
-  background: rgba(99, 102, 241, 0.12);
+  background: rgba(59, 130, 246, 0.12);
   filter: blur(14px);
   pointer-events: none;
+  transform: translate(50%, 50%);
 }
 
 /* Header */
 .header {
   position: relative;
   padding: 28px 22px 20px;
-  background: linear-gradient(135deg, #4f46e5 0%, #4338ca 45%, #1f2937 100%);
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 45%, #1e40af 100%);
   color: white;
   text-align: center;
+  border-radius: 28px 28px 0 0;
+  overflow: hidden;
 }
 
 .header::after {
@@ -96,29 +88,32 @@
 
 /* Menu */
 .menu {
-  padding: 14px 0 18px;
+  padding: 14px 12px 18px;
+  overflow: hidden;
 }
 
 /* Buttons */
 .menu button {
-  width: 100%;
+  width: calc(100% - 4px);
   justify-content: flex-start;
   padding: 14px 18px;
   font-size: 14px;
   color: #0f172a;
-  border-radius: 18px;
+  border-radius: 12px;
   transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box;
+  margin: 0 2px;
 }
 
 .menu button mat-icon {
   margin-right: 12px;
-  color: #4338ca;
+  color: #2563eb;
 }
 
 .menu button:hover {
-  background: rgba(99, 102, 241, 0.08);
+  background: rgba(37, 99, 235, 0.08);
   transform: translateX(2px);
-  box-shadow: 0 10px 24px rgba(99, 102, 241, 0.08);
+  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.08);
 }
 
 .menu button:first-of-type {

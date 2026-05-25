@@ -1055,6 +1055,29 @@
   margin-bottom: 16px;
 }
 
+.dashboard-header .header-quicklinks {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.dashboard-header .header-quicklinks .hl-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.dashboard-header .header-quicklinks .hl-icon mat-icon {
+  color: #1d4ed8;
+  font-size: 20px;
+}
+
 .dashboard-kicker {
   font-size: 12px;
   letter-spacing: 0.16em;
@@ -1068,6 +1091,10 @@
   margin: 0 0 6px;
   font-size: 28px;
   color: #0f172a;
+}
+
+.dashboard-header h2 .dashboard-title-accent {
+  color: #1d4ed8;
 }
 
 .dashboard-subtitle {
@@ -1155,9 +1182,9 @@
 }
 
 :host ::ng-deep .date-field .mat-mdc-form-field-infix {
-  min-height: 34px;
-  padding-top: 5px;
-  padding-bottom: 5px;
+  min-height: 28px;
+  padding-top: 3px;
+  padding-bottom: 3px;
 }
 
 :host ::ng-deep .date-field .mat-mdc-text-field-wrapper {
@@ -1168,8 +1195,12 @@
 }
 
 :host ::ng-deep .date-field .mat-mdc-form-field-flex {
-  height: 34px;
+  height: 28px;
   align-items: center;
+}
+
+:host ::ng-deep .date-field input.mat-mdc-input-element {
+  font-size: 12px;
 }
 
 :host ::ng-deep .date-field .mat-mdc-form-field-subscript-wrapper {

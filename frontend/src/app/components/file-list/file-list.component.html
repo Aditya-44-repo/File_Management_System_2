@@ -3,7 +3,7 @@
   <!-- Page Header -->
   <div class="page-header">
     <div class="page-title">
-      <h1>Doc<span class="brand-it">IT</span> Registry</h1>
+      <h1>File<span class="brand-it">Management</span> Registry</h1>
       <p>Browse, search, and manage all files.</p>
     </div>
     <div class="header-quicklinks">
@@ -48,24 +48,25 @@
 
       <div class="bulk-actions">
 
-        <!-- Show only when needed -->
         <button
-                *ngIf="selectedCount() > 0"
                 mat-flat-button
-                color="warn"
-                (click)="deleteSelected()">
+          class="download-selected-btn"
+          (click)="downloadSelected()">
+
+          <mat-icon>download</mat-icon>
+          Download
+        </button>
+
+        <button
+                mat-flat-button
+          class="delete-selected-btn"
+          (click)="deleteSelected()">
 
           <mat-icon>delete</mat-icon>
-          Delete Selected
+          Delete
         </button>
 
-        <!-- Optional -->
-        <button
-                mat-stroked-button
-                (click)="deleteAllMatching()">
-
-          Delete All
-        </button>
+        
 
       </div>
     </div>
@@ -156,8 +157,14 @@
             <button mat-icon-button class="action-btn download-btn" title="Download" (click)="download(row)">
               <mat-icon>download</mat-icon>
             </button>
-            <button mat-icon-button class="action-btn status-btn" title="Update status" (click)="openStatusDialog(row)">
-              <mat-icon>edit_note</mat-icon>
+            <button
+              mat-icon-button
+              class="action-btn reupload-btn"
+              title="Reupload"
+              matTooltip="Reupload"
+              [disabled]="row.status !== 'FAILED'"
+              (click)="reupload(row)">
+              <mat-icon>refresh</mat-icon>
             </button>
             <button mat-icon-button class="action-btn delete-btn" title="Delete" (click)="delete(row)">
               <mat-icon>delete_outline</mat-icon>

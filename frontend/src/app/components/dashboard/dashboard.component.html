@@ -4,8 +4,19 @@
       <div class="dashboard-header">
         <div>
           <p class="dashboard-kicker">Analytics Overview</p>
-          <h2>File Management Analytics Dashboard</h2>
+          <h2>File<span class="dashboard-title-accent">Management</span> Analytics Dashboard</h2>
           <p class="dashboard-subtitle">Live operational insights and daily performance</p>
+        </div>
+        <div class="header-quicklinks">
+          <button mat-icon-button routerLink="/" aria-label="Home" title="Home" class="hl-icon">
+            <mat-icon>home</mat-icon>
+          </button>
+          <button mat-icon-button routerLink="/upload" aria-label="Upload" title="Upload" class="hl-icon">
+            <mat-icon>cloud_upload</mat-icon>
+          </button>
+          <button mat-icon-button routerLink="/files" aria-label="Report" title="Report" class="hl-icon">
+            <mat-icon>assessment</mat-icon>
+          </button>
         </div>
       </div>
 
@@ -46,8 +57,8 @@
             <div class="mini-rings">
               <div class="mini-ring success">
                 <svg viewBox="0 0 80 80" aria-label="Success percentage ring">
-                  <circle cx="40" cy="40" r="34" stroke="#e2e8f0" stroke-width="8" fill="none"></circle>
-                  <circle cx="40" cy="40" r="34" stroke="#10b981" stroke-width="8" fill="none"
+                  <circle cx="40" cy="40" r="34" stroke="#e2e8f0" stroke-width="12" fill="none"></circle>
+                  <circle cx="40" cy="40" r="34" stroke="#10b981" stroke-width="12" fill="none"
                           [style.stroke-dasharray]="(213.63 * ringMetrics.successPercent / 100) + ' 213.63'"
                           stroke-linecap="round" transform="rotate(-90 40 40)"></circle>
                   <text x="40" y="44" text-anchor="middle" class="mini-value">{{ formatRate(ringMetrics.successPercent) }}</text>
@@ -56,8 +67,8 @@
               </div>
               <div class="mini-ring failed">
                 <svg viewBox="0 0 80 80" aria-label="Failed percentage ring">
-                  <circle cx="40" cy="40" r="34" stroke="#e2e8f0" stroke-width="8" fill="none"></circle>
-                  <circle cx="40" cy="40" r="34" stroke="#ef4444" stroke-width="8" fill="none"
+                  <circle cx="40" cy="40" r="34" stroke="#e2e8f0" stroke-width="12" fill="none"></circle>
+                  <circle cx="40" cy="40" r="34" stroke="#ef4444" stroke-width="12" fill="none"
                           [style.stroke-dasharray]="(213.63 * ringMetrics.failedPercent / 100) + ' 213.63'"
                           stroke-linecap="round" transform="rotate(-90 40 40)"></circle>
                   <text x="40" y="44" text-anchor="middle" class="mini-value">{{ formatRate(ringMetrics.failedPercent) }}</text>
