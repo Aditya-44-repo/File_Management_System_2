@@ -1,6 +1,8 @@
 package com.fileload.api.security;
 
 import com.fileload.dao.repository.UserAccountRepository;
+import com.fileload.dao.repository.EmailChangeRequestRepository;
+import com.fileload.model.entity.EmailChangeRequestStatus;
 import com.fileload.model.entity.UserAccount;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -26,15 +28,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     //UserAccountRepository = data-access layer (talks to the database, returns UserAccount entities).
     //CustomUserDetailsService = security service (implements Spring Security's UserDetailsService, converts user data into a UserDetails object used by Spring Security).
     private final UserAccountRepository userAccountRepository;
+    private final EmailChangeRequestRepository emailChangeRequestRepository;
 
     //JwtUtil jwtUtil — token generation/validation + claim extraction.
     //(to check stored tokenVersion).
     public JwtAuthenticationFilter(JwtUtil jwtUtil,
                                    CustomUserDetailsService userDetailsService,
-                                   UserAccountRepository userAccountRepository) {
+                                   UserAccountRepository userAccountRepository,
+                                   EmailChangeRequestRepository emailChangeRequestRepository) {
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
         this.userAccountRepository = userAccountRepository;
+        this.emailChangeRequestRepository = emailChangeRequestRepository;
     }
 
     //Validate token and read claims
@@ -58,13 +63,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserAccount account = userAccountRepository.findByEmail(username).orElse(null);
+            if (account == null) {
+                account = emailChangeRequestRepository
+                        .findFirstByOldEmailAndStatusOrderByReviewedAtDesc(username, EmailChangeRequestStatus.approved)
+                        .map(emailChangeRequest -> emailChangeRequest.getUser())
+                        .orElse(null);
+            }
             if (account == null || tokenVersion == null || account.getTokenVersion() != tokenVersion) {
                 filterChain.doFilter(request, response);
                 return;
             }
 
             //Creates UsernamePasswordAuthenticationToken with user details and authorities and sets it into SecurityContextHolder.
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(account.getEmail());
             UsernamePasswordAuthenticationToken authToken =
                     new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authToken);

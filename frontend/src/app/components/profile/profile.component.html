@@ -28,6 +28,26 @@
 
     </div>
 
+    <div class="email-change-banner" *ngIf="emailChangeRequest" [ngClass]="emailChangeRequest.status">
+        <span *ngIf="emailChangeRequest.status === 'pending'">
+            Email change to {{ emailChangeRequest.newEmail }} is awaiting admin approval.
+        </span>
+        <span *ngIf="emailChangeRequest.status === 'approved'">
+            Email change to {{ emailChangeRequest.newEmail }} was approved.
+        </span>
+        <span *ngIf="emailChangeRequest.status === 'rejected'">
+            Email change to {{ emailChangeRequest.newEmail }} was rejected.
+        </span>
+        <button
+                *ngIf="emailChangeRequest.status === 'pending'"
+                mat-stroked-button
+                type="button"
+                (click)="cancelPendingEmailChange()"
+        >
+            Cancel
+        </button>
+    </div>
+
 
     <!-- STATISTICS CARDS -->
     <div class="stats-grid">
@@ -210,6 +230,34 @@
                 <mat-label>Email</mat-label>
                 <input matInput [value]="currentUser?.email" disabled>
             </mat-form-field>
+
+            <div class="email-change-actions" *ngIf="!showEmailChangeForm && emailChangeRequest?.status !== 'pending'">
+                <button mat-stroked-button type="button" (click)="openEmailChangeForm()">
+                    Request email change
+                </button>
+            </div>
+
+            <div class="email-change-form" *ngIf="showEmailChangeForm">
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>New email</mat-label>
+                    <input matInput type="email" [(ngModel)]="requestedNewEmail">
+                </mat-form-field>
+
+                <div class="button-group compact-buttons">
+                    <button
+                            mat-raised-button
+                            color="primary"
+                            type="button"
+                            (click)="submitEmailChangeRequest()"
+                            [disabled]="emailChangeSubmitting"
+                    >
+                        Submit
+                    </button>
+                    <button mat-stroked-button type="button" (click)="cancelEmailChangeForm()">
+                        Cancel
+                    </button>
+                </div>
+            </div>
 
 
             <div class="button-group">

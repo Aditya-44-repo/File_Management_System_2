@@ -17,6 +17,56 @@
 
     <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
 
+    <div class="email-requests-card">
+      <button type="button" class="email-requests-header" (click)="toggleEmailRequests()">
+        <span>
+          <mat-icon>{{ emailRequestsExpanded ? 'expand_less' : 'expand_more' }}</mat-icon>
+          Email Change Requests
+        </span>
+        <span class="request-count">{{ emailRequests.length }}</span>
+      </button>
+
+      <div class="email-requests-body" *ngIf="emailRequestsExpanded">
+        <mat-progress-bar *ngIf="emailRequestsLoading" mode="indeterminate"></mat-progress-bar>
+
+        <div class="table-wrapper email-request-table" *ngIf="emailRequests.length > 0; else noEmailRequests">
+          <table class="users-table">
+            <thead>
+            <tr>
+              <th>User</th>
+              <th>Current email</th>
+              <th>Requested email</th>
+              <th>Requested at</th>
+              <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let request of emailRequests">
+              <td>{{ request.username }}</td>
+              <td>{{ request.oldEmail }}</td>
+              <td>{{ request.newEmail }}</td>
+              <td>{{ request.requestedAt | date:'medium' }}</td>
+              <td class="actions-cell">
+                <button mat-stroked-button color="primary" class="approve-button" (click)="reviewEmailRequest(request, 'approve')">
+                  Approve
+                </button>
+                <button mat-stroked-button color="warn" (click)="reviewEmailRequest(request, 'reject')">
+                  Reject
+                </button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <ng-template #noEmailRequests>
+          <div class="empty-state compact">
+            <p>No pending email change requests.</p>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+
     <div class="table-wrapper" *ngIf="dataSource.data.length > 0; else emptyState">
       <table mat-table [dataSource]="dataSource" class="users-table">
         <ng-container matColumnDef="id">

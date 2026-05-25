@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs';
-import { AdminService, AdminUserSummary } from '../../services/admin.service';
+import { AdminService, AdminUserSummary, EmailChangeRequest } from '../../services/admin.service';
 import { AuthService } from '../../services/auth.service';
 
 interface AdminUserRow extends AdminUserSummary {
@@ -25,6 +25,9 @@ export class AdminUsersComponent implements OnInit {
   query = '';
   pageIndex = 0;
   pageSize = 10;
+  emailRequests: EmailChangeRequest[] = [];
+  emailRequestsLoading = false;
+  emailRequestsExpanded = true;
   get permissionNotes(): string[] {
     const notes = ['Block or unblock users'];
     if (this.canViewFileCounts()) {
@@ -58,6 +61,7 @@ export class AdminUsersComponent implements OnInit {
     }
 
     this.loadUsers();
+    this.loadEmailChangeRequests();
   }
 
   canAccessAdminUsers(): boolean {
@@ -106,6 +110,41 @@ export class AdminUsersComponent implements OnInit {
           this.snack.open(err?.error?.message || 'Failed to load users', 'Dismiss', { duration: 3500 });
         }
       });
+  }
+
+  loadEmailChangeRequests(): void {
+    this.emailRequestsLoading = true;
+    this.adminService.listEmailChangeRequests()
+      .pipe(finalize(() => (this.emailRequestsLoading = false)))
+      .subscribe({
+        next: (requests) => {
+          this.emailRequests = requests || [];
+        },
+        error: (err) => {
+          console.error('[AdminUsersComponent] Failed to load email change requests:', err);
+          this.snack.open(err?.error?.message || 'Failed to load email change requests', 'Dismiss', { duration: 3500 });
+        }
+      });
+  }
+
+  toggleEmailRequests(): void {
+    this.emailRequestsExpanded = !this.emailRequestsExpanded;
+  }
+
+  reviewEmailRequest(request: EmailChangeRequest, action: 'approve' | 'reject'): void {
+    this.adminService.reviewEmailChangeRequest(request.id, action).subscribe({
+      next: () => {
+        this.emailRequests = this.emailRequests.filter((item) => item.id !== request.id);
+        this.snack.open(`Email change ${action}d`, 'OK', { duration: 2200 });
+        if (action === 'approve') {
+          this.loadUsers();
+        }
+      },
+      error: (err) => {
+        console.error('[AdminUsersComponent] Email change review failed:', err);
+        this.snack.open(err?.error?.message || 'Failed to review email change request', 'Dismiss', { duration: 3500 });
+      }
+    });
   }
 
   async loadCountsForVisibleRows(): Promise<void> {

@@ -69,6 +69,39 @@
   backdrop-filter: blur(4px);
 }
 
+.email-change-banner {
+  margin: 0 0 18px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid #bfdbfe;
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.email-change-banner.approved {
+  border-color: #bbf7d0;
+  background: #f0fdf4;
+  color: #15803d;
+}
+
+.email-change-banner.rejected {
+  border-color: #fecdd3;
+  background: #fff1f2;
+  color: #be123c;
+}
+
+.email-change-banner button {
+  border-radius: 10px !important;
+  font-weight: 700 !important;
+  background: #ffffff !important;
+}
+
 .edit-profile-btn {
   position: absolute;
   top: 16px;
@@ -280,6 +313,34 @@
   color: #b91c1c;
   font-size: 12px;
   font-weight: 600;
+}
+
+.email-change-actions {
+  margin-top: -8px;
+}
+
+.email-change-actions button,
+.compact-buttons button[mat-stroked-button] {
+  color: #1d4ed8 !important;
+  border: 1px solid #bfdbfe !important;
+  background: #eef4ff !important;
+  border-radius: 12px !important;
+  font-weight: 700 !important;
+  height: 40px !important;
+}
+
+.email-change-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid rgba(30, 64, 175, 0.12);
+  border-radius: 16px;
+  background: #f8fafc;
+}
+
+.compact-buttons {
+  margin-top: 0;
 }
 
 .button-group {

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
+import { AuthService, EmailChangeRequest } from '../../services/auth.service';
 import { FileLoadService } from '../../services/file-load.service';
 import { User } from '../../models/user.model';
 import { SearchCriteria } from '../../models/search-criteria.model';
@@ -26,6 +26,10 @@ export class ProfileComponent implements OnInit {
   currentPasswordError = false;
   passwordMismatchError = false;
   profileImage: string = 'assets/default-avatar.svg';
+  emailChangeRequest: EmailChangeRequest | null = null;
+  showEmailChangeForm = false;
+  requestedNewEmail = '';
+  emailChangeSubmitting = false;
 
   // Statistics
   totalFiles = 0;
@@ -102,6 +106,26 @@ export class ProfileComponent implements OnInit {
             this.failedFiles
           ];
         }
+
+        if (data.user) {
+          const updatedUser = {
+            ...(this.currentUser || {}),
+            ...data.user,
+            name: data.user.username
+          } as User;
+          const shouldUpdateUser =
+            this.currentUser?.email !== updatedUser.email ||
+            this.currentUser?.username !== updatedUser.username ||
+            this.currentUser?.name !== updatedUser.name ||
+            this.currentUser?.profileImage !== updatedUser.profileImage;
+
+          this.currentUser = updatedUser;
+          if (shouldUpdateUser) {
+            this.auth.updateUser(updatedUser);
+          }
+        }
+
+        this.emailChangeRequest = data.emailChangeRequest || null;
 
         if (data.recentActivities) {
           this.recentActivities = [...data.recentActivities]
@@ -300,6 +324,63 @@ export class ProfileComponent implements OnInit {
     } else {
       this.isEditing = false;
     }
+  }
+
+  openEmailChangeForm(): void {
+    this.showEmailChangeForm = true;
+    this.requestedNewEmail = '';
+  }
+
+  cancelEmailChangeForm(): void {
+    this.showEmailChangeForm = false;
+    this.requestedNewEmail = '';
+  }
+
+  submitEmailChangeRequest(): void {
+    const newEmail = this.requestedNewEmail.trim();
+    if (!newEmail) {
+      alert('New email is required.');
+      return;
+    }
+
+    this.emailChangeSubmitting = true;
+    this.auth.submitEmailChangeRequest(newEmail).subscribe({
+      next: (request) => {
+        this.emailChangeRequest = request;
+        this.showEmailChangeForm = false;
+        this.requestedNewEmail = '';
+        this.emailChangeSubmitting = false;
+      },
+      error: (err) => {
+        console.error('[ProfileComponent] Failed to submit email change request:', err);
+        alert(this.formatApiError(err, 'Failed to submit email change request.'));
+        this.emailChangeSubmitting = false;
+      }
+    });
+  }
+
+  cancelPendingEmailChange(): void {
+    if (!this.emailChangeRequest || this.emailChangeRequest.status !== 'pending') {
+      return;
+    }
+
+    this.auth.cancelEmailChangeRequest(this.emailChangeRequest.id).subscribe({
+      next: () => {
+        this.emailChangeRequest = null;
+      },
+      error: (err) => {
+        console.error('[ProfileComponent] Failed to cancel email change request:', err);
+        alert(this.formatApiError(err, 'Failed to cancel email change request.'));
+      }
+    });
+  }
+
+  private formatApiError(err: any, fallback: string): string {
+    const message = err?.error?.message || fallback;
+    if (err?.status === 404) {
+      return `${message}. Restart the backend so the new email-change API is loaded.`;
+    }
+    return message;
   }
 
   loginHistory: any[] = [];

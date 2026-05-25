@@ -3,6 +3,7 @@ package com.fileload.api.exception;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
+import com.fileload.service.exception.ConflictException;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
@@ -23,6 +24,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartException;
@@ -117,6 +120,12 @@ public class GlobalExceptionHandler {
         return build(HttpStatus.BAD_REQUEST, "Invalid request payload or parameters", request, null);
     }
 
+    @ExceptionHandler({NoHandlerFoundException.class, NoResourceFoundException.class})
+    public ResponseEntity<ApiErrorResponse> handleMissingRoute(Exception ex, HttpServletRequest request) {
+        logger.warn("Route not found: {}", request.getRequestURI(), ex);
+        return build(HttpStatus.NOT_FOUND, "API endpoint not found", request, null);
+    }
+
     //MaxUploadSizeExceededException -> 413 PAYLOAD TOO LARG
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public ResponseEntity<ApiErrorResponse> handleMaxUpload(MaxUploadSizeExceededException ex, HttpServletRequest request) {
@@ -137,6 +146,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiErrorResponse> handleDataIntegrity(DataIntegrityViolationException ex, HttpServletRequest request) {
         logger.error("Data integrity violation: {}", ex.getMessage(), ex);
         return build(HttpStatus.CONFLICT, "Data conflict: duplicate or invalid value", request, null);
+    }
+
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<ApiErrorResponse> handleConflict(ConflictException ex, HttpServletRequest request) {
+        logger.warn("Conflict: {}", ex.getMessage(), ex);
+        return build(HttpStatus.CONFLICT, ex.getMessage(), request, null);
     }
 
     //DataAccessException -> 500 INTERNAL SERVER ERROR

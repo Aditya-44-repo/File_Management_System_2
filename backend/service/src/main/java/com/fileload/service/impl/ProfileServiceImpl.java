@@ -8,6 +8,7 @@ import com.fileload.model.entity.FileLoad;
 import com.fileload.model.entity.FileStatus;
 import com.fileload.model.entity.LoginHistory;
 import com.fileload.model.entity.UserAccount;
+import com.fileload.service.EmailChangeRequestService;
 import com.fileload.service.ProfileService;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.ArrayList;
@@ -26,15 +27,18 @@ public class ProfileServiceImpl implements ProfileService {
     private final FileLoadRepository fileLoadRepository;
     private final LoginHistoryRepository loginHistoryRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailChangeRequestService emailChangeRequestService;
 
     public ProfileServiceImpl(UserAccountRepository userAccountRepository,
                               FileLoadRepository fileLoadRepository,
                               LoginHistoryRepository loginHistoryRepository,
-                              PasswordEncoder passwordEncoder) {
+                              PasswordEncoder passwordEncoder,
+                              EmailChangeRequestService emailChangeRequestService) {
         this.userAccountRepository = userAccountRepository;
         this.fileLoadRepository = fileLoadRepository;
         this.loginHistoryRepository = loginHistoryRepository;
         this.passwordEncoder = passwordEncoder;
+        this.emailChangeRequestService = emailChangeRequestService;
     }
 
     @Override
@@ -91,7 +95,13 @@ public class ProfileServiceImpl implements ProfileService {
                 ))
                 .collect(Collectors.toList());
 
-        return new ProfileResponseDTO(userDto, statsDto, activities, loginHistoryDtos);
+        return new ProfileResponseDTO(
+                userDto,
+                statsDto,
+                activities,
+                loginHistoryDtos,
+                emailChangeRequestService.latestForUser(userId).orElse(null)
+        );
     }
 
     @Override

@@ -4,6 +4,18 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { User } from '../models/user.model';
+
+export interface EmailChangeRequest {
+  id: number;
+  userId: number;
+  username: string;
+  oldEmail: string;
+  newEmail: string;
+  status: 'pending' | 'approved' | 'rejected';
+  requestedAt: string;
+  reviewedAt: string | null;
+  reviewedBy: number | null;
+}
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly KEY = 'fl_user';
@@ -129,6 +141,14 @@ export class AuthService {
   // Get full aggregated profile including stats, login history, and activities
   getFullProfile(): Observable<any> {
     return this.http.get<any>(`${environment.apiBaseUrl}/profile`);
+  }
+
+  submitEmailChangeRequest(newEmail: string): Observable<EmailChangeRequest> {
+    return this.http.post<EmailChangeRequest>(`${environment.apiBaseUrl}/email-change-requests`, { newEmail });
+  }
+
+  cancelEmailChangeRequest(id: number): Observable<void> {
+    return this.http.delete<void>(`${environment.apiBaseUrl}/email-change-requests/${id}`);
   }
 
   // Update username/name of the user and optionally password

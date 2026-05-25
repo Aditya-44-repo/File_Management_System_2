@@ -3,16 +3,21 @@ package com.fileload.api.controller;
 import com.fileload.api.security.SecurityControlService;
 import com.fileload.model.dto.FileLoadResponseDTO;
 import com.fileload.model.dto.UpdateStatusRequestDTO;
+import com.fileload.model.dto.EmailChangeRequestDTO;
 import com.fileload.model.dto.admin.AdminAnalyticsDTO;
 import com.fileload.model.dto.admin.AdminAuditEventDTO;
 import com.fileload.model.dto.admin.AdminSimpleResultDTO;
 import com.fileload.model.dto.admin.AdminUserSummaryDTO;
 import com.fileload.model.dto.admin.BlockedIpRequestDTO;
+import com.fileload.model.dto.admin.EmailChangeReviewRequestDTO;
 import com.fileload.model.dto.admin.FeatureFlagUpdateRequestDTO;
 import com.fileload.model.dto.admin.UserFileCountDTO;
 import com.fileload.model.dto.admin.UserEnabledUpdateRequestDTO;
 import com.fileload.model.dto.admin.UserRoleUpdateRequestDTO;
+import com.fileload.dao.repository.UserAccountRepository;
+import com.fileload.model.entity.UserAccount;
 import com.fileload.service.AdminService;
+import com.fileload.service.EmailChangeRequestService;
 import com.fileload.service.FileLoadService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,6 +29,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -36,6 +43,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 import java.util.Set;
+import java.util.List;
+import jakarta.persistence.EntityNotFoundException;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -46,13 +55,19 @@ public class AdminController {
     private final AdminService adminService;
     private final FileLoadService fileLoadService;
     private final SecurityControlService securityControlService;
+    private final EmailChangeRequestService emailChangeRequestService;
+    private final UserAccountRepository userAccountRepository;
 
     public AdminController(AdminService adminService,
                            FileLoadService fileLoadService,
-                           SecurityControlService securityControlService) {
+                           SecurityControlService securityControlService,
+                           EmailChangeRequestService emailChangeRequestService,
+                           UserAccountRepository userAccountRepository) {
         this.adminService = adminService;
         this.fileLoadService = fileLoadService;
         this.securityControlService = securityControlService;
+        this.emailChangeRequestService = emailChangeRequestService;
+        this.userAccountRepository = userAccountRepository;
     }
 
 
@@ -65,6 +80,30 @@ public class AdminController {
             @RequestParam(defaultValue = "20") int size
     ) {
         return ResponseEntity.ok(adminService.listUsers(query, page, size));
+    }
+
+    @GetMapping("/email-change-requests")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "List pending email change requests")
+    public ResponseEntity<List<EmailChangeRequestDTO>> listEmailChangeRequests() {
+        return ResponseEntity.ok(emailChangeRequestService.listPending());
+    }
+
+    @PatchMapping("/email-change-requests/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Approve or reject a pending email change request")
+    public ResponseEntity<EmailChangeRequestDTO> reviewEmailChangeRequest(
+            @PathVariable Long id,
+            @Valid @RequestBody EmailChangeReviewRequestDTO request
+    ) {
+        EmailChangeRequestDTO reviewed = emailChangeRequestService.review(id, request.action(), currentAdmin().getId());
+        adminService.audit(
+                "EMAIL_CHANGE_" + request.action().trim().toUpperCase(),
+                "EMAIL_CHANGE_REQUEST",
+                id.toString(),
+                "userId=" + reviewed.userId() + ",newEmail=" + reviewed.newEmail()
+        );
+        return ResponseEntity.ok(reviewed);
     }
 
     @PatchMapping("/users/{userId}/role")
@@ -218,6 +257,13 @@ public class AdminController {
         headers.setContentDisposition(ContentDisposition.attachment().filename("admin-audit-events.csv").build());
         headers.setContentType(MediaType.TEXT_PLAIN);
         return new ResponseEntity<>(csv.getBytes(java.nio.charset.StandardCharsets.UTF_8), headers, HttpStatus.OK);
+    }
+
+    private UserAccount currentAdmin() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        return userAccountRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + email));
     }
 }
 

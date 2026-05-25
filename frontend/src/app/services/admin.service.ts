@@ -27,6 +27,18 @@ export interface UserFileCountResponse {
   fileCount: number;
 }
 
+export interface EmailChangeRequest {
+  id: number;
+  userId: number;
+  username: string;
+  oldEmail: string;
+  newEmail: string;
+  status: 'pending' | 'approved' | 'rejected';
+  requestedAt: string;
+  reviewedAt: string | null;
+  reviewedBy: number | null;
+}
+
 @Injectable({ providedIn: 'root' })
 export class AdminService {
   constructor(private http: HttpClient) {}
@@ -51,6 +63,14 @@ export class AdminService {
 
   deleteAllUserFiles(userId: number) {
     return this.http.delete(`${environment.apiBaseUrl}/admin/users/${userId}/files`);
+  }
+
+  listEmailChangeRequests(): Observable<EmailChangeRequest[]> {
+    return this.http.get<EmailChangeRequest[]>(`${environment.apiBaseUrl}/admin/email-change-requests`);
+  }
+
+  reviewEmailChangeRequest(id: number, action: 'approve' | 'reject'): Observable<EmailChangeRequest> {
+    return this.http.patch<EmailChangeRequest>(`${environment.apiBaseUrl}/admin/email-change-requests/${id}`, { action });
   }
 }
 

@@ -6,6 +6,7 @@ public record ProfileResponseDTO(
         ProfileUserDTO user,
         ProfileStatsDTO stats,
         List<ProfileActivityDTO> recentActivities,
-        List<LoginHistoryDTO> loginHistory
+        List<LoginHistoryDTO> loginHistory,
+        EmailChangeRequestDTO emailChangeRequest
 ) {
 }
